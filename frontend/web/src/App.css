@@ -1,0 +1,195 @@
+@import "tailwindcss";
+
+
+/*utility-class*/
+.center-flex{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.transition-element{
+    transition: all 0.5s ease-in-out;
+}
+.pruebaSection{
+    width: 100%;
+    height: 1500px;
+    background: orange;
+}
+
+/*end-utility-class*/
+
+
+/*body*/
+body{
+    scroll-behavior: smooth;
+}
+
+/*end-body*/
+
+.containerCheck{
+    position: relative;
+
+}
+.cuack{
+    border: 2.5px solid lightblue;
+    border-left-color: blue;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+/*navBar*/
+.clampNavBar{
+    width : clamp(350px, 55vw ,65%)
+}
+
+
+
+
+/*end-navBar*/
+/*introduction*/
+.clampTitleIntro{
+    font-size : clamp(75px, 10vw, 200px)
+}
+.clampSubTitleIntro{
+    font-size : clamp(12.5px, 2.50vw, 18.5px)
+}
+.clampImagenIntro{
+    width : clamp(150px, 20vh, 350px);
+    height : clamp(150px, 20vh, 350px);
+}
+/*end-introduction*/
+
+
+.animateCuack{
+    opacity: 1;
+    animation: spinner 2s linear infinite;
+}
+
+.flickSvg{
+    animation: flickItem 0.25s linear;
+}
+
+.showItem{
+    animation: show 0.5s linear forwards;
+}
+
+
+@keyframes show {
+    0%{
+        opacity:0;
+    }
+    100%{
+        opacity:1;
+    }
+}
+
+@keyframes flickItem {
+    0%{
+        opacity: 0;
+    }
+    100%{
+        opacity : 1;
+    }
+}
+
+@keyframes spinner {
+    0%{
+        transform: rotate(0);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
+
+
+.fade-in-section {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-in-section.is-active {
+    opacity: 1;
+    transform: translateY(0);
+}
+.widthElement{
+    gap: clamp(20px, 2.5vw, 50px);
+    /*height: clamp(20px, 2.5vw, 40px);*/
+}
+
+/*.imgAguaje {*/
+/*    transition: transform 0.3s ease, box-shadow 0.3s ease;*/
+/*}*/
+
+/*.imgAguaje.hover-active {*/
+/*    transform: translateY(-200px);  !* Mueve la imagen hacia arriba en el eje Y *!*/
+/*    box-shadow: 5px 10px 20px rgba(255, 165, 0, 0.7); !* Sombra más notoria *!*/
+/*}*/
+
+/*.imgAguaje:hover {*/
+/*    transform: translateY(-200px);  !* Mueve la imagen hacia arriba en el eje Y *!*/
+/*    box-shadow: 5px 10px 20px rgba(255, 165, 0, 0.7); !* Sombra más notoria *!*/
+/*}*/
+.showItem{
+    animation: show 0.35s linear;
+}
+
+@keyframes show {
+    0%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
+}
+.hideItem{
+    animation: hide 0.35s linear;
+}
+@keyframes hide {
+    0%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+    }
+}
+
+.paintItem {
+    background-color: lightblue; /* Color inicial */
+    overflow: hidden;
+    position: relative;
+}
+
+.paintItem::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    background-color: gray; /* Color final */
+    transform-origin: left; /* Punto de inicio de la animación */
+    transform: scaleX(0);
+    animation: paint 4.5s ease infinite;
+}
+.paintWidthItem {
+    width: 75px;
+}
+
+@keyframes paint {
+    0% {
+        transform: scaleX(0);
+    }
+    100% {
+        transform: scaleX(1);
+    }
+}
+
+
+.cuack2:hover{
+    background: #fff;
+    box-shadow:
+    0 0 0 4px #fff,
+    0 0 0 6px rgba(0,0,0,1)
+}

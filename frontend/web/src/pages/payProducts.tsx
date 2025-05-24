@@ -8,11 +8,9 @@ export const PayProducts = () => {
 
     return(
         <>
-            <Header/>
             <main>
-                cuackkkkk seccion de pago
+                cuackkkkk seccion de pago dfgs
             </main>
-            <Footer/>
         </>
     )
 }

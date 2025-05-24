@@ -14,11 +14,11 @@ export function Index () {
 
     return (
         <>
-            <Header/>
+            {/*<Header/>*/}
             <section className={"w-full"}>
                 <Introduction/>
             </section>
-            <Footer/>
+            {/*<Footer/>*/}
         </>
     )
 }
@@ -200,12 +200,12 @@ function Introduction() {
     }, []);
 
     return (
-        <section className="border-[5px] border-[green] h-full w-full mx-auto bg-[gray]">
-            <div className="w-[95%] h-[1000px] mx-auto border-[5px] border-[purple] flex flex-col items-center justify-center gap-[25px] py-[25px]">
-                <h1 className="clampTitleIntro border-[5px] border-[orange] w-[50%] font leading-[0.8] bg-[url('https://www.fundacionaquae.org/wp-content/uploads/2016/05/amazonia-1-1024x576.jpg')] bg-cover bg-center bg-clip-text text-transparent py-[10px] text-center">
+        <section className="border-[5px] border-[green] h-full w-full mx-auto ">
+            <div className="index w-[95%] h-[1000px] mx-auto border-[5px] border-[purple] flex flex-col items-center justify-center gap-[25px] py-[25px]">
+                <h1 className="clampTitleIntro border-[5px] border-[orange] w-[50%] font leading-[0.8] py-[10px] text-center ">
                     Amazonia Peruana
                 </h1>
-                <h5 className="clampSubTitleIntro w-[50%] text-white text-center leading-[0.9] text-right whitespace-nowrap">
+                <h5 className="clampSubTitleIntro w-[50%] text-white leading-[0.9] text-right whitespace-nowrap">
                     los mejores productos directo a tus manos
                 </h5>
             </div>

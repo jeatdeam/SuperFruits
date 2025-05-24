@@ -3,45 +3,54 @@ import { Modal } from "./Modal";
 import {Menu, Ref} from "./menu";
 import {useFetchProducts} from "../hooks/customProducts.tsx";
 import {Carrito, CarritoRefs} from "./carrito.tsx"
+import ReactDOM from "react-dom";
 import {NavBar} from "./navigationBar.tsx"
 import {Link} from "react-router-dom"
 // import { BoxSearch } from "./BoxSearch"; // asumiendo que lo separas también
 
-export function Header() {
+
+
+export function Header({children}) {
     const refImg = useRef<HTMLImageElement|null>(null)
+    const refHeader = useRef<HTMLDivElement|null>(null);
+    const hehehe = document.getElementById("hehehe");
 
     const redirectIndex = () => {
         window.location.href="/"
     }
 
-    return (
-        <>
-            <header
-                className={"h-[250px] w-[80%] bg-[lightblue] flex justify-between items-center mx-auto rounded-[8px] border-[5px] border-[green]"}>
+    useEffect(()=>{
 
-                <div className={"flex justify-between items-center w-full"}>
-                    <Link to="/">
-                        <img className="size-[150px]"
-                             src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1746066848/22529f942d0ede6fc6350f2c53560a33_wyf0oh.jpg"
-                             alt="superFruts"
-                             // onClick={redirectIndex}
-                             ref={refImg}/>
-                    </Link>
-                    <nav className={"flex gap-[25px] items-center"}>
-                        <SearchIcon
-                            className="rounded-full transition-all duration-500 hover:ring-2 ring-black ring-offset-[6px] hover:bg-white"
-                        />
-                        <BagIcon/>
-                        <SettingsSight/>
-                        <MenuIcon/>
-                    </nav>
-                </div>
+    })
 
-            </header>
-            {/*<NavBar>*/}
-            {/*    <div>Aqui esta el navBar nuevo</div>*/}
-            {/*</NavBar>*/}
-        </>
+    return ReactDOM.createPortal(
+        <header
+            ref={refHeader}
+            className={"w-[80%] xl:w-[1024px] fixed top-[100px] left-1/2 -translate-x-1/2 flex justify-between items-center  rounded-[16px] h-[75px]"}>
+            <div
+                className={"flex justify-between items-center w-full px-[25px] absolute z-10"}>
+                <Link to="/">
+                    <img className="size-[75px]"
+                         src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1746066848/22529f942d0ede6fc6350f2c53560a33_wyf0oh.jpg"
+                         alt="superFruts"
+                        // onClick={redirectIndex}
+                         ref={refImg}/>
+                </Link>
+                <nav className={"gapIcons flex items-center"}>
+                    <SearchIcon
+                        className="rounded-full transition-all duration-500 hover:ring-2 ring-black ring-offset-[6px] hover:bg-white"
+                    />
+                    <BagIcon/>
+                    <SettingsSight/>
+                    <MenuIcon/>
+                </nav>
+            </div>
+            <div className="absolute w-full h-[75px] z-[9] rounded-[16px]
+                backdrop-blur-md  border border-white/30 shadow-md">
+            </div>
+
+        </header>,
+        hehehe
     )
 }
 

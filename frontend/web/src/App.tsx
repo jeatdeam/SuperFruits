@@ -13,17 +13,21 @@ import './App.css';
 function App() {
 
     return (
-        <Routes>
-            {/*<Header/>*/}
-            {/*<Index/>*/}
-            {/*<Footer/>*/}
-            <Route path="/" element={<Index/>}/>
-            {/*<Route path="/cuacksito" element={<ProductsCards/>}/>*/}
-            <Route path="/:product/" element={<ProductsCards/>}/>
-            <Route path="/:product/:name" element={<InfoProduct/>} />
-             <Route path="/productos/seccion-de-pagos" element={<PayProducts/>}/>
+        <>
+            <Header/>
+            <Routes>
+                {/*<Header/>*/}
+                {/*<Index/>*/}
+                {/*<Footer/>*/}
+                <Route path="/" element={<Index/>}/>
+                {/*<Route path="/cuacksito" element={<ProductsCards/>}/>*/}
+                <Route path="/:product/" element={<ProductsCards/>}/>
+                <Route path="/:product/:name" element={<InfoProduct/>} />
+                <Route path="/productos/seccion-de-pagos" element={<PayProducts/>}/>
+            </Routes>
+            <Footer/>
+        </>
 
-        </Routes>
     );
 }
 

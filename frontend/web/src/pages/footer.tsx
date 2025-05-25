@@ -7,106 +7,113 @@ export function Footer() {
 
 
     return (
-        <footer className={"w-full flex flex-col gap-[30px] bg-gradient-to-br from-purple-700 via-black to-gray-900 pb-[20px] px-[20px]"}>
+        <footer className={"w-full flex flex-col gap-[30px] bg-gradient-to-br from-purple-700 via-black to-gray-900 px-[20px] pb-[50px]"}>
             <div className={"w-[90%] mx-auto flex flex-col gap-[50px]"}>
 
-                <div className={"lg:w-[80%] xl:w-[70%] w-[90%] flex flex-col gap-[50px] justify-evenly bg-white/20 mx-auto rounded-b-[35px] p-[25px] backdrop-blur-[20px] border border-white/30 shadow-md"}>
+                <div
+                    className={"lg:w-[80%] xl:w-[70%] w-[90%] flex flex-col gap-[50px] justify-evenly bg-white/20 mx-auto rounded-b-[35px] p-[25px] backdrop-blur-[20px] border border-white/30 shadow-md"}>
                     <div>
-                        <h1 className={"w-1/2 text-[75px] leading-[1]"}>Lo mejor de la amazonia peruana con</h1>
-                        <h1 className={"text-[75px] leading-[1] bg-blue-300 w-fit"}>Super Fruits</h1>
+                        <h1 className={"text-[75px] leading-[1]  w-fit"}>Super Fruits</h1>
                     </div>
                     <h1>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum delectus ex expedita ipsa
                         praesentium
                         quam qui sequi. Aspernatur dolore ea enim eveniet</h1>
 
-                    <div className={"w-full flex gap-[25px] mx-auto flex-wrap  bg-amber-500"}>
+                    <div className={"w-full flex sm:gap-[15px] gap-[25px] content-end mx-auto flex-wrap "}>
 
-                        <div className={"flex w-[200px]  flex-col gap-[7.5px] border-4 border-violet-600"}>
-                            <h1 className={"text-[20px] bg-blue-300 flex items-center leading-[1.1] text-gray-200 text-center flex-1"}>quienes
+                        <div className={"flex flex-1 min-w-[200px] bg-blue-300 flex-col gap-[15px] "}>
+                            <h1 className={"text-[20px] font-thin flex items-center leading-[1.1] text-gray-200 flex-1"}>quienes
                                 somos</h1>
-                            <ul className={"flex flex-col gap-[7.5px] pl-[7.5px]"}>
-                                <li>quienes somos</li>
-                                <li>quienes somos</li>
-                                <li>quienes somos</li>
-                                <li>quienes somos</li>
-                                <li>quienes somos</li>
+                            <ul className={"flex flex-col gap-[7.5px]"}>
+                                <li className={"text-[15px]"}>quienes somos</li>
+                                <li className={"text-[15px]"}>quienes somos</li>
+                                <li className={"text-[15px]"}>quienes somos</li>
+                                <li className={"text-[15px]"}>quienes somos</li>
+                                <li className={"text-[15px]"}>quienes somos</li>
                             </ul>
                         </div>
 
-                        <div className={"flex w-[200px] flex-col gap-[7.5px] border-4 border-violet-600"}>
-                            <h1 className={"text-[20px] flex items-center leading-[1.1] text-gray-200 text-center flex-1"}>certificados</h1>
-                            <ul className={"flex flex-col gap-[7.5px] pl-[7.5px]"}>
-                                <li>certificados</li>
-                                <li>certificados</li>
-                                <li>certificados</li>
-                                <li>certificados</li>
-                                <li>certificados</li>
+                        <div className={"flex flex-1 min-w-[200px] bg-blue-300  flex-col gap-[15px] "}>
+                            <h1 className={"text-[20px] font-thin flex items-center leading-[1.1] text-gray-200 flex-1"}>certificados</h1>
+                            <ul className={"flex flex-col gap-[7.5px]"}>
+                                <li className={"text-[15px]"}>certificados</li>
+                                <li className={"text-[15px]"}>certificados</li>
+                                <li className={"text-[15px]"}>certificados</li>
+                                <li className={"text-[15px]"}>certificados</li>
+                                <li className={"text-[15px]"}>certificados</li>
                             </ul>
                         </div>
 
-                        <div className={"flex w-[200px] flex-col gap-[7.5px] border-4 border-violet-600"}>
-                            <h1 className={"text-[20px] flex items-center leading-[1.1] text-gray-200 text-center flex-1"}>registro
+                        <div className={"flex flex-1 min-w-[200px] bg-blue-300  flex-col gap-[15px] "}>
+                            <h1 className={"text-[20px] font-thin flex items-center leading-[1.1] text-gray-200 flex-1"}>registro
                                 sanitario</h1>
-                            <ul className={"flex flex-col gap-[7.5px] pl-[7.5px]"}>
-                                <li>sanitario</li>
-                                <li>sanitario</li>
-                                <li>sanitario</li>
-                                <li>sanitario</li>
-                                <li>sanitario</li>
+                            <ul className={"flex flex-col gap-[7.5px]"}>
+                                <li className={"text-[15px]"}>sanitario</li>
+                                <li className={"text-[15px]"}>sanitario</li>
+                                <li className={"text-[15px]"}>sanitario</li>
+                                <li className={"text-[15px]"}>sanitario</li>
+                                <li className={"text-[15px]"}>sanitario</li>
                             </ul>
                         </div>
 
-                        <div className={"flex w-[200px] flex-col gap-[7.5px]  border-4 border-violet-600"}>
-                            <h1 className={"text-[20px] flex items-center leading-[1.1] text-gray-200 text-center flex-1"}>insumos de
+                        <div className={"flex flex-1 min-w-[200px] bg-blue-300  flex-col gap-[15px]"}>
+                            <h1 className={"text-[20px] font-thin flex items-center leading-[1.1] text-gray-200 flex-1"}>insumos
+                                de
                                 preparacion</h1>
-                            <ul className={"flex flex-col gap-[7.5px] pl-[7.5px]"}>
-                                <li>preparacion</li>
-                                <li>preparacion</li>
-                                <li>preparacion</li>
-                                <li>preparacion</li>
-                                <li>preparacion</li>
+                            <ul className={"flex flex-col gap-[7.5px]"}>
+                                <li className={"text-[15px]"}>preparacion</li>
+                                <li className={"text-[15px]"}>preparacion</li>
+                                <li className={"text-[15px]"}>preparacion</li>
+                                <li className={"text-[15px]"}>preparacion</li>
+                                <li className={"text-[15px]"}>preparacion</li>
                             </ul>
                         </div>
 
-                        <div className={"flex w-[200px] flex-col gap-[7.5px] border-4 border-violet-600"}>
-                            <h1 className={"text-[20px] flex items-center leading-[1.1] text-gray-200 text-center flex-1"}>preparacion</h1>
-                            <ul className={"flex flex-col gap-[7.5px] pl-[7.5px]"}>
-                                <li>recomendacion</li>
-                                <li>recomendacion</li>
-                                <li>recomendacion</li>
-                                <li>recomendacion</li>
-                                <li>recomendacion</li>
+                        <div className={"flex flex-1 min-w-[200px] bg-blue-300 flex-col gap-[15px]"}>
+                            <h1 className={"text-[20px] font-thin flex items-center leading-[1.1] text-gray-200  flex-1"}>preparacion</h1>
+                            <ul className={"flex flex-col gap-[7.5px]"}>
+                                <li className={"text-[15px]"}>recomendacion</li>
+                                <li className={"text-[15px]"}>recomendacion</li>
+                                <li className={"text-[15px]"}>recomendacion</li>
+                                <li className={"text-[15px]"}>recomendacion</li>
+                                <li className={"text-[15px]"}>recomendacion</li>
                             </ul>
                         </div>
 
                     </div>
                 </div>
-                <div className={"md:flex-row md:w-[60%]  w-[95%] flex mx-auto flex-col items-center justify-between gap-[10px]"}>
-                    <div className={"md:w-1/2 w-4/5 flex flex-col gap-[5px]"}>
-                        <h1 className={"w-[50%] rounded-[5px] text-white text-[50px]"}>Contactanos</h1>
-                        <input className={"h-[30px] px-[5px] rounded-[5px]"} type="email" placeholder="Contactanos"/>
-                        <textarea className={"p-[5px] rounded-[5px] border border-violet-600 h-[150px]"}
+                <div className={"md:flex-row md:w-[90%] xl:w-[75%] 2xl:w-[60%] flex mx-auto flex-col items-center xl:justify-between gap-[25px] md:gap-[5px] justify-evenly 2xl:gap-0 bg-blue-300 border-4 w-[90%]"}>
+
+                    <div className={"flex flex-col gap-[5px] w-[90%] md:w-full"}>
+                        <h1 className={" rounded-[5px] font-thin text-white text-[50px]"}>Contactanos</h1>
+                        <input className={" h-[30px] px-[10px] rounded-[5px]"} type="email" placeholder="Contactanos"/>
+                        <textarea className={"p-[10px] rounded-[5px] h-[150px]"}
                                   placeholder={"compras mayoristas - informacion de productos"}/>
                         <button className={"bg-white rounded-[5px] h-[30px] w-[75px] self-end"}>Enviar</button>
                     </div>
 
-                    <div className={"md:w-1/2 w-4/5 flex items-center gap-[10px]"}>
-                        <div className={"bg-white h-[150px]  p-[10px] size-[150px] ml-auto"}>
+                    <div className={"xxs:justify-evenly h-full w-[70%] xxs:w-full 2xl:w-full 2xl:flex-row flex flex-col items-center gap-[25px] md:w-[60%] xxs:flex-row md:flex-col bg-green-400"}>
+                        <div className={"bg-amber-50 h-[150px]  p-[10px] size-[150px] "}>
                             Designed for Jeatdeam / Realizado
                         </div>
-                        <img className={"aspect-[16/9] w-[160px] h-[90px] ml-auto"}
+                        <img className={"aspect-[16/9] w-[160px] h-[90px] "}
                              src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1747957241/icons8-open-book-64_vexqn0.png"
                              alt=""/>
                     </div>
 
                 </div>
-                <div className={"flex h-[50px] mx-auto justify-evenly items-center border-2 border-violet-600 w-1/2 bg-white/20 rounded-full backdrop-blur-[20px] "}>
-                    <Facebook/>
-                    <Instagram/>
-                    <Twitter/>
-                    <Tiktok/>
+                <div className={""}>
+                    <div className={"w-full h-[2px] bg-amber-500 flex justify-between "}/>
+                    <div className={"flex justify-between py-[15px]"}>
+                        <h1 className={"text-white"}>Diseñado por jeatdeam</h1>
+                        <div className={"flex gap-[10px]"}>
+                            <Facebook/>
+                            <Instagram/>
+                            <Twitter/>
+                            <Tiktok/>
+                        </div>
+                    </div>
                 </div>
-
             </div>
         </footer>
     )
@@ -116,7 +123,7 @@ export function Footer() {
 const Instagram = () => {
 
     return (
-        <svg className={"size-[30px] transition-bg duration-500 ease-in-out rounded-[8px] hover:bg-white"}
+        <svg className={"size-[25px] transition-bg duration-500 ease-in-out rounded-[8px] hover:bg-white"}
              xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100"
              viewBox="0 0 50 50">
             <path
@@ -127,7 +134,7 @@ const Instagram = () => {
 const Facebook = () => {
 
     return (
-        <svg className={"size-[30px] transition-bg duration-500 ease-in-out hover:bg-white rounded-[8px]"}
+        <svg className={"size-[25px] transition-bg duration-500 ease-in-out hover:bg-white rounded-[8px]"}
              xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 50 50">
             <path
                 d="M25,3C12.85,3,3,12.85,3,25c0,11.03,8.125,20.137,18.712,21.728V30.831h-5.443v-5.783h5.443v-3.848 c0-6.371,3.104-9.168,8.399-9.168c2.536,0,3.877,0.188,4.512,0.274v5.048h-3.612c-2.248,0-3.033,2.131-3.033,4.533v3.161h6.588 l-0.894,5.783h-5.694v15.944C38.716,45.318,47,36.137,47,25C47,12.85,37.15,3,25,3z"></path>
@@ -137,7 +144,7 @@ const Facebook = () => {
 const Twitter = () => {
 
     return (
-        <svg className={"size-[30px] transition-bg duration-500 ease-in-out hover:bg-white rounded-[8px]"}
+        <svg className={"size-[25px] transition-bg duration-500 ease-in-out hover:bg-white rounded-[8px]"}
              xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100"
              viewBox="0 0 50 50">
             <path
@@ -148,7 +155,7 @@ const Twitter = () => {
 const Tiktok = () => {
 
     return (
-        <svg className={"size-[30px] transition-bg duration-500 ease-in-out hover:bg-white rounded-[8px]"}
+        <svg className={"size-[25px] transition-bg duration-500 ease-in-out hover:bg-white rounded-[8px]"}
              xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 50 50">
             <path
                 d="M41,4H9C6.243,4,4,6.243,4,9v32c0,2.757,2.243,5,5,5h32c2.757,0,5-2.243,5-5V9C46,6.243,43.757,4,41,4z M37.006,22.323 c-0.227,0.021-0.457,0.035-0.69,0.035c-2.623,0-4.928-1.349-6.269-3.388c0,5.349,0,11.435,0,11.537c0,4.709-3.818,8.527-8.527,8.527 s-8.527-3.818-8.527-8.527s3.818-8.527,8.527-8.527c0.178,0,0.352,0.016,0.527,0.027v4.202c-0.175-0.021-0.347-0.053-0.527-0.053 c-2.404,0-4.352,1.948-4.352,4.352s1.948,4.352,4.352,4.352s4.527-1.894,4.527-4.298c0-0.095,0.042-19.594,0.042-19.594h4.016 c0.378,3.591,3.277,6.425,6.901,6.685V22.323z"></path>

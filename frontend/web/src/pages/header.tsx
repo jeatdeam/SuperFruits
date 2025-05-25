@@ -26,7 +26,7 @@ export function Header({children}) {
     return ReactDOM.createPortal(
         <header
             ref={refHeader}
-            className={"w-[80%] xl:w-[1024px] fixed top-[100px] left-1/2 -translate-x-1/2 flex justify-between items-center  rounded-[16px] h-[75px]"}>
+            className={"w-[90%] xs:w-[80%] xl:w-[1024px] fixed top-[100px] left-1/2 -translate-x-1/2 flex justify-between items-center  rounded-[16px] h-[75px]"}>
             <div
                 className={"flex justify-between items-center w-full px-[25px] absolute z-10"}>
                 <Link to="/">

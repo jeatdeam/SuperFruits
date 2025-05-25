@@ -97,10 +97,10 @@ body{
 /*end-navBar*/
 /*introduction*/
 .clampTitleIntro{
-    font-size : clamp(75px, 10vw, 200px)
+    font-size : clamp(85px, 10vw, 175px)
 }
 .clampSubTitleIntro{
-    font-size : clamp(12.5px, 2.50vw, 18.5px)
+    font-size : clamp(14.5px, 2.50vw, 18.5px)
 }
 .clampImagenIntro{
     width : clamp(150px, 20vh, 350px);

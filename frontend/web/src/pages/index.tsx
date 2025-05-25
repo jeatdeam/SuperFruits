@@ -201,16 +201,18 @@ function Introduction() {
 
     return (
         <section className="border-[5px] border-[green] h-full w-full mx-auto ">
-            <div className="index w-[95%] h-[1000px] mx-auto border-[5px] border-[purple] flex flex-col items-center justify-center gap-[25px] py-[25px]">
-                <h1 className="clampTitleIntro border-[5px] border-[orange] w-[50%] font leading-[0.8] py-[10px] text-center ">
+            <div className="index w-[95%] h-[100vh] mx-auto border-[5px] border-[purple] flex flex-col items-center justify-center gap-[25px] py-[25px]">
+                <h1 className="clampTitleIntro w-4/5 xl:w-3/5 leading-[0.8] py-[10px] text-center">
                     Amazonia Peruana
                 </h1>
-                <h5 className="clampSubTitleIntro w-[50%] text-white leading-[0.9] text-right whitespace-nowrap">
-                    los mejores productos directo a tus manos
-                </h5>
+                {/*<h5 className="clampSubTitleIntro w-4/5 text-white leading-[0.9] text-right whitespace-nowrap text-center">*/}
+                {/*    los mejores productos directo a tus manos*/}
+                {/*</h5>*/}
             </div>
 
-            <div className="w-[80%] mx-auto">
+
+
+            <div className="w-[90%] mx-auto">
                 <div className="fade-in-section" ref={(el) => (sectionRefs.current[0] = el)}>
                     <Aguaje />
                 </div>
@@ -246,20 +248,19 @@ function Aguaje() {
     })
 
     return (
-        <section
-            className={` border-[5px] border-[blue] h-[800px] w-full flex flex-row-reverse items-center justify-center gap-[25px]`}>
+        <section className={` border-[5px] border-[blue] h-[800px] w-full  flex flex-col-reverse md:flex-row-reverse items-center justify-evenly gap-[50px]`}>
             <img
-                className="clampImagenIntro border-4 border-red-500 transition-all duration-300 rounded-[8px]"
+                className="clampImagenIntro transition-all duration-300 rounded-[8px]"
                 src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1745543768/logo-cuadrado_cuc5wh.webp"
                 alt="Aguaje"
                 ref={refImg}
                 onClick={redirectProduct}
             />
             <div>
-                <h1 className="clampTitleIntro border-[5px] border-[red] transition-opacity duration-300 opacity-100  self-start">
+                <h1 className="clampTitleIntro  transition-opacity duration-300 opacity-100  self-start leading-1">
                     Aguaje
                 </h1>
-                <h5 className="clampSubTitleIntro opacity-100 transition-opacity duration-300 delay-500 whitespace-nowrap">la mayor fruta con fitoestrogeno</h5>
+                <h5 className="clampSubTitleIntro opacity-100 transition-opacity duration-300 delay-500 whitespace-nowrap text-right leading-none">la mayor fruta con fitoestrogeno</h5>
             </div>
         </section>
     );
@@ -301,11 +302,7 @@ function Camu () {
 
     return (
         <section
-            ref={containerCamu}
-            // onMouseEnter={showInfoCamu}
-            // onMouseLeave={hideInfoCamu}
-            className={` border-[5px] border-[pink] h-[800px] w-full flex items-center justify-center gap-[25px] px-[25px]`}
-        >
+            ref={containerCamu} className={` border-[5px] border-[pink] h-[800px] w-full flex flex-col-reverse md:flex-row-reverse items-center justify-evenly gap-[50px] px-[25px]`}>
             <img
                 ref={imgCamu}
                 className="clampImagenIntro transition-all duration-300"
@@ -314,14 +311,13 @@ function Camu () {
                 ref={refImg}
                 onClick={redirectProduct}
             />
-            <div className="w-[800px] flex flex-col justify-center">
-                <div ref={nameCamu} className="opacity-100 transition-opacity duration-300">
-                    <h1 className="clampTitleIntro text-[200px] bg-[blue] leading-none ml-[50px]">Camu</h1>
-                    <h1 className="clampTitleIntro text-[200px] bg-[green] text-right mr-[50px] leading-none">Camu</h1>
+            <div className="flex flex-col justify-center">
+                <div ref={nameCamu} className="opacity-100 transition-opacity duration-300 ">
+                    <h1 className="clampTitleIntro  leading-none  sm:whitespace-nowrap">Camu camu</h1>
                 </div>
                 <h5
                     ref={descriptionCamu}
-                    className="clampSubTitleIntro opacity-100 transition-opacity duration-300 text-right mr-[50px] whitespace-nowrap"
+                    className="clampSubTitleIntro self-end opacity-100 transition-opacity duration-300 w-full sm:text-right whitespace-nowrap"
                 >
                     La fruta con mayor vitamina C del mundo
                 </h5>
@@ -345,11 +341,11 @@ function Ungurahui () {
 
 
     return (
-        <section className={` border-[5px] border-[orange] h-[800px] w-full flex flex-row-reverse items-center justify-center gap-[25px]`}>
+        <section className={` border-[5px] border-[orange] h-[800px] w-full flex flex-col-reverse md:flex-row-reverse items-center justify-evenly gap-[50px]`}>
             <img ref={refUngurahui} onClick={redirectProduct} className={"clampImagenIntro transition-transform duration-300"} src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1745543768/logo-cuadrado_cuc5wh.webp" alt="ungurahui"/>
-            <div className={"flex flex-col justify-center "}>
+            <div className={"flex flex-col justify-center leading-none"}>
                 <h1 ref={nameUngurahui} className={"clampTitleIntro opacity-100 transition-opacity duration-300"}>Ungurahui</h1>
-                <h5 ref={descriptionUngurahui} className={"clampSubTitleIntro transition-opacity duration-300"} >Fruta con mayor calcio del mundo</h5>
+                <h5 ref={descriptionUngurahui} className={"clampSubTitleIntro transition-opacity duration-300 w-full sm:text-right"} >Fruta con mayor calcio del mundo</h5>
             </div>
         </section>
     )

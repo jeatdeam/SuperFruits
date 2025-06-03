@@ -24,10 +24,17 @@ app.get('/', (req, res) => {
     res.send('Hello World from Node.js + TypeScript!');
 });
 app.get('/products', taskControllers.getProducts)
+app.get('/payProducts', taskControllers.getPayProducts);
 app.get('/infoProducts/:product', taskControllers.selectProducts);
+app.get('/productDescription/:name', taskControllers.getInfoProduct)
 app.get('/lastIdCarrito',taskControllers.getLastIdProducts)
 
+
+app.post('/filterProducts',taskControllers.busquedaProducts)
 app.post('/addProductCarrito', taskControllers.addProductCarrito)
+
+app.delete("/deleteProduct", taskControllers.deleteProduct)
+app.delete("/deleteGroup", taskControllers.deleteGroup)
 
 
 app.listen(port, () => {

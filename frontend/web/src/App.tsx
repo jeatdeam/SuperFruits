@@ -6,6 +6,8 @@ import {InfoProduct} from "./pages/infoProduct.tsx";
 import {Index} from "./pages/index.tsx"
 import {ProductsCards}  from "./pages/productDetails.tsx"
 import {Routes, Route} from 'react-router-dom'
+import {NewHeader} from "./pages/newHeader.tsx";
+import {CarritoProvider} from "./contexts/carritoContext.tsx"
 
 import './App.css';
 
@@ -14,17 +16,17 @@ function App() {
 
     return (
         <>
-            <Header/>
-            <Routes>
-                {/*<Header/>*/}
-                {/*<Index/>*/}
-                {/*<Footer/>*/}
-                <Route path="/" element={<Index/>}/>
-                {/*<Route path="/cuacksito" element={<ProductsCards/>}/>*/}
-                <Route path="/:product/" element={<ProductsCards/>}/>
-                <Route path="/:product/:name" element={<InfoProduct/>} />
-                <Route path="/productos/seccion-de-pagos" element={<PayProducts/>}/>
-            </Routes>
+            <CarritoProvider>
+                <Header/>
+                <NewHeader/>
+                <Routes>
+                    <Route path="/" element={<Index/>}/>
+                    {/*<Route path="/cuacksito" element={<ProductsCards/>}/>*/}
+                    <Route path="/:product/" element={<ProductsCards/>}/>
+                    <Route path="/:product/:name" element={<InfoProduct/>} />
+                    <Route path="/seccion-de-pagos" element={<PayProducts/>}/>
+                </Routes>
+            </CarritoProvider>
             <Footer/>
         </>
 

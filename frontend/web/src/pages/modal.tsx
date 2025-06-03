@@ -38,7 +38,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(({ children, activeB
     return ReactDOM.createPortal(
         <div
             ref={modalContainer}
-            className="fixed top-[200px] left-[50%] -translate-x-[50%] w-[600px] border-[5px] border-[green] bg-[lightblue] transition-opacity duration-300"
+            className="fixed top-[200px] left-[50%] -translate-x-[50%] w-[90%] md:w-[475px] shadow-[0_0_7.5px_rgba(0,0,0,.9)] rounded-[12px]  bg-blue-300 transition-opacity duration-300 p-[15px] flex flex-col gap-[15px]"
         >
             {children}
         </div>,

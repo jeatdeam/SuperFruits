@@ -8,6 +8,9 @@ import {NavBar} from "./navigationBar.tsx"
 import {Link} from "react-router-dom"
 // import { BoxSearch } from "./BoxSearch"; // asumiendo que lo separas también
 
+import {useCarrito} from "../contexts/carritoContext.tsx"
+
+
 
 
 export function Header({children}) {
@@ -26,7 +29,7 @@ export function Header({children}) {
     return ReactDOM.createPortal(
         <header
             ref={refHeader}
-            className={"w-[90%] xs:w-[80%] xl:w-[1024px] fixed top-[100px] left-1/2 -translate-x-1/2 flex justify-between items-center  rounded-[16px] h-[75px]"}>
+            className={"w-[90%] xs:w-[80%] xl:w-[1024px] absolute top-[100px] left-1/2 -translate-x-1/2 flex justify-between items-center  rounded-[16px] h-[75px]"}>
             <div
                 className={"flex justify-between items-center w-full px-[25px] absolute z-10"}>
                 <Link to="/">
@@ -90,8 +93,8 @@ export const SearchIcon = ({className}: { className?: string }) => {
             <Modal activeBox={activeBox} ref={refModal}>
                 <BoxSearch
                     ref={refInput}
-                    deleteElements={activeBox ? '/products' : null}
-                    onClear={(fn) => setClearProducts(() => fn)}
+                    // deleteElements={activeBox ? '/products' : null}
+                    // onClear={(fn) => setClearProducts(() => fn)}
                 />
             </Modal>
         </>
@@ -106,46 +109,102 @@ type BoxGroup = {
     group: HTMLDivElement | null
 }
 
+type Products = {
+    id : number;
+    idCompra : number | null;
+    fruit : string;
+    name : string;
+    price : number;
+    img : string[];
+    description : string[];
+}
+
+
 const BoxSearch = forwardRef<BoxGroup, BoxSearchProps>(({ deleteElements, onClear }, ref) => {
     const [withElements, setWidthElements] = useState<string|null>(deleteElements);
-    const [products, setProducts] = useState<any[]>([]);
+    const [products, setProducts] = useState<Products[]>([]);
     const { data } = useFetchProducts(deleteElements);
     const inputRef = useRef<HTMLInputElement | null>(null);
     const groupRef = useRef<HTMLDivElement | null>(null);
-    const inputEvent = (): void => {
-        if (data) {
-            setProducts([...data]);
-        }
-    };
-    useImperativeHandle(ref, () => ({
-        input: inputRef.current,
-        group: groupRef.current,
-    }));
+    const refInfo = useRef<HTMLHeadingElement|null>(null);
+    const withItems = useRef<boolean|null>(null);
+    const [active, setActive] = useState<boolean>(false);
+    const [contador,setContador] = useState<number|null>(0);
 
-    useEffect(()=>{
-        if(deleteElements===null){
-            setProducts([]);
-        }else{
+    const inputEvent = () : void => {
+
+        console.log('aqui esta el valor escrito->', inputRef.current?.value)
+
+    };
+
+    const extraerProducts = async () => {
+
+        const txt : string = inputRef.current?.value ?? "no hay valores validos";
+        const cleanTxt = txt.replace(/\s+/," ");
+
+        if(cleanTxt === " " || cleanTxt === "" ) {
+            console.log(cleanTxt)
+            setProducts([])
+            // withItems.current = false;
+            setActive(false)
+            setContador( prev => prev + 1)
+            return;
         }
-    },[deleteElements])
+
+        const options = {
+            method: 'POST',
+            headers : {"Content-Type":"application/json"},
+            body: JSON.stringify({txt})
+        }
+        const url = "http://localhost:3000/filterProducts";
+        try{
+            const response = await fetch(url,options)
+            if(!response.ok) throw new Error('error en la peticion')
+            const result = await response.json()
+            console.log(result.productsFilter)
+            setProducts(result.productsFilter)
+            !result.productsFilter.lenght && (setActive(true))
+            setContador(prev => prev + 1 )
+            // withItems.current = result.void
+            // setActive()
+        }catch(error){
+
+        }finally {
+
+        }
+    }
+
+    useEffect(()=> {
+
+
+
+    },[active, products])
 
     return (
         <>
             <input
-                onInput={inputEvent}
+                onInput={extraerProducts}
                 ref={inputRef}
-                className="w-[90%] bg-white mx-auto block rounded-[7.5px] px-[10px]"
+                className="w-full bg-red mx-auto block rounded-[7.5px] px-[10px] h-[32.5px] outline-none shadow-[0_0_5px_rgba(0,0,0,.9)] text-gray-700"
                 type="text"
                 placeholder="busque un producto"
             />
-            <div ref={groupRef} className={"border-[5px] border-[orange] w-[90%] mx-auto"}>
-                {products.map((el) => (
-                    <div key={el.id} className="flex justify-evenly">
-                        <img src={el.img} alt={el.name} />
-                        <h1>{el.name}</h1>
-                        <h2>{el.price}</h2>
-                    </div>
-                ))}
+            <div ref={groupRef} className={`flex flex-col gap-[15px] w-full mx-auto min-h-[150px]`}>
+                { products.length ?  products.map(
+                (el,index) => (
+                    <Link to={`/${el.fruit.replace(/\s+/g,"-")}/${el.name.replace(/\s+/g,"-")}`}>
+                        <div key={index} className="showItem transition-all duration-[250] ease-in-out flex justify-between gap-[15px] items-center shadow-[0_0_7.5px_rgba(0,0,0,.9)] rounded-[8px] hover:bg-amber-50 py-[10px] px-[15px]">
+                            <img className={"size-[75px] rounded-[8px] shadow-[0_0_2.5px_rgba(0,0,0,.9)]"} src={el.img?.[0]??""} alt={el.name} />
+                            <h1 className={"text-start flex-1 "}>{el.name}</h1>
+                            <h2 className={"text-start"}>S/. {el.price}</h2>
+                        </div>
+                    </Link>
+                ))
+                    : <h1 className={`border border-gray-700 p-[10px] rounded-[8px] whitespace-pre showItem`} ref={refInfo}>
+                        <span className={"font-[400]"}>{active?"no hay coincidencias para: ":"Ingrese datos del productos deseado"}</span>
+                        { active && <span className={"font-normal text-gray-700"}>{`"${inputRef.current?.value}"` }</span>}
+                      </h1>
+                }
             </div>
         </>
     );
@@ -161,6 +220,7 @@ const BagIcon = () => {
     const [shortInfo, setShortInfo] = useState<boolean>(false);
     const refCarrito = useRef<CarritoRefs|null>(null);
     const refIcon = useRef<SVGSVGElement|null>(null);
+    const {count} = useCarrito()
 
     const getInfo = () : void =>{
 
@@ -197,14 +257,7 @@ const BagIcon = () => {
         } else {
             document.removeEventListener('mousedown',hideCarrito);
         }
-        // if(shortInfo) {
-        //
-        // } else {
-        //
-        // }
-
-
-
+        console.log("aqui esta el count",count)
         return () => {
             document.removeEventListener('mousedown',hideCarrito);
         }
@@ -216,14 +269,14 @@ const BagIcon = () => {
             <svg
                 ref={refIcon}
                 className={"rounded-full transition-all duration-500 hover:ring-2 ring-black ring-offset-[6px] hover:bg-white"}
-                onClick={getInfo} onMouseDown={hideCarrito} onMouseEnter={showShort} onMouseLeave={hideShort} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                onClick={getInfo} onMouseDown={hideCarrito}  onMouseLeave={hideShort} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
                 fill="#999999">
                 <path
                     d="M240-80q-33 0-56.5-23.5T160-160v-480q0-33 23.5-56.5T240-720h80q0-66 47-113t113-47q66 0 113 47t47 113h80q33 0 56.5 23.5T800-640v480q0 33-23.5 56.5T720-80H240Zm0-80h480v-480h-80v80q0 17-11.5 28.5T600-520q-17 0-28.5-11.5T560-560v-80H400v80q0 17-11.5 28.5T360-520q-17 0-28.5-11.5T320-560v-80h-80v480Zm160-560h160q0-33-23.5-56.5T480-800q-33 0-56.5 23.5T400-720ZM240-160v-480 480Z"/>
             </svg>
             <Carrito ref={refCarrito} validate={validate}/>
-            <div className={`${shortInfo ? "opacity-100" : "opacity-0"} transition-element size-[20px] bg-[pink] rounded-full absolute top-[-120%] left-[50%] translate-x-[-50%] center-flex text-[10px]`}>
-                0
+            <div className={`${  count ? "opacity-100 animation-count" : "opacity-0"} itemCount transition-element size-[20px]  rounded-full absolute top-[-120%] left-[50%] translate-x-[-50%] center-flex text-[10px]`}>
+                { count}
             </div>
         </div>
     )
@@ -244,6 +297,7 @@ const MoonIcon = () => {
         </svg>
     )
 }
+
 const SettingsSight = () => {
     return (
         <svg className={"rounded-full transition-all duration-500 hover:ring-2 ring-black ring-offset-[6px] hover:bg-white"} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#999999">

@@ -9,6 +9,9 @@ const config: Config = {
         xxs: "320px",
         xs: "480px",
       },
+      boxShadow: {
+        shadowItem: '0px 0px 10px rgba(0, 0, 0, 1);'
+      }
     },
   },
   plugins: [],

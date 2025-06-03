@@ -45,7 +45,7 @@ type Products = {
     img : string[];
     description : string[];
 }
-const products : Products[]= [
+const products : Products[] = [
     {
         id : 1,
         idCompra : null,
@@ -111,26 +111,97 @@ type ProductsCarrito = {
     img : string;
     description : string;
 }
-const carritoCompras : Products[] = [
+let carritoCompras : Products[] = [
 
 ]
-const selectProducts = ( req : Request, res : Response) : void => {
 
+const busquedaProducts = ( req : Request, res: Response) => {
+    // console.log('el texto reciido es ->',[...req.body].replace(/\s/,""))
+    const {txt} = req.body;
+    const value = txt.replace(/\s+/," ");
+    console.log('cuack->',value)
+
+    const productsName = products.map(product => product.name);
+    const productsCuack = productsName.filter(name=>name.includes(value))
+    const productsFilter = products.filter(product=> productsCuack.some(cuack=>cuack.includes(product.name)))
+    console.log(productsFilter);
+
+    productsFilter.length && res.status(200).json({productsFilter,message:"si hay productos", void : false,});
+    !productsFilter.length && res.status(200).json({productsFilter,message: "no hay productos", void : true,});
+}
+
+
+
+
+
+const selectProducts = ( req : Request, res : Response) : void => {
+    console.log('cuack 0->',req.params)
     const {product} = req.params;
 
-    console.log( product );
 
-    const filterProducts = products.filter(element=> element.fruit.toLowerCase()===product.toLowerCase().replace(/-/," "))
+    if(product) {
 
-    console.log(filterProducts);
+        const filterProducts = products.filter(element=> element.fruit.toLowerCase()===product.toLowerCase().replace(/-+/g," "))
 
-    res.json({data:filterProducts});
+        // console.log(filterProducts);
+
+        res.status(200).json({data:filterProducts});
+
+    }
 
 }
+
+type KeyOptions = {
+    dataFront : string | null,
+    afterData : string | null,
+    finded : boolean | null,
+    product : Products | null,
+    message : string,
+}
+
+
+const getInfoProduct = (req: Request, res: Response) : void => {
+    const options : KeyOptions = {
+        dataFront: null,
+        afterData: null,
+        finded : null,
+        product : null,
+        message : '',
+    }
+    const { name } = req.params;
+
+    if(!name) {
+        options.message = "el parametro de ingreso es invalido"
+        res.status(400).json(options)
+    } else {
+        options.dataFront = name;
+        const nombreNormalizado = name.replace(/-+/g, " ").toLowerCase();
+        if(!nombreNormalizado) {
+            options.message = `no se pudo limpiar el parametro recibido: ${options.dataFront}`;
+            res.status(400).json(options)
+        } else {
+            options.afterData = nombreNormalizado
+            const findProduct = products.find( el => el.name.toLowerCase()===nombreNormalizado);
+            if(!findProduct) {
+                options.message = `no se encontro el producto '${options.afterData}' en la base de datos`;
+                res.status(400).json(options)
+            } else {
+                options.finded = true;
+                options.product  = findProduct;
+                options.message  = "el producto fue encontrado exitosamente";
+                res.status(200).json(options)
+            }
+        }
+
+    }
+
+};
+
+
 const getProducts = (req: Request, res: Response) :void => {
     try{
         // setTimeout(()=>
-            res.status(200).json(baseDatos)
+            res.status(200).json({products,carritoCompras})
             // ,5000);
     }catch (error: unknown) {
         if(error instanceof Error) {
@@ -150,16 +221,16 @@ const addProductCarrito = ( req : Request, res : Response) : void => {
 
         const findProduct = products.find( el=> el.id === parseInt(id) );
         if(!findProduct)  res.status(404).json({ message: `El producto con el id-${id} no existe...`})
-""
-        if(findProduct) {
-            const newProduct : Products = {...findProduct}
-            newProduct.idCompra = carritoCompras.length + 1 ;
 
-            carritoCompras.push(newProduct);
-
-            res.status(200).json({message: 'Producto agregado con exito',carritoCompras, newProduct})
-            console.log(carritoCompras)
-        }
+    if (!findProduct) {
+        return;
+        
+    }
+    const newProduct: Products = {...findProduct}
+    newProduct.idCompra = carritoCompras.length + 1;
+    carritoCompras.push(newProduct);
+    res.status(200).json({message: 'Producto agregado con exito', carritoCompras, newProduct})
+    console.log(carritoCompras)
 }
 
 
@@ -169,27 +240,83 @@ const getLastIdProducts = ( req : Request, res : Response ) => {
 
     const lastId = carritoCompras.length;
 
-    res.status(200).json({lastId,carritoCompras})
+
+    // arritoCompras})
+
+}
+
+const getPayProducts = ( req : Request, res : Response) => {
+
+    const mapProducts = new Map<number, Products[]>();
+
+    carritoCompras.forEach((product, indice)=> {
+
+        if(mapProducts.has(product.id)){
+            mapProducts.get(product.id)?.push(product)
+        } else {
+            mapProducts.set(product.id, [product])
+        }
+    })
+    const flattenedProducts = [...mapProducts]
+    mapProducts && res.status(200).json({flattenedProducts})
+    // console.log("aqui esta el mapProducts",flattenedProducts);
+
+}
+
+const deleteProduct = (req : Request, res : Response ) => {
+    console.log('rebiendo el producto a eliminar -> ',req.body)
+    const {id} = req.body;
+
+    const mapProducts = new Map<number, Products[]>();
+
+    carritoCompras.forEach((product, indice)=> {
+        if(mapProducts.has(product.id)){
+            mapProducts.get(product.id)?.push(product)
+        }else{
+            mapProducts.set(product.id, [product])
+        }
+    })
+
+    const elementDeleted = mapProducts.get(id)?.pop();
+
+    carritoCompras = carritoCompras.filter(product=> product.idCompra !== elementDeleted?.idCompra)
+    console.log('el nuevo carrito de compras es', carritoCompras)
+
+    res.status(200).json({carritoCompras})
+
+}
+const deleteGroup = () => {
 
 }
 
 
 
 
+interface TaskControllers {
+    getProducts: (req: Request, res: Response) => void;
+    getPayProducts : (req: Request, res: Response) => void;
+    getInfoProduct: (req: Request, res: Response) => void;
+    selectProducts: (req: Request, res: Response) => void;
+    getLastIdProducts: (req: Request, res: Response) => void;
+    addProductCarrito: (req: Request, res: Response) => void;
+    busquedaProducts: (req: Request, res: Response) => void;
+    deleteProduct : (req: Request, res: Response) => void;
+    deleteGroup : (req: Request, res: Response) => void;
+}
 
-
-
-
-
-
-
-
-
-
-
-export default {
+const taskControllers: TaskControllers = {
     getProducts,
+    getPayProducts,
+    getInfoProduct,
     selectProducts,
     getLastIdProducts,
     addProductCarrito,
-}
+    busquedaProducts,
+    deleteProduct,
+    deleteGroup,
+};
+
+export default taskControllers;
+
+
+

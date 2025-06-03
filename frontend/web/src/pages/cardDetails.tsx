@@ -54,7 +54,7 @@ export const CardDetails = forwardRef<RefsCard, PropsCard>(({children, refSectio
             document.removeEventListener('mousedown', handleClickOutside);
             const root = document.getElementById("root");
             if (root) root.style.filter = "blur(0)";
-            refSection.current?.forEach(div=> div && (div.style.pointerEvents="auto"))
+            refSection.current?.forEach( div => div && (div.style.pointerEvents="auto"))
         };
 
     }, [active]);

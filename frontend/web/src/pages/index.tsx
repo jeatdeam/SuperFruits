@@ -202,7 +202,7 @@ function Introduction() {
     return (
         <section className="border-[5px] border-[green] h-full w-full mx-auto ">
             <div className="index w-[95%] h-[100vh] mx-auto border-[5px] border-[purple] flex flex-col items-center justify-center gap-[25px] py-[25px]">
-                <h1 className="clampTitleIntro w-4/5 xl:w-3/5 leading-[0.8] py-[10px] text-center">
+                <h1 className="clampTitleIntro w-4/5 xl:w-3/5 leading-none py-[10px] text-center">
                     Amazonia Peruana
                 </h1>
                 {/*<h5 className="clampSubTitleIntro w-4/5 text-white leading-[0.9] text-right whitespace-nowrap text-center">*/}
@@ -257,7 +257,7 @@ function Aguaje() {
                 onClick={redirectProduct}
             />
             <div>
-                <h1 className="clampTitleIntro  transition-opacity duration-300 opacity-100  self-start leading-1">
+                <h1 className="clampTitleIntro  transition-opacity duration-300 opacity-100  self-start ">
                     Aguaje
                 </h1>
                 <h5 className="clampSubTitleIntro opacity-100 transition-opacity duration-300 delay-500 whitespace-nowrap text-right leading-none">la mayor fruta con fitoestrogeno</h5>
@@ -313,7 +313,7 @@ function Camu () {
             />
             <div className="flex flex-col justify-center">
                 <div ref={nameCamu} className="opacity-100 transition-opacity duration-300 ">
-                    <h1 className="clampTitleIntro  leading-none  sm:whitespace-nowrap">Camu camu</h1>
+                    <h1 className="clampTitleIntro  sm:whitespace-nowrap leading-none">Camu camu</h1>
                 </div>
                 <h5
                     ref={descriptionCamu}
@@ -343,7 +343,7 @@ function Ungurahui () {
     return (
         <section className={` border-[5px] border-[orange] h-[800px] w-full flex flex-col-reverse md:flex-row-reverse items-center justify-evenly gap-[50px]`}>
             <img ref={refUngurahui} onClick={redirectProduct} className={"clampImagenIntro transition-transform duration-300"} src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1745543768/logo-cuadrado_cuc5wh.webp" alt="ungurahui"/>
-            <div className={"flex flex-col justify-center leading-none"}>
+            <div className={"flex flex-col justify-center "}>
                 <h1 ref={nameUngurahui} className={"clampTitleIntro opacity-100 transition-opacity duration-300"}>Ungurahui</h1>
                 <h5 ref={descriptionUngurahui} className={"clampSubTitleIntro transition-opacity duration-300 w-full sm:text-right"} >Fruta con mayor calcio del mundo</h5>
             </div>

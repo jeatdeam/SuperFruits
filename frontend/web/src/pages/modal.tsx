@@ -46,34 +46,3 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(({ children, activeB
     );
 });
 
-//
-// import ReactDOM from 'react-dom';
-// import { useRef } from 'react';
-//
-// export const Modal = ({
-//                           children,
-//                           activeBox,
-//                       }: {
-//     children: React.ReactNode;
-//     activeBox: boolean;
-// }) => {
-//     const modalRoot: HTMLElement | null = document.getElementById('modal');
-//     const modalContainer = useRef<HTMLDivElement | null>(null);
-//
-//     if (!modalRoot) return null;
-//
-//     return ReactDOM.createPortal(
-//         <div
-//             ref={modalContainer}
-//             className={`
-//         fixed top-[200px] left-[50%] -translate-x-1/2 z-50
-//         transition-all duration-300 ease-in-out
-//         ${activeBox ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-95 pointer-events-none'}
-//         bg-[lightblue] border-[5px] border-[green] rounded-lg size-[600px]
-//       `}
-//         >
-//             {children}
-//         </div>,
-//         modalRoot
-//     );
-// };

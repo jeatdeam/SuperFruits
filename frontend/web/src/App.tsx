@@ -8,8 +8,11 @@ import {ProductsCards}  from "./pages/productDetails.tsx"
 import {Routes, Route} from 'react-router-dom'
 import {NewHeader} from "./pages/newHeader.tsx";
 import {CarritoProvider} from "./contexts/carritoContext.tsx"
+import {ProcesoCompraProvider} from "./contexts/procesoDeCompraContext.tsx";
+import {ProcesoDeCompra} from "./components/procesoDeCompra.tsx";
 
 import './App.css';
+import {LayoutConProceso} from "./pages/layoutConProceso.tsx";
 
 
 function App() {
@@ -17,17 +20,21 @@ function App() {
     return (
         <>
             <CarritoProvider>
-                <Header/>
-                <NewHeader/>
-                <Routes>
-                    <Route path="/" element={<Index/>}/>
-                    {/*<Route path="/cuacksito" element={<ProductsCards/>}/>*/}
-                    <Route path="/:product/" element={<ProductsCards/>}/>
-                    <Route path="/:product/:name" element={<InfoProduct/>} />
-                    <Route path="/seccion-de-pagos" element={<PayProducts/>}/>
-                </Routes>
+                <ProcesoCompraProvider>
+                    <Header/>
+                    <NewHeader/>
+                    <Routes>
+                        <Route path="/" element={<Index/>}/>
+                        <Route element={<LayoutConProceso/>}>
+                            <Route path="/:product/" element={<ProductsCards/>}/>
+                            <Route path="/:product/:name" element={<InfoProduct/>} />
+                            <Route path="/seccion-de-pagos" element={<PayProducts/>}/>
+                        </Route>
+                    </Routes>
+                </ProcesoCompraProvider>
             </CarritoProvider>
             <Footer/>
+
         </>
 
     );

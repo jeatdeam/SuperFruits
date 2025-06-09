@@ -13,6 +13,8 @@ const useGetProducts =  ()=> {
 
 
 
+    // const
+
     useEffect( ()=>{
         const fetchLength = async () => {
             const options = {
@@ -28,7 +30,7 @@ const useGetProducts =  ()=> {
             }catch(error){
                 console.error(error.message)
             }finally{
-                console.log('fetch terminado')
+                // console.log('fetch terminado')
             }
         }
 
@@ -49,17 +51,13 @@ export const CarritoProvider = ({children}) => {
     const [count, setCount] = useState<number>(data);
 
     useEffect(()=>{
-        console.log(data,"<-1")
-        console.log(count,"<-count 1")
+
         setCount(data)
-        console.log(count,"<-count 2")
-        console.log(data,"<-2")
+
     },[data])
 
     const incrementCount = (value) => {
         setCount(value);
-        console.log('si hemos llegado aqui')
-        console.log(count)
     }
 
     return(

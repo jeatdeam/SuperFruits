@@ -5,6 +5,7 @@ import {ButtonBuy} from "../components/buttonBuy.tsx";
 
 import { useState, useEffect, useRef} from "react";
 import {useParams} from "react-router-dom"
+import {ProcesoDeCompra} from "../components/procesoDeCompra.tsx";
 
 type Products = {
     id : number;
@@ -23,7 +24,7 @@ const useFetchItem = (name : string ) => {
     const [dataProduct, setData] = useState<Products|null>(null);
 
     useEffect(()=>{
-        console.log(name)
+        // console.log(name)
         const options = {
             method : 'GET',
             headers : {"Content-Type": "application/json"},

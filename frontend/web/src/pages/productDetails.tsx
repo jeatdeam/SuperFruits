@@ -1,10 +1,10 @@
 import {useEffect, useState, useRef, useImperativeHandle, forwardRef} from "react";
-import {Header} from "./header.tsx";
-import {Footer} from "./footer.tsx";
 import {CardDetails, RefsCard} from "./cardDetails.tsx" ;
 import {useParams, Link, useNavigate} from 'react-router-dom'
 import {useLastId} from "../hooks/lastIdProduct.tsx"
-
+import {ButtonBuy} from "../components/buttonBuy.tsx";
+import {ButtonAdd} from "../components/buttonAdd.tsx";
+import {ProcesoDeCompra} from "../components/procesoDeCompra.tsx";
 
 type Products = {
     id: number;
@@ -33,14 +33,11 @@ export const ProductsCards = () => {
 
     const sendProduct = ( e : MouseEvent) => {
         const id = e.target?.dataset.id;
-        // const id = refButtonAdd.current?.dataset.id;
         console.log(id)
         if( id) {
-            // setSelectedId(id)
             refetch(id);
             console.log(data)
         }
-
     }
     useEffect(() => {
         console.log('cuacksito -> ',refProducts.current)
@@ -68,6 +65,8 @@ export const ProductsCards = () => {
     }, [product]);  // ← Aquí incluimos `products` en las dependencias
 
     const showInfoProduct = (e: MouseEvent) => {
+
+
         // if(!refCard.current) return;
         // const { showInfo } = refCard.current;
         // const target = e.target as HTMLElement;
@@ -88,24 +87,17 @@ export const ProductsCards = () => {
             if(card.contains(e.target as Node)) {
                 object = indice;
                 const name = refButtonAdd.current[object].dataset.name;
+                console.log('aqui ta el name ',name)
                 if(!refButtonAdd.current[object].contains(e.target as Node) && !refButtonCarrito.current[object].contains(e.target as Node)) {
                     navigate(`/${product}/${name.replace(/\s+/g,"-")}`)
+                    console.log('no estaos presionando ninguno de los dos botones')
                     break;
                 }
             }
 
-
-
-
         }
-
-
-
     };
 
-    const redirectToPays =  () => {
-
-    }
 
     return (
         <>
@@ -120,18 +112,12 @@ export const ProductsCards = () => {
                                 <img src={el.img[0]} alt="" className={"size-[240px] rounded-[8px]"}/>
                                 <h1>{el.fruit}</h1>
                                 <h2>{el.description[0]}</h2>
-                                <h2>{el.name}</h2>
+                                <h2 className={"nameProduct"}>{el.name}</h2>
                                 <b>{el.price}</b>
                                 <div className={"flex gap-[20px] justify-evenly w-full"}>
-                                    <button ref={(node)=> (refButtonCarrito.current[key] = node)} data-id={el.id} onMouseDown={sendProduct}
-                                            className={" bg-white  border-[2px] border-[gray] text-sm w-[80px] h-[40px] rounded-[8px] leading-[1.1]"}>agregar
-                                        al carrito
-                                    </button>
-                                    <Link to={`/${product}/${el.name.replace(/\s+/g,"-")}/seccion-de-pagos`}>
-                                        <button ref={(node) => (refButtonAdd.current[key] = node)}
-                                                onMouseDown={sendProduct} data-id={el.id} data-name={el.name}
-                                                className={"bg-white  border-[2px] border-[gray] text-sm w-[75px] h-[40px] rounded-[8px]"}>comprar
-                                        </button>
+                                    <ButtonAdd ref={(node) => (refButtonCarrito.current[key] = node)} id={el.id}/>
+                                    <Link to={`/seccion-de-pagos`}>
+                                        <ButtonBuy ref={(node)=>(refButtonAdd.current[key] = node)} id={el.id} name={el.name}/>
                                     </Link>
                                 </div>
                             </div>

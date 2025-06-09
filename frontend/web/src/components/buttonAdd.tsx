@@ -2,14 +2,15 @@ import {useState, useEffect, useRef, forwardRef, useImperativeHandle} from "reac
 import {useCarrito} from "../contexts/carritoContext.tsx"
 
 type PropsButton = {
-    id: number,
+    id: number;
 }
 type RefButton = {
     // addCarrito: () => void,
+    ref : HTMLButtonElement;
 }
 
 
-export const ButtonAdd = forwardRef<RefButton, PropsButton>(({id}, ref) => {
+export const ButtonAdd = forwardRef<HTMLButtonElement, PropsButton>(({id}, ref) => {
     const {incrementCount} = useCarrito()
     const sendProduct = async (e?: React.MouseEvent<HTMLButtonElement>) => {
         // const idProduct = e.target.dataset.id
@@ -48,12 +49,12 @@ export const ButtonAdd = forwardRef<RefButton, PropsButton>(({id}, ref) => {
     }
 
 
-    useImperativeHandle(ref, () => ({
-        // addCarrito : sendProduct,
-    }))
 
+    useEffect(() => {
+        // console.log('aqui esta el ref -> ',ref)
+    }, []);
 
     return (
-        <button data-id={id} onClick={sendProduct}>Añadir al carrito</button>
+        <button ref={ref} data-id={id} onClick={sendProduct}>Añadir al carrito</button>
     )
 })

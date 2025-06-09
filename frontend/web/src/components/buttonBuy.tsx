@@ -1,44 +1,43 @@
-import {useState, useEffect, useRef, useImperativeHandle} from 'react'
-import {Link} from 'react-router-dom'
-import {useCarrito} from "../contexts/carritoContext.tsx";
+import { forwardRef } from "react";
+import { useCarrito } from "../contexts/carritoContext";
+import { useNavigate } from "react-router-dom";
 
 
-type ButtonProps = {
-    id : number;
-}
-type ButtonRef = {
+type ButtonBuyProps = {
+    id: number;
+    name: string;
+};
 
-}
-
-
-
-export const ButtonBuy = ({id} : ButtonProps ) => {
-    const {incrementCount} = useCarrito()
+// forwardRef espera: forwardRef<refType, propsType>((props, ref) => ...)
+export const ButtonBuy = forwardRef<HTMLButtonElement, ButtonBuyProps>(({ id, name }, ref) => {
+    const { incrementCount } = useCarrito();
+    const navigate = useNavigate();
 
     const sendProduct = async () => {
+        try {
+            const response = await fetch("http://localhost:3000/addProductCarrito", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id }),
+            });
 
+            if (!response.ok)
+                throw new Error(`Error ${response.status}: ${response.statusText}`);
 
-        await fetchBuy(id)
-    }
-    const fetchBuy = async (id) => {
-        const options = {
-            method : 'POST',
-            headers : {"Content-Type":"application/json"},
-            body : JSON.stringify({id})
+            const result = await response.json();
+            incrementCount(result.carritoCompras.length);
+
+            navigate("/seccion-de-pagos");
+        } catch (error) {
+            console.error(error);
         }
-        const url = "http://localhost:3000/addProductCarrito";
-        const response = await fetch(url, options);
-        if(!response.ok) throw new Error(`Error en la peticion - ${response.status} -> ${response.statusText}`);
-        const result = await response.json();
-        incrementCount(result.carritoCompras.length);
+    };
 
-    }
+    return (
+        <button ref={ref} data-id={id} data-name={name} onClick={sendProduct}>
+            Comprar
+        </button>
+    );
+});
 
-    return(
-        <Link to={"/seccion-de-pagos"}>
-            <button data-id={id} onClick={sendProduct}>
-                comprar
-            </button>
-        </Link>
-    )
-}
+

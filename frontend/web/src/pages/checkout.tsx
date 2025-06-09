@@ -1,6 +1,5 @@
 import {useState, useEffect, useRef, forwardRef} from 'react'
 import {useFetchProducts} from "../hooks/customProducts.tsx"
-import {c} from "vite/dist/node/moduleRunnerTransport.d-DJ_mE5sf";
 
 
 

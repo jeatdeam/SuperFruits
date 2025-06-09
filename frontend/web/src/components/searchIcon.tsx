@@ -1,0 +1,144 @@
+import {forwardRef, useEffect, useRef, useState} from "react";
+import {Modal} from "../pages/modal.tsx";
+import {useFetchProducts} from "../hooks/customProducts.tsx";
+import {Link} from "react-router-dom";
+
+export const SearchIcon = ({className}: { className?: string }) => {
+    const [activeBox, setActiveBox] = useState(false);
+    const refInput = useRef<BoxGroup | null>(null);
+    const refModal = useRef<HTMLDivElement | null>(null);
+    const iconRef = useRef<HTMLElement | null>(null);
+    // sin | null porque ya es handled internamente
+    const [clearProducts, setClearProducts] = useState<(() => void) | null>(null);
+    const toggleSearch = () => setActiveBox(prev => !prev);
+    useEffect(() => {
+        if (activeBox) {
+            refInput.current?.input && (refInput.current.input.value = "");
+        }
+        const hideAfterShow = (e: MouseEvent) => {
+            if (refModal.current && !refModal.current?.contains(e.target as Node) && !iconRef.current?.contains(e.target as Node)) {
+                setActiveBox(false);
+            }
+        }
+
+        document.addEventListener('mousedown', hideAfterShow)
+
+        return () => document.removeEventListener('mousedown', hideAfterShow)
+
+    }, [activeBox]);
+
+
+    return (
+        <>
+            <svg className={className} onClick={toggleSearch} ref={iconRef} xmlns="http://www.w3.org/2000/svg" height="24px"
+                 viewBox="0 -960 960 960"
+                 width="24px" fill="#999999">
+                <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+            </svg>
+            <Modal activeBox={activeBox} ref={refModal}>
+                <BoxSearch
+                    ref={refInput}
+                    closeModal={toggleSearch}
+                    // deleteElements={activeBox ? '/products' : null}
+                    // onClear={(fn) => setClearProducts(() => fn)}
+                />
+            </Modal>
+        </>
+    );
+};
+
+type BoxSearchProps = {
+    closeModal: () => void; // 👈 nueva prop
+};
+type BoxGroup = {
+    input: HTMLInputElement | null;
+    group: HTMLDivElement | null
+}
+type Products = {
+    id : number;
+    idCompra : number | null;
+    fruit : string;
+    name : string;
+    price : number;
+    img : string[];
+    description : string[];
+}
+
+const BoxSearch = forwardRef<BoxGroup, BoxSearchProps>(({ closeModal }, ref) => {
+    const [products, setProducts] = useState<Products[]>([]);
+    const inputRef = useRef<HTMLInputElement | null>(null);
+    const groupRef = useRef<HTMLDivElement | null>(null);
+    const refInfo = useRef<HTMLHeadingElement|null>(null);
+    const withItems = useRef<boolean|null>(null);
+    const [active, setActive] = useState<boolean>(false);
+    const [contador,setContador] = useState<number|null>(0);
+
+    const extraerProducts = async () => {
+
+        const txt : string = inputRef.current?.value ?? "no hay valores validos";
+        const cleanTxt = txt.replace(/\s+/," ");
+
+        if(cleanTxt === " " || cleanTxt === "" ) {
+            console.log(cleanTxt)
+            setProducts([])
+            // withItems.current = false;
+            setActive(false)
+            setContador( prev => prev + 1)
+            return;
+        }
+
+        const options = {
+            method: 'POST',
+            headers : {"Content-Type":"application/json"},
+            body: JSON.stringify({txt})
+        }
+        const url = "http://localhost:3000/filterProducts";
+        try{
+            const response = await fetch(url,options)
+            if(!response.ok) throw new Error('error en la peticion')
+            const result = await response.json()
+            console.log(result.productsFilter)
+            setProducts(result.productsFilter)
+            !result.productsFilter.lenght && (setActive(true))
+            setContador(prev => prev + 1 )
+            // withItems.current = result.void
+            // setActive()
+        }catch(error){
+
+        }finally {
+
+        }
+    }
+
+    useEffect(()=> {
+    },[active, products])
+
+    return (
+        <>
+            <input
+                onInput={extraerProducts}
+                ref={inputRef}
+                className="w-full bg-red mx-auto block rounded-[7.5px] px-[10px] h-[32.5px] outline-none shadow-[0_0_5px_rgba(0,0,0,.9)] text-gray-700"
+                type="text"
+                placeholder="busque un producto"
+            />
+            <div ref={groupRef} className={`flex flex-col gap-[15px] w-full mx-auto min-h-[150px]`}>
+                { products.length ?  products.map(
+                        (el,index) => (
+                            <Link onClick={closeModal} to={`/${el.fruit.replace(/\s+/g,"-")}/${el.name.replace(/\s+/g,"-")}`}>
+                                <div key={index} className="showItem transition-all duration-[250] ease-in-out flex justify-between gap-[15px] items-center shadow-[0_0_7.5px_rgba(0,0,0,.9)] rounded-[8px] hover:bg-amber-50 py-[10px] px-[15px]">
+                                    <img className={"size-[75px] rounded-[8px] shadow-[0_0_2.5px_rgba(0,0,0,.9)]"} src={el.img?.[0]??""} alt={el.name} />
+                                    <h1 className={"text-start flex-1 "}>{el.name}</h1>
+                                    <h2 className={"text-start"}>S/. {el.price}</h2>
+                                </div>
+                            </Link>
+                        ))
+                    : <h1 className={`border border-gray-700 p-[10px] rounded-[8px] whitespace-pre showItem`} ref={refInfo}>
+                        <span className={"font-[400]"}>{active?"no hay coincidencias para: ":"Ingrese datos del productos deseado"}</span>
+                        { active && <span className={"font-normal text-gray-700"}>{`"${inputRef.current?.value}"` }</span>}
+                    </h1>
+                }
+            </div>
+        </>
+    );
+});

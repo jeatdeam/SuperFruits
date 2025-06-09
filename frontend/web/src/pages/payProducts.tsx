@@ -1,199 +1,90 @@
-import {useState, useEffect, useRef} from "react";
-
-import {Header} from './Header';
-import {Footer} from './Footer';
-import {Carrito} from "./carrito.tsx";
-import {useCarrito} from "../contexts/carritoContext.tsx";
-
-
-type Carrito = {
-    id: number;
-    idCompra: number;
-    fruit: string;
-    name: string;
-    price: number;
-    img : string[];
-    description: string[];
-}
-type Productos = {
-    id: number;
-    idCompra: number|null;
-    fruit: string;
-    name: string;
-    price: number;
-    img : string[];
-    description: string[];
-}
-
-
-
-// type FlattenedProducts = {
-//     id: number;
-//     products : Productos[];
-// }
-
-type ResponseData = {
-    flattenedProducts: [number, Productos[]][];
-}
-
-
-
-const useGetCarrito = () => {
-
-    const [data, setData]   = useState<ResponseData|null>(null);
-    const [error, setError]   = useState<boolean>(false);
-    const [loading, setLoading]   = useState<boolean>(false);
-
-    useEffect(()=>{
-        const options = {
-            method : 'GET',
-            headers : {"Content-Type" : "application/json"},
-        }
-        const url = "http://localhost:3000/payProducts";
-
-        setLoading(true)
-
-        const fetchCarrito = async () => {
-            try{
-                const response = await fetch(url,options);
-                if(!response.ok) throw new Error(`error en la peticion | ${response.status} -> ${response.statusText}`)
-                const result = await response.json()
-
-                setData(result)
-                setLoading(false);
-                console.log(result)
-            }catch(error){
-                console.error(error.message)
-                setError(true);
-                setLoading(false)
-            }finally{
-                setLoading(false);
-            }
-
-        }
-        fetchCarrito();
-    },[])
-
-    return {data};
-}
-
-
-const LessProducts = ({id} : {id:number}) => {
-    const {incrementCount} = useCarrito();
-
-
-    const deleteProduct = () => {
-
-        const options = {
-            method : 'DELETE',
-            headers : {"Content-Type" : "application/json"},
-            body : JSON.stringify({id}),
-        }
-        const url = "http://localhost:3000/deleteProduct";
-
-        const fetchDelete = async () => {
-            try{
-                const response = await fetch(url,options);
-                if(!response.ok) throw new Error(`error en la peticion | ${response.status} -> ${response.statusText}`);
-                const result = await response.json();
-                result.carritoCompras && incrementCount(result.carritoCompras?.length);
-            }catch(error){
-                console.error(error.message)
-            }finally{
-
-            }
-
-        }
-        fetchDelete()
-
-    }
-
-    return (
-        <svg onClick={deleteProduct} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#999999">
-            <path className={"pointer-events-none"} d="M200-440v-80h560v80H200Z"/>
-        </svg>
-    )
-}
-
-
-const AddProducts = ({id} : {id: number}) => {
-    const {incrementCount} = useCarrito();
-
-    const addCarrito = (e:MouseEvent) => {
-        const idProduct = parseInt(e.target?.closest('svg').dataset.id);
-        console.log(idProduct);
-        const options = {
-            method : 'POST',
-            headers : {"Content-Type":"application/json"},
-            body : JSON.stringify({id})
-        }
-        const url = "http://localhost:3000/addProductCarrito"
-        try{
-            const fetchAdd = async () => {
-                const response = await fetch(url,options);
-                if(!response.ok) throw new Error(`error en la peticion | ${response.status} -> ${response.statusText}`);
-                const result = await response.json()
-
-                result.carritoCompras && incrementCount(result.carritoCompras.length);
-
-            }
-            fetchAdd()
-        }catch(error){
-            console.error(error.message)
-        }finally{
-
-        }
-
-    }
-
-
-    return (
-        <svg onClick={addCarrito} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#999999">
-            <path className={"pointer-events-none"} d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/>
-        </svg>
-    )
-}
-const DeleteGroup = () => {
-
-
-    return (
-        <svg className={"absolute top-0 right-0"} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#999999">
-            <path
-                d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
-        </svg>
-    )
-
-}
-
+import { useState, useRef } from "react";
+import { useCarrito } from "../contexts/carritoContext.tsx";
+import { useGetCarrito } from "../hooks/getCarritoMap.tsx";
+import { DeleteGroup } from "../components/deleteGroupProducts.tsx";
+import { AddProducts } from "../components/addElementGroupProducts.tsx";
+import { LessProducts } from "../components/lessElementProductGroup.tsx";
 
 export const PayProducts = () => {
-    const {data} = useGetCarrito();
-
-
-    useEffect(() => {
-        console.log('data es->', data)
-
-
-    }, [])
-
+    const { data, refetch } = useGetCarrito();
+    const [animateIndex, setAnimateIndex] = useState<number | null>(null);
 
     return (
-        <main>
-            {
-                data?.flattenedProducts.map(([key, value], indice) => (
-                    value?.length && <section className={"flex flex-col border-4 relative w-fit"} key={indice}>
-                        <img className={"size-[75px]"} src={value[0].img[0]} alt=""/>
-                        <h1>{value[0].name}</h1>
-                        <b>{value[0].price}</b>
-                        <div className={"flex"}>
-                            <LessProducts id={value[0].id}/>
-                            <small>count: {value.length}</small>
-                            <AddProducts id={value[0].id}/>
+        <main className="w-3/4 mx-auto flex flex-col gap-[25px]">
+            <h1 className="text-[75px] bg-blue-300 text-center leading-none">Seccion de Pagos</h1>
+
+            <div className="flex flex-wrap gap-[25px] justify-center p-[10px]">
+                {data?.flattenedProducts.map(([key, value], index) => (
+                    <section
+                        key={index}
+                        className={`transition-all duration-500 ease-in-out flex flex-col justify-between gap-[10px] rounded-[8px] items-center w-[250px] h-[375px] p-[15px] shadow-[0_0_5px_rgba(0,0,0,.8)] relative ${
+                            animateIndex === index ? "showItem" : ""
+                        }`}
+                        onAnimationEnd={() => setAnimateIndex(null)}
+                    >
+                        <img
+                            className="size-[215px] rounded-[8px] object-cover shadow-[0_0_2.5px_rgba(0,0,0,.9)]"
+                            src={value[0].img[0]}
+                            alt=""
+                        />
+                        <h1 className="self-start">{value[0].name} - {value[0].fruit}</h1>
+
+                        <div className="flex justify-between w-[85%]">
+                            <div className="flex gap-[10px]">
+                                <StarIcon />
+                                <EmpaqueIcon />
+                            </div>
+                            <b className="font-medium self-end">S/. {value[0].price}</b>
                         </div>
-                        <DeleteGroup/>
+
+                        <div className="flex w-1/2 justify-between">
+                            <LessProducts
+                                id={value[0].id}
+                                refetch={refetch}
+                                onAnimate={() => setAnimateIndex(index)}
+                            />
+                            <small className="rounded-full size-[25px] flex items-center justify-center shadow-[0_0_3.5px_rgba(0,0,0,1)]">
+                                {value.length}
+                            </small>
+                            <AddProducts
+                                id={value[0].id}
+                                refetch={refetch}
+                                onAnimate={() => setAnimateIndex(index)}
+                            />
+                        </div>
+
+                        <DeleteGroup id={value[0].id} refetch={refetch} />
                     </section>
-                    ))
-                }
-            </main>
+                ))}
+            </div>
+        </main>
+    );
+};
+
+
+const EmpaqueIcon = () => {
+    return (
+        <svg className={"size-[25px]"} xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+             width="100" height="100"
+             viewBox="0 0 50 50">
+            <path
+                d="M 1 3 L 1 15 L 3 15 L 3 48 L 47 48 L 47 15 L 49 15 L 49 3 Z M 3 5 L 47 5 L 47 13 L 3 13 Z M 5 15 L 45 15 L 45 46 L 5 46 Z M 17.5 19 C 15.578125 19 14 20.578125 14 22.5 C 14 24.421875 15.578125 26 17.5 26 L 32.5 26 C 34.421875 26 36 24.421875 36 22.5 C 36 20.578125 34.421875 19 32.5 19 Z M 17.5 21 L 32.5 21 C 33.339844 21 34 21.660156 34 22.5 C 34 23.339844 33.339844 24 32.5 24 L 17.5 24 C 16.660156 24 16 23.339844 16 22.5 C 16 21.660156 16.660156 21 17.5 21 Z"></path>
+        </svg>
+    )
+}
+const StarIcon = () => {
+
+    const flickElement = ( e : MouseEvent ) => {
+        const rootNode = e.target?.parentNode.parentNode;
+        console.log(rootNode,"aqui ta")
+
+    }
+
+    return (
+        <svg onClick={flickElement} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
+             width="24px" fill="#999999">
+            <path
+                d="m354-287 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm247-350Z"/>
+        </svg>
     )
 }

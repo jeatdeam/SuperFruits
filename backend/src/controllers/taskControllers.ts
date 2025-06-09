@@ -285,7 +285,13 @@ const deleteProduct = (req : Request, res : Response ) => {
     res.status(200).json({carritoCompras})
 
 }
-const deleteGroup = () => {
+const deleteGroup = (req : Request, res : Response) => {
+    console.log('el id recibido es -> ', req.body)
+    const {id} = req.body;
+
+    carritoCompras = carritoCompras.filter( product=> product.id !== id )
+
+    res.status(200).json({carritoCompras})
 
 }
 

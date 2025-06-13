@@ -21,6 +21,7 @@ export const useGetCarrito = () => {
     const [loading, setLoading]   = useState<boolean>(false);
 
 
+
     const fetchCarrito = async () => {
         const options = {
             method : 'GET',
@@ -36,8 +37,8 @@ export const useGetCarrito = () => {
 
             setData(result)
             setLoading(false);
-            // console.log(result)
-            console.log('si se esta haciendo el fetch')
+            console.log('si se esta haciendo fetch')
+            // console.log('si se esta haciendo el fetch')
         }catch(error){
             console.error(error.message)
             setError(true);

@@ -7,6 +7,41 @@
 /*    --breakpoint-xs : 20rem;*/
 /*}*/
 
+@layer utilities {
+    .transition-half {
+        transition: all .25s linear;
+    }
+
+
+}
+
+
+.animate-heightDown{
+    animation: heightDown .5s ease-in-out forwards;
+}
+
+.animate-heightUp{
+    animation: heightUp .5s ease-in-out forwards;
+}
+@keyframes heightDown {
+    0%{
+       height: 100%;
+    }
+    100%{
+        height: 0;
+    }
+}
+
+@keyframes heightUp {
+    0%{
+        height: 0;
+    }
+    100%{
+        height: 75px;
+    }
+}
+
+
 .index{
     position: relative;
     z-index: 1;
@@ -154,10 +189,10 @@ body{
 }
 
 
+
+
 .itemCount{
-    /*position: relative;*/
-    z-index: 999;
-    background: red;
+
 }
 .itemCount::after{
     content: "";
@@ -165,21 +200,48 @@ body{
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    background: gainsboro;
+    background: blueviolet;
+    opacity: .5;
     z-index: -999;
 
-    animation: pulse-count 3s ease-in-out infinite;
+    animation: pulse-count 1s linear infinite;
 }
-.animation-count{
+.itemCount::before{
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 1px solid blueviolet;
+    /*background: transparent;*/
+    z-index: -1000;
 
+    animation: pulse-count-two 1s linear infinite;
+
+}
+
+.animation-count{
+    /*animation : pulse-count-two 2s linear infinite;*/
+}
+@keyframes pulse-count-two {
+    0%{
+        transform: scale(0.75);
+        opacity: .75;
+    }
+    100%{
+        transform: scale(1.25);
+        opacity: .25;
+    }
 }
 
 @keyframes pulse-count {
     0%{
-        transform: scale(.5);
+        transform: scale(.75);
+        opacity: .5;
     }
     100%{
-        transform: scale(1.5);
+        transform: scale(2);
+        opacity: .25;
     }
 }
 
@@ -235,6 +297,10 @@ body{
 
 .showItem{
     animation: show 0.5s linear;
+}
+.showButton{
+    transition: all 0.25s linear;
+    animation: show .25s linear;
 }
 
 
@@ -354,6 +420,6 @@ body{
 .cuack2:hover{
     background: #fff;
     box-shadow:
-    0 0 0 4px #fff,
-    0 0 0 6px rgba(0,0,0,1)
+    0 0 0 2px #fff,
+    0 0 0 4px rgba(0,0,0,1)
 }

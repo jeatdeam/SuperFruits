@@ -11,7 +11,7 @@ export const PayProducts = () => {
 
     return (
         <main className="w-3/4 mx-auto flex flex-col gap-[25px]">
-            <h1 className="text-[75px] bg-blue-300 text-center leading-none">Seccion de Pagos</h1>
+            <h1 className="text-titleResponsive text-center leading-none">Seccion de Pagos</h1>
 
             <div className="flex flex-wrap gap-[25px] justify-center p-[10px]">
                 {data?.flattenedProducts.map(([key, value], index) => (
@@ -62,7 +62,7 @@ export const PayProducts = () => {
 };
 
 
-const EmpaqueIcon = () => {
+export const EmpaqueIcon = () => {
     return (
         <svg className={"size-[25px]"} xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
              width="100" height="100"
@@ -72,7 +72,7 @@ const EmpaqueIcon = () => {
         </svg>
     )
 }
-const StarIcon = () => {
+export const StarIcon = () => {
 
     const flickElement = ( e : MouseEvent ) => {
         const rootNode = e.target?.parentNode.parentNode;

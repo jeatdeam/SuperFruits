@@ -80,29 +80,29 @@ export const InfoProduct = () => {
 
     return (
         <main>
-            <section className={"bg-[green] w-4/5 mx-auto"}>
-                <h1 className={"text-[75px]"}>{name.replace(/-/g,' ')}</h1>
-                <div className={"w-full bg-blue-300 flex"} >
-                        <div className={"w-1/2 bg-amber-300 h-full flex flex-col justify-center items-center gap-[10px]"}>
-                            <img className={"size-[250px] object-cover border rounded-[8px]"} src={dataProduct?.img[0]} alt=""/>
+            <section className={"w-4/5 xl:w-3/5 mx-auto flex flex-col gap-[25px]"}>
+                <h1 className={"text-titleResponsive text-center mb-[25px]"}>{name.replace(/-/g,' ')}</h1>
+                <div className={"w-full flex-col flex md:flex-row gap-0 md:gap-[25px] shadow-shadowElement p-[25px] rounded-[8px]"} >
+                        <div className={"w-full md:w-1/2 rounded-[8px] h-full flex flex-col justify-center items-center gap-[10px]"}>
+                            <img className={"shadow-shadowElement size-[250px] object-cover border rounded-[8px]"} src={dataProduct?.img[0]} alt=""/>
                             <div className={"flex gap-[10px] justify-between"}>
-                                <img className={"size-[75px] object-cover border rounded-[8px]"}  src={dataProduct?.img[1]} alt=""/>
-                                <img className={"size-[75px] object-cover border rounded-[8px]"}  src={dataProduct?.img[2]} alt=""/>
-                                <img className={"size-[75px] object-cover border rounded-[8px]"}  src={dataProduct?.img[3]} alt=""/>
+                                <img className={"shadow-shadowElement size-[75px] object-cover border rounded-[8px]"}  src={dataProduct?.img[1]} alt=""/>
+                                <img className={"shadow-shadowElement size-[75px] object-cover border rounded-[8px]"}  src={dataProduct?.img[2]} alt=""/>
+                                <img className={"shadow-shadowElement size-[75px] object-cover border rounded-[8px]"}  src={dataProduct?.img[3]} alt=""/>
                             </div>
-                            <div className={"flex gap-[10px] justify-center items-center"}>
-                                <span className={"size-[25px] rounded-full bg-red-600 inline-block"}></span>
-                                <span className={"size-[25px] rounded-full bg-red-600 inline-block"}></span>
-                                <span className={"size-[25px] rounded-full bg-red-600 inline-block"}></span>
-                                <span className={"size-[25px] rounded-full bg-red-600 inline-block"}></span>
+                            <div className={"flex gap-[10px] justify-center items-center translate-y-1/2"}>
+                                <span className={"size-[20px] rounded-full bg-red-600 inline-block"}></span>
+                                <span className={"size-[20px] rounded-full bg-red-600 inline-block"}></span>
+                                <span className={"size-[20px] rounded-full bg-red-600 inline-block"}></span>
+                                <span className={"size-[20px] rounded-full bg-red-600 inline-block"}></span>
                             </div>
                         </div>
-                        <div className={"w-1/2 bg-blue-300 flex flex-col"}>
-                            <h1 className={"text-[50px] border-blue-800 border-4 pb-[25px]"}>{ dataProduct && dataProduct?.name}{ dataProduct && dataProduct?.fruit}</h1>
-                            <div className={"flex justify-between border-4 border-violet-600 pt-[10px]"}>
+                        <div className={"w-full md:w-1/2  flex flex-col gap-[15px]"}>
+                            <h1 className={"leading-none text-[27.5px]"}>{ dataProduct && dataProduct?.name} - { dataProduct && dataProduct?.fruit}</h1>
+                            <div className={"flex justify-between "}>
                                 <div className={"flex gap-[5px]"}>
-                                    <span>S/. {dataProduct?.price}</span>
-                                    <span>S/. {dataProduct?.price}</span>
+                                    <span className={""}>S/. {dataProduct?.price}</span>
+                                    <span className={"line-through"}>S/. {dataProduct?.price}</span>
                                 </div>
                                 <div className={"flex gap-[7.5px] "}>
                                     <span className={"size-[20px] border inline-block rounded-full"}/>
@@ -112,48 +112,50 @@ export const InfoProduct = () => {
                                     <span className={"size-[20px] border inline-block rounded-full"}/>
                                 </div>
                             </div>
-                            <div className={"w-full border-4"}>
+                            <div className={"w-full shadow-shadowElement px-[5px] py-[10px] rounded-[8px]"}>
                                 <h1>Tratamiento</h1>
-                                <div className={"flex justify-evenly"}>
-                                    <ul className={"list-disc"}>
-                                        <li>1</li>
-                                        <li>1</li>
-                                        <li>1</li>
-                                        <li>1</li>
-                                        <li>1</li>
+                                <div className={"flex justify-between"}>
+                                    <ul className={"list-disc pl-[25px]"}>
+                                        <li>1 cuack cuack cuack</li>
+                                        <li>1 cuack cuack cuack</li>
+                                        <li>1 cuack cuack cuack</li>
+                                        <li>1 cuack cuack cuack</li>
+                                        <li>1 cuack cuack cuack</li>
                                     </ul>
-                                    <ul className={"list-disc"}>
-                                        <li>2</li>
-                                        <li>2</li>
-                                        <li>2</li>
-                                        <li>2</li>
-                                        <li>2</li>
+                                    <ul className={"list-disc pl-[25px]"}>
+                                        <li>2 cuack cuack cuack</li>
+                                        <li>2 cuack cuack cuack</li>
+                                        <li>2 cuack cuack cuack</li>
+                                        <li>2 cuack cuack cuack</li>
+                                        <li>2 cuack cuack cuack</li>
                                     </ul>
                                 </div>
                             </div>
-                            <div className={"flex flex-1 gap-[10px] w-full justify-evenly mx-auto bg-orange-500 items-center"}>
+                            <div className={"flex flex-1 gap-[10px] w-full justify-evenly mx-auto items-center"}>
                                 <ButtonAdd id={dataProduct?.id ?? 999}/>
                                 <ButtonBuy id={dataProduct?.id ?? 999}/>
                             </div>
                         </div>
-
                 </div>
-                <div className={"h-[600px] w-[90%] mx-auto border-4 bg-red-400 flex"}>
-                    <div className={"border flex-1"}>
-                        <h1>Detalles del producto</h1>
-                        <div className={"border-2"}>{dataProduct?.description[0] ?? '-'}</div>
-                        <div className={"border-2"}>{dataProduct?.description[1] ?? '-'}</div>
-                        <div className={"border-2"}>{dataProduct?.description[2] ?? '-'}</div>
-                        <div className={"border-2"}>{dataProduct?.description[3] ?? '-'}</div>
-                        <div className={"border-2"}>{dataProduct?.description[4] ?? '-'}</div>
-                    </div>
-                    <div className={"border flex-1"}>
-                        <h1>caracteristicas</h1>
-                        <div className={"border-2"}>{dataProduct?.caracteristicas?.[0] ?? '-'}</div>
-                        <div className={"border-2"}>{dataProduct?.caracteristicas?.[1] ?? '-'}</div>
-                        <div className={"border-2"}>{dataProduct?.caracteristicas?.[2] ?? '-'}</div>
-                        <div className={"border-2"}>{dataProduct?.caracteristicas?.[3] ?? '-'}</div>
-                        <div className={"border-2"}>{dataProduct?.caracteristicas?.[4] ?? '-'}</div>
+                <div className={"mx-auto p-[25px] shadow-shadowElement flex flex-col w-full rounded-[8px] gap-[25px]"}>
+                    <h1 className={"text-[40px]"}>Informacion adicional</h1>
+                    <div className={"flex gap-[5px]"}>
+                        <div className={"border-t-2 border-l-2 border-r-2 border-gray-500 rounded-[8px] flex-1 flex flex-col gap-[5px]"}>
+                            <h1 className={"pl-[5px]"} >Detalles del producto</h1>
+                            <div className={"pl-[5px] border-t-2  border-gray-500"}>{dataProduct?.description[0] ?? '-'}</div>
+                            <div className={"pl-[5px] border-t-2  border-gray-500"}>{dataProduct?.description[1] ?? '-'}</div>
+                            <div className={"pl-[5px] border-t-2  border-gray-500"}>{dataProduct?.description[2] ?? '-'}</div>
+                            <div className={"pl-[5px] border-t-2  border-gray-500"}>{dataProduct?.description[3] ?? '-'}</div>
+                            <div className={"pl-[5px] border-t-2 border-b-2 border-gray-500 rounded-b-[8px]"}>{dataProduct?.description[4] ?? '-'}</div>
+                        </div>
+                        <div className={"border-t-2 border-l-2 border-r-2 border-gray-500 rounded-[8px] flex-1 flex flex-col gap-[5px]"}>
+                            <h1 className={"pl-[5px]"} >caracteristicas</h1>
+                            <div className={"pl-[5px] border-t-2  border-gray-500"}>{dataProduct?.caracteristicas?.[0] ?? '-'}</div>
+                            <div className={"pl-[5px] border-t-2  border-gray-500"}>{dataProduct?.caracteristicas?.[1] ?? '-'}</div>
+                            <div className={"pl-[5px] border-t-2  border-gray-500"}>{dataProduct?.caracteristicas?.[2] ?? '-'}</div>
+                            <div className={"pl-[5px] border-t-2  border-gray-500"}>{dataProduct?.caracteristicas?.[3] ?? '-'}</div>
+                            <div className={"pl-[5px] border-t-2 border-b-2 border-gray-500 rounded-b-[8px]"}>{dataProduct?.caracteristicas?.[4] ?? '-'}</div>
+                        </div>
                     </div>
                 </div>
                 <div className="w-full bg-lime-500 flex flex-wrap justify-center items-center gap-[10px]">

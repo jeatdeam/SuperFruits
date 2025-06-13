@@ -4,6 +4,7 @@ import {useParams, Link, useNavigate} from 'react-router-dom'
 import {useLastId} from "../hooks/lastIdProduct.tsx"
 import {ButtonBuy} from "../components/buttonBuy.tsx";
 import {ButtonAdd} from "../components/buttonAdd.tsx";
+import {StarIcon, EmpaqueIcon} from "./payProducts.tsx";
 import {ProcesoDeCompra} from "../components/procesoDeCompra.tsx";
 
 type Products = {
@@ -21,7 +22,8 @@ export const ProductsCards = () => {
     const { product } = useParams<string>();
     const [allProducts,setAllProducts] = useState<Products[]|null>(null)
     const [selectedId, setSelectedId] = useState<number|null>(null);
-    const refProducts = useRef<Products[]|null>(null);
+    // const refProducts = useRef<Products[]|null>(null);
+    const [productsFetch, setProductsFetch] = useState<Products[]|null>([]);
     const [ready, setReady] = useState<boolean>(false);
     const refButtonAdd = useRef<(HTMLButtonElement|null)[]>([])
     const {data, loading, error, refetch} = useLastId()
@@ -40,10 +42,11 @@ export const ProductsCards = () => {
         }
     }
     useEffect(() => {
-        console.log('cuacksito -> ',refProducts.current)
+        // if (!product) return;
+        // console.log('cuacksito -> ',refProducts.current)
         const fetchData = async () => {
             try {
-                console.log(product, "<-");
+                // console.log(product, "<-");
 
                 const response = await fetch(`http://localhost:3000/infoProducts/${product}`, {
                     method: "GET",
@@ -53,16 +56,18 @@ export const ProductsCards = () => {
                 if (!response.ok) throw new Error(`Error en la petición: ${response.statusText}`);
 
                 const result = await response.json();
-                refProducts.current = result.data;
+                // refProducts.current = result.data;
+                // console.log(result.productsFilter);
+                setProductsFetch(result.data)
                 setReady(true)
-                console.log(result.data);
+                // console.log(result.data);
 
             } catch (error) {
                 console.error("Algo salió mal:", error);
             }
         };
         fetchData();
-    }, [product]);  // ← Aquí incluimos `products` en las dependencias
+    }, [product] );  // ← Aquí incluimos `products` en las dependencias
 
     const showInfoProduct = (e: MouseEvent) => {
 
@@ -100,20 +105,22 @@ export const ProductsCards = () => {
 
 
     return (
-        <>
-            <main className={"w-full"}>
-                <h1 className={"text-center text-[50px]"}>Products Cards</h1>
-                <section className="w-[80%] border-[5px]  justify-center border-[purple] mx-auto flex flex-wrap content-start gap-[15px] relative" ref={refSectionProducts}>
-                    {refProducts.current && refProducts.current?.map((el,key)=>(
-                        // <Link to={`/${product}/${el.name.replace(/\s+/g,"-")}`}>
-                            <div
-                                className={"border-[2px]  border-[gray] rounded-[15px] w-[275px] h-[450px] px-[5px] py-[17.5px] flex flex-col items-center"}
+            <main className={"w-full pb-[25px]"}>
+                <h1 className={"text-center text-titleResponsive mb-[50px]"}>Products Cards</h1>
+                <section className="w-[80%] justify-center mx-auto flex flex-wrap content-start gap-[25px] relative" ref={refSectionProducts}>
+                    {productsFetch && productsFetch?.map((el,key)=>(
+                            <div className={"shadow-shadowCard rounded-[15px] w-[250px] h-[400px] p-[15px] flex flex-col items-center justify-between"}
                                 ref={(node) => refPadre.current[key] = node} key={key} onClick={showInfoProduct}>
-                                <img src={el.img[0]} alt="" className={"size-[240px] rounded-[8px]"}/>
-                                <h1>{el.fruit}</h1>
-                                <h2>{el.description[0]}</h2>
-                                <h2 className={"nameProduct"}>{el.name}</h2>
-                                <b>{el.price}</b>
+                                <img src={el.img[0]} alt="" className={"size-[215px] rounded-[8px] shadow-shadowElement"}/>
+                                {/*<h1>{el.fruit}</h1>*/}
+                                <h2 className={"nameProduct self-start"}>{el.fruit} - {el.name}</h2>
+                                <div className={"flex justify-between w-4/5"}>
+                                    <div className={"flex gap-[10px]"}>
+                                        <StarIcon/>
+                                        <EmpaqueIcon/>
+                                    </div>
+                                    <b className={"self-end"}>S/. {el.price}</b>
+                                </div>
                                 <div className={"flex gap-[20px] justify-evenly w-full"}>
                                     <ButtonAdd ref={(node) => (refButtonCarrito.current[key] = node)} id={el.id}/>
                                     <Link to={`/seccion-de-pagos`}>
@@ -121,11 +128,8 @@ export const ProductsCards = () => {
                                     </Link>
                                 </div>
                             </div>
-                        // </Link>
                     ))}
-                    {/*<CardDetails ref={refCard} refSection={refPadre}/>*/}
                 </section>
             </main>
-        </>
     );
 };

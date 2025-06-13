@@ -2,6 +2,8 @@ import {useState, useEffect, forwardRef, useRef, useImperativeHandle} from "reac
 import {Link} from "react-router-dom";
 import {FormCompras} from "./formularioPago.tsx";
 import {useGetCarrito} from "../hooks/getCarritoMap.tsx"
+import {useCarrito} from "../contexts/carritoContext.tsx";
+
 
 type CarritoProps = {
     validate : boolean | null;
@@ -9,7 +11,7 @@ type CarritoProps = {
 }
 export type CarritoRefs = {
     carrito : HTMLDivElement | null;
-    access : () => void;
+    // access : () => void;
 }
 
 
@@ -17,46 +19,63 @@ export const Carrito = forwardRef<CarritoRefs,CarritoProps>( ({validate, closeWi
     const {data, refetch} = useGetCarrito()
     const containerCarrito = useRef<HTMLDivElement|null>(null);
     const [total, setTotal] = useState<number|null>(null)
+    const {count, incrementCount} = useCarrito()
 
+    useEffect(()=>{
+        setTotal(data?.flattenedProducts.length)
+    },[data])
 
     useImperativeHandle(ref,()=>({
         carrito : containerCarrito.current,
     }))
 
     useEffect(()=>{
-        validate && refetch()
-    },[validate])
+        refetch()
+    },[ count])
 
 
     return(
         <>
-            <div ref={containerCarrito} className={`${ validate ? " opacity-100" : "opacity-0"} rounded-[8px] p-[10px] gap-[10px] w-[300px] translate-x-[-50%] bg-[pink] absolute top-[125%] left-0 transition-all duration-500 ease-in-out flex flex-col justify-between shadow-[0px_0px_5px_rgba(0,0,0,.5)]`}>
-            {
-                data?.flattenedProducts && data.flattenedProducts.map(([key, value],indice)=>(
-                    <div className={"flex shadow-[0px_0px_5px_rgba(0,0,0,.5)] rounded-[8px] gap-[5px] pl-[10px] justify-between items-center"} key={indice}>
-                        <div className={"flex justify-between w-[67.5%]"}>
-                            <h1 className={"text-[14px]"}>{value[0].name}</h1>
-                            <b className={"text-[12.5px] font-medium"}>S/. {value[0].price}</b>
-                        </div>
-                        {/*<small className={"whitespace-nowrap text-[12.5px]"}>total: {value.reduce((total,product) => product.price + total, 0)}</small>*/}
-                        <div className={"relative"}>
-                            <img className={"size-[75px] object-cover rounded-r-[8px]"} src={value[0]?.img[0]} alt=""/>
-                            <small className={"absolute right-[3.5px] top-[3.5px] block rounded-full bg-white size-[15px] shadow-[0px_0px_5px_rgba(0,0,0,.5)] flex justify-center items-center text-[10px]"}>{value.length}</small>
-                        </div>
-                    </div>
-                ))
-            }
+        {
+            total ?
+                ( <div ref={containerCarrito} className={`${ validate ? " opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"} rounded-[8px] p-[10px] gap-[10px] w-[300px] translate-x-[-50%] bg-[pink] absolute top-[200%] left-0 transition-all duration-500 ease-in-out flex flex-col justify-between shadow-[0px_0px_5px_rgba(0,0,0,.5)]`}>
+                <div className={"overflow-auto h-[400px] rounded-[8px] flex flex-col gap-[10px] p-[2.5px]"}>
+                    {
+                        data?.flattenedProducts && data.flattenedProducts.map(([key, value],indice)=>(
+                            <div className={"flex shadow-[0_0_5px_rgba(0,0,0,.9)] rounded-[8px] gap-[5px] pl-[10px] justify-between items-center"} key={indice}>
+                                <div className={"flex flex-col w-[67.5%] gap-[10px]"}>
+                                    <h1 className={"text-[14px]"}>{value[0].name}</h1>
+                                    <b className={"text-[12.5px] font-medium self-end"}>S/. {value[0].price}</b>
+                                </div>
+                                {/*<small className={"whitespace-nowrap text-[12.5px]"}>total: {value.reduce((total,product) => product.price + total, 0)}</small>*/}
+                                <div className={"relative"}>
+                                    <img className={"size-[75px] object-cover rounded-r-[8px]"} src={value[0]?.img[0]} alt=""/>
+                                    <small className={"absolute right-[3.5px] top-[3.5px] block rounded-full bg-white size-[15px] shadow-[0px_0px_5px_rgba(0,0,0,.5)] flex justify-center items-center text-[10px]"}>{value.length}</small>
+                                </div>
+                            </div>
+                        ))
+                    }
+                </div>
+
                 <div className={"flex justify-between pr-[10px]"}>
                     <b className={"text-[14px]"}>Total: S/. {data?.flattenedProducts.reduce((total,[indice,value]) => total + (value.reduce((subTotal, element) => subTotal + element.price,0)) ,0)}</b>
-                        <Link onClick={closeWindow} className={"flex gap-[5px]"} to={"/seccion-de-pagos"}>
-                            <MasterCard/>
-                            <DinersClub/>
-                            <VisaPay/>
-                            <ApplePay/>
-                            <GooglePay/>
-                        </Link>
+                    <Link onClick={closeWindow} className={"flex gap-[5px]"} to={"/seccion-de-pagos"}>
+                        <MasterCard/>
+                        <DinersClub/>
+                        <VisaPay/>
+                        <ApplePay/>
+                        <GooglePay/>
+                    </Link>
                 </div>
-            </div>
+                </div> )
+                :
+                (
+                    <div ref={containerCarrito} className={`absolute ${ validate ? "opacity-100" : "opacity-0"} right-1/2 translate-x-1/2 top-[125%] transition-half size-[25px] rounded-full`}>
+                        <h1 className={"text-[12.5px] size-full flex items-center justify-center text-center bg-blue-300 rounded-full"}>{data?.flattenedProducts.length}</h1>
+                    </div>
+                )
+
+        }
         </>
     )
 })

@@ -1,5 +1,6 @@
 import {useState, useEffect, useRef, forwardRef, useImperativeHandle} from "react";
 import {useCarrito} from "../contexts/carritoContext.tsx"
+import {useGetCarrito} from "../hooks/getCarritoMap.tsx";
 
 type PropsButton = {
     id: number;
@@ -12,9 +13,10 @@ type RefButton = {
 
 export const ButtonAdd = forwardRef<HTMLButtonElement, PropsButton>(({id}, ref) => {
     const {incrementCount} = useCarrito()
+    const {refetch} = useGetCarrito()
     const sendProduct = async (e?: React.MouseEvent<HTMLButtonElement>) => {
         // const idProduct = e.target.dataset.id
-
+        setFlicked(true);
         await fetchAdd(id);
 
     }
@@ -34,6 +36,7 @@ export const ButtonAdd = forwardRef<HTMLButtonElement, PropsButton>(({id}, ref) 
             const result = await response.json();
             //añadir al panel del carrito
             incrementCount(result.carritoCompras.length);
+            // refetch()
             // console.log(result.message)
 
         } catch (error) {
@@ -54,7 +57,12 @@ export const ButtonAdd = forwardRef<HTMLButtonElement, PropsButton>(({id}, ref) 
         // console.log('aqui esta el ref -> ',ref)
     }, []);
 
+
+    const [flicked, setFlicked] = useState<boolean>(false);
+
+
+
     return (
-        <button ref={ref} data-id={id} onClick={sendProduct}>Añadir al carrito</button>
+        <button onAnimationEnd={()=>setFlicked(false)} className={`${flicked ? "showButton":""} text-[14px] shadow-shadowElement rounded-[8px] p-[2.5px] h-[35px] w-[100px] leading-none`} ref={ref} data-id={id} onClick={sendProduct}>Añadir al carrito</button>
     )
 })

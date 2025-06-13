@@ -1,9 +1,12 @@
-import {useState, useEffect, useRef, useImperativeHandle, forwardRef} from "react";
-
+import {useState, useEffect, useRef, useImperativeHandle, forwardRef, act} from "react";
+import {MenuSide} from "../components/menuSide.tsx";
+import {useGetProducts, Products} from "../hooks/getProducts.tsx";
+import {Link} from "react-router-dom";
 
 
 export type Props = {
     show? : boolean;
+    toggleMenu : () => void
 }
 export type Ref = {
     container : HTMLDivElement | null;
@@ -14,59 +17,84 @@ type BackRefs = {
     hideItems : () => void;
 }
 
-export const Menu = forwardRef<Ref,Props>(({show}, ref) => {
+
+
+export const Menu = forwardRef<Ref,Props>(({show, toggleMenu}, ref) => {
+    const {products, fruits} = useGetProducts()
+    // const [fruits, setFruits] = useState<Products[]>(products)
 
     const refContainer = useRef<HTMLDivElement|null>(null);
     const refHeaderMenu = useRef<HTMLDivElement|null>(null);
-    const [isActive, setIsActive] = useState<boolean>(show);
-    const [activeTitles, setActiveTitles] = useState<boolean>(false);
-    const refTitles = useRef<HTMLDivElement|null>(null)
-    const signalSub = useRef<boolean>(false);
-    const handleShow = useRef<BackRefs|null>(null);
-    const handleShowTwo = useRef<BackRefs|null>(null);
-    const handleShowThree = useRef<BackRefs|null>(null);
+    // const [isActive, setIsActive] = useState<boolean>(show);
+    // const [activeTitles, setActiveTitles] = useState<boolean>(false);
+    // const refTitles = useRef<HTMLDivElement|null>(null)
+    // const signalSub = useRef<boolean>(false);
+    // const handleShow = useRef<BackRefs|null>(null);
+    // const handleShowTwo = useRef<BackRefs|null>(null);
+    // const handleShowThree = useRef<BackRefs|null>(null);
 
-    const moveTitles = () => {
-        refTitles.current.style.transform = "translateX(-100%)"
-        setActiveTitles(true)
-    }
-
-    const backItems = () => {
-        if(activeTitles) {
-            activeTitles && (refTitles.current.style.transform = "translateX(0)")
-            handleShow.current && handleShow.current.hideItems();
-            handleShowTwo.current && handleShowTwo.current.hideItems();
-            handleShowThree.current && handleShowThree.current.hideItems();
-        } else {
-            console.log('para actuar se necesita true y el valor actual de activeTitles es -> ',activeTitles)
-        }
-    }
 
     useImperativeHandle(ref, () => ({
         container : refContainer,
         childContainer: refHeaderMenu
     }))
+
+    const [activeFruits, setActiveFruits] = useState<boolean>(false);
+    const [activeSubFruits, setActiveSubFruits] = useState<number|null>(null);
+    const [activeTitle, setActiveTitle] = useState<number|null>(null);
+
     useEffect(()=>{
-        show ? refContainer.current.style.left="0" : refContainer.current.style.left="-100%"
+        if(!show) {
+            setActiveFruits(false);
+            setActiveSubFruits(false)
+        }
     },[show])
 
     return(
-            <section ref={refContainer} className={`${show? "opacity-[1]" : "opacity-[0]"} fixed top-[500px] border-[10px] border-blue-500 size-[300px] z-[5] transition-all duration-500 ease-in-out`}>
+        <MenuSide>
+            <section ref={refContainer} className={`${show? "opacity-1 pointer-events-auto" : "opacity-0 pointer-events-none"} z-[10] p-[15px] rounded-[8px] h-full z-[5] transition-all duration-500 ease-in-out bg-white flex flex-col gap-[10px] shadow-shadowButton`}>
+
                 <div ref={refHeaderMenu} className={"flex justify-between items-center"}>
-                    <svg onClick={backItems} className={"opacity-[1]"} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                    <svg onClick={()=> { setActiveFruits(false); setActiveSubFruits(null)} } className={` ${activeFruits ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none" }`} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
                          fill="#999999">
                         <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/>
                     </svg>
-                    <h1>Productos</h1>
+                    <h1 className={" text-[20px]"}>Productos</h1>
                     <h1 className={"bg-[lightblue] size-[40px] rounded-full"}></h1>
                 </div>
-                <div ref={refTitles} className={"transition-all duration-500 ease-in-out"}>
-                    <AguajeProducts ref={handleShow} cuack={show} move={moveTitles} back={backItems} estado={signalSub}/>
-                    <CamuCamuProducts ref={handleShowTwo} cuack={show} move={moveTitles}/>
-                    <UngurahuiProducts ref={handleShowThree} cuack={show} move={moveTitles} />
+
+                <div className={`w-full flex flex-col gap-[15px] ${activeFruits ? "-translate-x-full" : ""} transition-all duration-500 ease-in-out relative`}>
+
+                    {fruits.length && fruits.map(([key, value],index) => (
+                        <div className={`w-full transition-all duration-500 ease-in-out  flex justify-between  gap-[15px]`} key={index}>
+                            <div className={`relative flex gap-[15px] justify-between items-center min-w-full hover:bg-blue-300 rounded-[8px] ${activeFruits ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+
+                                <Link className={"w-full shadow-shadowButton px-[15px] rounded-[8px] h-[30px] flex items-center  transition-half"} to={`/${value[0].fruit.replace(/\s+/g,'-')}`} onClick={() => toggleMenu()}>
+                                    <h1 className={``}>{value[0].fruit}</h1>
+                                </Link>
+                                <svg  className={"absolute right-[15px] size-[20px]"} onClick={() => {setActiveFruits(true); setActiveSubFruits(index)}} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
+                                     width="24px" fill="#999999">
+                                    <path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z"/>
+                                </svg>
+
+                            </div>
+                            <div className={`min-w-full flex flex-col gap-[15px] ${index === activeSubFruits ? "block absolute top-0 right-[-100%]" : "hidden"}`}>
+
+                            {value.map((el,indice) => (
+                                    <Link className={"w-full rounded-[8px] px-[15px] h-[30px] shadow-shadowButton transition-half flex items-center hover:bg-blue-300"} key={indice} to={`/${el.fruit}/${el.name.replace(/\s+/g,"-")}`} onClick={()=>{toggleMenu();setActiveFruits(false); setActiveSubFruits(null)}}>
+                                        <div className={`w-full`}>
+                                            {el.name}
+                                        </div>
+                                    </Link>
+                            ))}
+
+                            </div>
+                        </div>
+                    ))}
+
                 </div>
             </section>
-
+        </MenuSide>
     )
 })
 
@@ -215,5 +243,93 @@ const SubProductsUngurahui = ({show}) => {
 }
 
 
-
+//
+// import {useState, useEffect, useRef, useImperativeHandle, forwardRef} from "react";
+// import {MenuSide} from "../components/menuSide.tsx";
+// import {useGetProducts, Products} from "../hooks/getProducts.tsx";
+//
+// export type Props = {
+//     show?: boolean;
+// }
+//
+// export type Ref = {
+//     container: HTMLDivElement | null;
+//     childContainer: HTMLDivElement | null;
+// }
+//
+// export const Menu = forwardRef<Ref, Props>(({show}, ref) => {
+//     const {products, fruits} = useGetProducts()
+//
+//     const refContainer = useRef<HTMLDivElement | null>(null);
+//     const refHeaderMenu = useRef<HTMLDivElement | null>(null);
+//     const [activeFruits, setActiveFruits] = useState<boolean>(false);
+//     const [activeSubFruits, setActiveSubFruits] = useState<number | null>(null);
+//
+//     useImperativeHandle(ref, () => ({
+//         container: refContainer,
+//         childContainer: refHeaderMenu
+//     }))
+//
+//     return (
+//         <MenuSide>
+//             <section ref={refContainer} className={`${show ? "opacity-[1] pointer-events-auto" : "opacity-0 pointer-events-none"} z-[10] border-[1px] border-blue-500 transition-all duration-500 ease-in-out bg-white relative overflow-hidden`}>
+//                 <div ref={refHeaderMenu} className={"flex justify-between items-center p-4"}>
+//                     <svg
+//                         onClick={() => { setActiveFruits(false); setActiveSubFruits(null) }}
+//                         className={"opacity-[1] cursor-pointer"}
+//                         xmlns="http://www.w3.org/2000/svg"
+//                         height="24px"
+//                         viewBox="0 -960 960 960"
+//                         width="24px"
+//                         fill="#999999"
+//                     >
+//                         <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/>
+//                     </svg>
+//                     <h1>Productos</h1>
+//                     <h1 className={"bg-[lightblue] size-[40px] rounded-full"}></h1>
+//                 </div>
+//
+//                 {/* Contenedor principal con dos paneles */}
+//                 <div className="relative h-[400px] overflow-hidden">
+//                     {/* Panel de categorías */}
+//                     <div className={`absolute inset-0 transition-transform duration-500 ease-in-out ${activeFruits ? '-translate-x-full' : 'translate-x-0'}`}>
+//                         {fruits.length > 0 && fruits.map(([key, value], index) => (
+//                             <div key={key} className={`w-full p-4 border-b hover:bg-gray-50 cursor-pointer`}>
+//                                 <h1
+//                                     onClick={() => {
+//                                         setActiveFruits(true);
+//                                         setActiveSubFruits(index)
+//                                     }}
+//                                     className={`text-lg font-medium`}
+//                                 >
+//                                     {value[0]?.fruit}
+//                                 </h1>
+//                             </div>
+//                         ))}
+//                     </div>
+//
+//                     {/* Panel de subproductos */}
+//                     <div className={`absolute inset-0 transition-transform duration-500 ease-in-out ${activeFruits ? 'translate-x-0' : 'translate-x-full'}`}>
+//                         {activeSubFruits !== null && fruits[activeSubFruits] && (
+//                             <div className="h-full overflow-y-auto">
+//                                 <div className="p-4 border-b bg-gray-100">
+//                                     <h2 className="text-xl font-bold">{fruits[activeSubFruits][1][0]?.fruit}</h2>
+//                                 </div>
+//                                 {fruits[activeSubFruits][1].map((product, index) => (
+//                                     <div key={product.id} className="p-4 border-b hover:bg-gray-50">
+//                                         <h3 className="font-medium">{product.name}</h3>
+//                                         <p className="text-sm text-gray-600">${product.price}</p>
+//                                         {product.description && product.description.length > 0 && (
+//                                             <p className="text-sm text-gray-500 mt-1">{product.description[0]}</p>
+//                                         )}
+//                                     </div>
+//                                 ))}
+//                             </div>
+//                         )}
+//                     </div>
+//                 </div>
+//             </section>
+//         </MenuSide>
+//     )
+// })
 

@@ -6,13 +6,14 @@ import {SearchIcon} from "../components/searchIcon.tsx";
 import {ProcesoDeCompra} from "../components/procesoDeCompra.tsx"
 import ReactDOM from "react-dom";
 import {Link} from "react-router-dom"
+import {Options} from "autoprefixer";
 
 
 
-export function Header({children}) {
+export function Header() {
     const refImg = useRef<HTMLImageElement|null>(null)
     const refHeader = useRef<HTMLDivElement|null>(null);
-    const hehehe = document.getElementById("hehehe");
+    const [activeOptions, setActiveOptions] = useState<boolean>(false)
 
     const redirectIndex = () => {
         window.location.href="/"
@@ -20,38 +21,100 @@ export function Header({children}) {
 
     useEffect(()=>{
 
-    })
+        const observer = new IntersectionObserver(([entry])=>{
 
-    return ReactDOM.createPortal(
-        <header
-            ref={refHeader}
-            className={"w-[90%] xs:w-[80%] xl:w-[1024px] absolute top-[100px] left-1/2 -translate-x-1/2 flex justify-between items-center  rounded-[16px] h-[75px]"}>
-            <div
-                className={"flex justify-between items-center w-full px-[25px] absolute z-10"}>
-                <Link to="/">
-                    <img className="size-[75px]"
-                         src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1746066848/22529f942d0ede6fc6350f2c53560a33_wyf0oh.jpg"
-                         alt="superFruts"
-                        // onClick={redirectIndex}
-                         ref={refImg}/>
-                </Link>
-                <nav className={"gapIcons flex items-center"}>
-                    <SearchIcon
-                        className="rounded-full transition-all duration-500 hover:ring-2 ring-black ring-offset-[6px] hover:bg-white"
-                    />
-                    <BagIcon/>
-                    <SettingsSight/>
-                    <MenuIcon/>
-                </nav>
-            </div>
-            <div className="absolute w-full h-[75px] z-[9] rounded-[16px]
-                backdrop-blur-md  border border-white/30 shadow-md">
-            </div>
-        </header>,
-        hehehe
+            // setDesacoplar(!entry.isIntersecting)
+
+            // if(activeOptions && entry.isIntersecting) setDesacoplar(false)
+
+            setDesacoplar(!entry.isIntersecting)
+
+
+        }, {root: null, threshold: 0});
+
+        refHeader.current && observer.observe(refHeader.current);
+
+        return () => {
+            refHeader.current && observer.unobserve(refHeader.current);
+        }
+
+    },[activeOptions])
+
+    const [desacoplar, setDesacoplar] = useState<boolean>(false);
+    const cuacksito = useRef<HTMLDivElement|null>(null)
+
+    useEffect(()=>{
+
+
+
+    },[desacoplar])
+
+
+
+    return (
+        <>
+            <header ref={refHeader}
+                    className="gaaa w-full h-[200px] bg-pink-200 flex flex-col items-center justify-center">
+
+                { !desacoplar && <div className={`relative mx-auto w-[90%] xs:w-[80%] xl:w-[1024px] flex justify-between items-center rounded-[16px] z-10`}>
+
+                <div className="flex justify-between items-center w-full px-[25px] relative">
+                    <Link to="/">
+                        <img
+                            className="size-[75px]"
+                            src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1746066848/22529f942d0ede6fc6350f2c53560a33_wyf0oh.jpg"
+                            alt="superFruts"
+                            ref={refImg}
+                        />
+                    </Link>
+                    <nav className="gapIcons flex items-center">
+                        <SearchIcon
+                            className="rounded-full transition-all duration-500 hover:ring-2 ring-black ring-offset-[3px] hover:bg-white"/>
+                        <BagIcon/>
+                        <SettingsSight/>
+                        <MenuIcon/>
+                    </nav>
+                </div>
+
+                {/* fondo borroso debajo */}
+                <div
+                    className="absolute inset-0 h-[75px] z-[-1] rounded-[16px] backdrop-blur-md border border-white/30 shadow-md"/>
+
+            </div> }
+
+            </header>
+             <div className={"h-[75px] sticky top-[37.5px] z-10 mx-auto w-[90%] xs:w-[80%] xl:w-[1024px] mb-[-75px]"}>
+               { desacoplar &&
+
+                   <div ref={cuacksito} className={` ${desacoplar ? "animate-heightUp" : "" }  flex justify-between items-center rounded-[16px] z-[30] `}>
+
+                        <div className="flex justify-between items-center w-full px-[25px] relative">
+                            <Link to="/">
+                                <img
+                                    className="size-[75px]"
+                                    src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1746066848/22529f942d0ede6fc6350f2c53560a33_wyf0oh.jpg"
+                                    alt="superFruts"
+                                    ref={refImg}
+                                />
+                            </Link>
+                            <nav className="gapIcons flex items-center">
+                                <SearchIcon
+                                    className="rounded-full transition-all duration-500 hover:ring-2 ring-black ring-offset-[3px] hover:bg-white"/>
+                                <BagIcon/>
+                                <SettingsSight/>
+                                <MenuIcon/>
+                            </nav>
+                        </div>
+
+                        {/* fondo borroso debajo */}
+                        <div className="absolute inset-0 h-[75px] z-[-1] rounded-[16px] backdrop-blur-md border border-white/50 shadow-md"/>
+
+                    </div>
+               }
+           </div>
+        </>
     )
 }
-
 
 
 const SunIcon = () => {

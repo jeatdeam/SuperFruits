@@ -4,7 +4,7 @@ import {Footer} from "./pages/footer.tsx"
 import {PayProducts} from "./pages/payProducts.tsx";
 import {InfoProduct} from "./pages/infoProduct.tsx";
 import {Index} from "./pages/index.tsx"
-import {ProductsCards}  from "./pages/productDetails.tsx"
+import {ProductsCards}  from "./pages/fruitProducts.tsx"
 import {Routes, Route} from 'react-router-dom'
 import {NewHeader} from "./pages/newHeader.tsx";
 import {CarritoProvider} from "./contexts/carritoContext.tsx"
@@ -22,7 +22,7 @@ function App() {
             <CarritoProvider>
                 <ProcesoCompraProvider>
                     <Header/>
-                    <NewHeader/>
+                    {/*<NewHeader/>*/}
                     <Routes>
                         <Route path="/" element={<Index/>}/>
                         <Route element={<LayoutConProceso/>}>

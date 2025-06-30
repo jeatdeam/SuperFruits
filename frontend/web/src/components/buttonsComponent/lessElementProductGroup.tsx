@@ -1,16 +1,9 @@
 import {useCallback, useEffect, useRef, useState} from "react";
-import {useCarrito} from "../contexts/carritoContext.tsx";
+import {useCarrito} from "../../contexts/carritoContext.tsx";
 
 
-export const LessProducts = ({
-                                 id,
-                                 refetch,
-                                 onAnimate,
-                             }: {
-    id: number;
-    refetch: () => void;
-    onAnimate: () => void;
-}) => {
+export const LessProducts = ({id, refetch, onAnimate,}: { id: number; refetch: () => void; onAnimate: () => void; }) => {
+
     const { incrementCount } = useCarrito();
 
     const deleteProduct = async () => {

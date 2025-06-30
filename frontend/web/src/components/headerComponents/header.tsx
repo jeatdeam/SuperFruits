@@ -1,20 +1,22 @@
 import {useRef, useState, useEffect, forwardRef, useImperativeHandle, act} from "react";
-import {BagIcon} from "../components/bagIcon.tsx"
-import {MenuIcon} from "../components/menuIcon.tsx"
-import {SettingsSight} from "../components/settingsSight.tsx";
-import {SearchIcon} from "../components/searchIcon.tsx";
-import {ProcesoDeCompra} from "../components/procesoDeCompra.tsx"
+import {BagIcon} from "./bagIcon.tsx"
+import {MenuIcon} from "./menuIcon.tsx"
+import {SettingsSight} from "./settingsSight.tsx";
+import {SearchIcon} from "./searchIcon.tsx";
+import {ProcesoDeCompra} from "../bodyComponents/procesoDeCompra.tsx"
 import ReactDOM from "react-dom";
 import {Link} from "react-router-dom"
 import {Options} from "autoprefixer";
-
+import {useBlurMenu} from "../../zustand/useBlurMenu.tsx"
+import {useBlurSearch} from "../../zustand/useBlurSearch.tsx"
 
 
 export function Header() {
     const refImg = useRef<HTMLImageElement|null>(null)
     const refHeader = useRef<HTMLDivElement|null>(null);
     const [activeOptions, setActiveOptions] = useState<boolean>(false)
-
+    const toggleBlur = useBlurMenu(state => state.activeBlur)
+    const switchBlurSearch = useBlurSearch(state=>state.switchBlur)
     const redirectIndex = () => {
         window.location.href="/"
     }
@@ -23,12 +25,7 @@ export function Header() {
 
         const observer = new IntersectionObserver(([entry])=>{
 
-            // setDesacoplar(!entry.isIntersecting)
-
-            // if(activeOptions && entry.isIntersecting) setDesacoplar(false)
-
             setDesacoplar(!entry.isIntersecting)
-
 
         }, {root: null, threshold: 0});
 
@@ -43,18 +40,10 @@ export function Header() {
     const [desacoplar, setDesacoplar] = useState<boolean>(false);
     const cuacksito = useRef<HTMLDivElement|null>(null)
 
-    useEffect(()=>{
-
-
-
-    },[desacoplar])
-
-
 
     return (
         <>
-            <header ref={refHeader}
-                    className="gaaa w-full h-[200px] bg-pink-200 flex flex-col items-center justify-center">
+            <header ref={refHeader} className={`${switchBlurSearch ? "blur-[20px]":""}  ${toggleBlur ? "blur-[20px]" : ""} w-full h-[200px] bg-pink-200 border-red-500 border-4 flex flex-col items-center justify-center`}>
 
                 { !desacoplar && <div className={`relative mx-auto w-[90%] xs:w-[80%] xl:w-[1024px] flex justify-between items-center rounded-[16px] z-10`}>
 
@@ -68,50 +57,47 @@ export function Header() {
                         />
                     </Link>
                     <nav className="gapIcons flex items-center">
-                        <SearchIcon
-                            className="rounded-full transition-all duration-500 hover:ring-2 ring-black ring-offset-[3px] hover:bg-white"/>
+                        <SearchIcon className="rounded-full transition-all duration-500 hover:ring-2 ring-black ring-offset-[3px] hover:bg-white"/>
                         <BagIcon/>
                         <SettingsSight/>
                         <MenuIcon/>
                     </nav>
                 </div>
 
-                {/* fondo borroso debajo */}
-                <div
-                    className="absolute inset-0 h-[75px] z-[-1] rounded-[16px] backdrop-blur-md border border-white/30 shadow-md"/>
+                <div className="absolute inset-0 h-[75px] z-[-1] rounded-[16px] backdrop-blur-md border border-white/30 shadow-md"/>
 
             </div> }
 
             </header>
-             <div className={"h-[75px] sticky top-[37.5px] z-10 mx-auto w-[90%] xs:w-[80%] xl:w-[1024px] mb-[-75px]"}>
-               { desacoplar &&
+           {/*  <div className={"h-[75px] sticky top-[37.5px] z-10 mx-auto w-[90%] xs:w-[80%] xl:w-[1024px] mb-[-75px] pointer-events-none"}>*/}
+           {/*    { desacoplar &&*/}
 
-                   <div ref={cuacksito} className={` ${desacoplar ? "animate-heightUp" : "" }  flex justify-between items-center rounded-[16px] z-[30] `}>
+           {/*        <div ref={cuacksito} className={` ${desacoplar ? "animate-heightUp pointer-events-auto" : "" }  pointer-events-none flex justify-between items-center rounded-[16px] z-[30] `}>*/}
 
-                        <div className="flex justify-between items-center w-full px-[25px] relative">
-                            <Link to="/">
-                                <img
-                                    className="size-[75px]"
-                                    src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1746066848/22529f942d0ede6fc6350f2c53560a33_wyf0oh.jpg"
-                                    alt="superFruts"
-                                    ref={refImg}
-                                />
-                            </Link>
-                            <nav className="gapIcons flex items-center">
-                                <SearchIcon
-                                    className="rounded-full transition-all duration-500 hover:ring-2 ring-black ring-offset-[3px] hover:bg-white"/>
-                                <BagIcon/>
-                                <SettingsSight/>
-                                <MenuIcon/>
-                            </nav>
-                        </div>
+           {/*             <div className="flex justify-between items-center w-full px-[25px] relative">*/}
+           {/*                 <Link to="/">*/}
+           {/*                     <img*/}
+           {/*                         className="size-[75px]"*/}
+           {/*                         src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1746066848/22529f942d0ede6fc6350f2c53560a33_wyf0oh.jpg"*/}
+           {/*                         alt="superFruts"*/}
+           {/*                         ref={refImg}*/}
+           {/*                     />*/}
+           {/*                 </Link>*/}
+           {/*                 <nav className="gapIcons flex items-center">*/}
+           {/*                     <SearchIcon*/}
+           {/*                         className="rounded-full transition-all duration-500 hover:ring-2 ring-black ring-offset-[3px] hover:bg-white"/>*/}
+           {/*                     <BagIcon/>*/}
+           {/*                     <SettingsSight/>*/}
+           {/*                     <MenuIcon/>*/}
+           {/*                 </nav>*/}
+           {/*             </div>*/}
 
-                        {/* fondo borroso debajo */}
-                        <div className="absolute inset-0 h-[75px] z-[-1] rounded-[16px] backdrop-blur-md border border-white/50 shadow-md"/>
+           {/*             /!* fondo borroso debajo *!/*/}
+           {/*             <div className="absolute inset-0 h-[75px] z-[-1] rounded-[16px] backdrop-blur-md border border-white/50 shadow-md"/>*/}
 
-                    </div>
-               }
-           </div>
+           {/*         </div>*/}
+           {/*    }*/}
+           {/*</div>*/}
         </>
     )
 }

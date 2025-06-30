@@ -1,11 +1,11 @@
 import {useEffect, useState, useRef, useImperativeHandle, forwardRef} from "react";
-import {CardDetails, RefsCard} from "./cardDetails.tsx" ;
+import {CardDetails, RefsCard} from "../components/bodyComponents/cardDetails.tsx" ;
 import {useParams, Link, useNavigate} from 'react-router-dom'
 import {useLastId} from "../hooks/lastIdProduct.tsx"
-import {ButtonBuy} from "../components/buttonBuy.tsx";
-import {ButtonAdd} from "../components/buttonAdd.tsx";
+import {ButtonBuy} from "../components/buttonsComponent/buttonBuy.tsx";
+import {ButtonAdd} from "../components/buttonsComponent/buttonAdd.tsx";
 import {StarIcon, EmpaqueIcon} from "./payProducts.tsx";
-import {ProcesoDeCompra} from "../components/procesoDeCompra.tsx";
+import {ProcesoDeCompra} from "../components/bodyComponents/procesoDeCompra.tsx";
 
 type Products = {
     id: number;

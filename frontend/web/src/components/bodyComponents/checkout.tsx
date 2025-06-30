@@ -1,5 +1,5 @@
 import {useState, useEffect, useRef, forwardRef} from 'react'
-import {useFetchProducts} from "../hooks/customProducts.tsx"
+import {useFetchProducts} from "../../hooks/customProducts.tsx"
 
 
 

@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from "react";
-import {useFetchProducts} from "../hooks/customProducts.tsx";
-import {Carrito, CarritoRefs} from "../pages/carrito.tsx";
-import {useCarrito} from "../contexts/carritoContext.tsx";
+import {useFetchProducts} from "../../hooks/customProducts.tsx";
+import {Carrito, CarritoRefs} from "./carrito.tsx";
+import {useCarrito} from "../../contexts/carritoContext.tsx";
 
 export const BagIcon = () => {
     const [validate, setValidate] = useState<boolean>(false);

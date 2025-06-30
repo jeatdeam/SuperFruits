@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { useCarrito } from "../contexts/carritoContext";
+import { useCarrito } from "../../contexts/carritoContext.tsx";
 import { useNavigate } from "react-router-dom";
 import {useEffect, useState} from "react";
 

@@ -1,11 +1,11 @@
-import {Header} from './header';
-import {Footer} from "./footer";
-import {ButtonAdd} from "../components/buttonAdd.tsx"
-import {ButtonBuy} from "../components/buttonBuy.tsx";
+import {Header} from '../components/headerComponents/header.tsx';
+import {Footer} from "../components/footerComponents/footer.tsx";
+import {ButtonAdd} from "../components/buttonsComponent/buttonAdd.tsx"
+import {ButtonBuy} from "../components/buttonsComponent/buttonBuy.tsx";
 
 import { useState, useEffect, useRef} from "react";
 import {useParams} from "react-router-dom"
-import {ProcesoDeCompra} from "../components/procesoDeCompra.tsx";
+import {ProcesoDeCompra} from "../components/bodyComponents/procesoDeCompra.tsx";
 
 type Products = {
     id : number;

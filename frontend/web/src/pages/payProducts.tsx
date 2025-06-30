@@ -1,9 +1,9 @@
 import { useState, useRef } from "react";
 import { useCarrito } from "../contexts/carritoContext.tsx";
 import { useGetCarrito } from "../hooks/getCarritoMap.tsx";
-import { DeleteGroup } from "../components/deleteGroupProducts.tsx";
-import { AddProducts } from "../components/addElementGroupProducts.tsx";
-import { LessProducts } from "../components/lessElementProductGroup.tsx";
+import { DeleteGroup } from "../components/buttonsComponent/deleteGroupProducts.tsx";
+import { AddProducts } from "../components/buttonsComponent/addElementGroupProducts.tsx";
+import { LessProducts } from "../components/buttonsComponent/lessElementProductGroup.tsx";
 
 export const PayProducts = () => {
     const { data, refetch } = useGetCarrito();

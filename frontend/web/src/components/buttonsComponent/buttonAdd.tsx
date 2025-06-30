@@ -1,6 +1,6 @@
 import {useState, useEffect, useRef, forwardRef, useImperativeHandle} from "react";
-import {useCarrito} from "../contexts/carritoContext.tsx"
-import {useGetCarrito} from "../hooks/getCarritoMap.tsx";
+import {useCarrito} from "../../contexts/carritoContext.tsx"
+import {useGetCarrito} from "../../hooks/getCarritoMap.tsx";
 
 type PropsButton = {
     id: number;

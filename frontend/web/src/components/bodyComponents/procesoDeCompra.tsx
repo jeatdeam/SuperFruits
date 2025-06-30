@@ -1,7 +1,7 @@
 import {useRef, useEffect, forwardRef} from "react";
-import {useProceso} from "../contexts/procesoDeCompraContext.tsx"
-import {useCarrito} from "../contexts/carritoContext.tsx";
-import {useGetCarrito} from "../hooks/getCarritoMap.tsx";
+import {useProceso} from "../../contexts/procesoDeCompraContext.tsx"
+import {useCarrito} from "../../contexts/carritoContext.tsx";
+import {useGetCarrito} from "../../hooks/getCarritoMap.tsx";
 
 export const ProcesoDeCompra = () => {
     const {refProcess} = useProceso();

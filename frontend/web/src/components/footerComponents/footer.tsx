@@ -1,13 +1,13 @@
 import {useState, useEffect, useRef} from 'react';
-
-
+import {useBlurMenu} from "../../zustand/useBlurMenu.tsx"
+import {useBlurSearch} from "../../zustand/useBlurSearch.tsx";
 
 export function Footer() {
-
-
+    const toggleBlur = useBlurMenu(state => state.activeBlur)
+    const switchBlurSearch = useBlurSearch(state=>state.switchBlur)
 
     return (
-        <footer className={"w-full flex flex-col gap-[30px] bg-gradient-to-br from-purple-700 via-black to-gray-900 px-[20px] pb-[50px]"}>
+        <footer className={`${switchBlurSearch? "blur-[20px]":""}  ${toggleBlur ? "blur-[20px]" : ""} w-full flex flex-col gap-[30px] bg-gradient-to-br from-purple-700 via-black to-gray-900 px-[20px] pb-[50px]`}>
             <div className={"w-[90%] mx-auto flex flex-col gap-[50px]"}>
 
                 <div

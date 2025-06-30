@@ -1,7 +1,9 @@
 import {useState, useEffect, useRef, useImperativeHandle, forwardRef, act} from "react";
-import {MenuSide} from "../components/menuSide.tsx";
-import {useGetProducts, Products} from "../hooks/getProducts.tsx";
+import {MenuSide} from "../menuSide.tsx";
+import {useGetProducts, Products} from "../../hooks/getProducts.tsx";
 import {Link} from "react-router-dom";
+import {useActiveMenu} from "../../zustand/useActiveMenu.tsx"
+import {useBlurMenu} from "../../zustand/useBlurMenu.tsx"
 
 
 export type Props = {
@@ -21,17 +23,12 @@ type BackRefs = {
 
 export const Menu = forwardRef<Ref,Props>(({show, toggleMenu}, ref) => {
     const {products, fruits} = useGetProducts()
-    // const [fruits, setFruits] = useState<Products[]>(products)
-
+    const switchContainer = useActiveMenu((state)=>state.activeMenu)
+    const desactiveContainer = useActiveMenu((state)=>state.inActiveMenu)
     const refContainer = useRef<HTMLDivElement|null>(null);
     const refHeaderMenu = useRef<HTMLDivElement|null>(null);
-    // const [isActive, setIsActive] = useState<boolean>(show);
-    // const [activeTitles, setActiveTitles] = useState<boolean>(false);
-    // const refTitles = useRef<HTMLDivElement|null>(null)
-    // const signalSub = useRef<boolean>(false);
-    // const handleShow = useRef<BackRefs|null>(null);
-    // const handleShowTwo = useRef<BackRefs|null>(null);
-    // const handleShowThree = useRef<BackRefs|null>(null);
+    const body = document.querySelector('body')
+    const toggleBlur = useBlurMenu(state => state.toggleBlur)
 
 
     useImperativeHandle(ref, () => ({
@@ -44,15 +41,30 @@ export const Menu = forwardRef<Ref,Props>(({show, toggleMenu}, ref) => {
     const [activeTitle, setActiveTitle] = useState<number|null>(null);
 
     useEffect(()=>{
-        if(!show) {
+        if(!switchContainer) {
             setActiveFruits(false);
             setActiveSubFruits(false)
         }
-    },[show])
+    },[switchContainer])
+
+    useEffect(() => {
+
+        const closeMenu = (e: MouseEvent) => {
+            const refIconMenu = useActiveMenu.getState().refMenu
+            const statusBlur = useBlurMenu.getState().activeBlur;
+            // console.log(refContainer.current)
+            if( statusBlur && refIconMenu && !refIconMenu.contains(e.target as Node)  && !refContainer.current.contains(e.target as Node) && body.contains(e.target as Node)) {
+                desactiveContainer();
+                useBlurMenu.setState({activeBlur: false})
+            }
+        }
+        body.addEventListener('click', closeMenu)
+        return () => body.removeEventListener('click', closeMenu)
+
+    },[])
 
     return(
-        <MenuSide>
-            <section ref={refContainer} className={`${show? "opacity-1 pointer-events-auto" : "opacity-0 pointer-events-none"} z-[10] p-[15px] rounded-[8px] h-full z-[5] transition-all duration-500 ease-in-out bg-white flex flex-col gap-[10px] shadow-shadowButton`}>
+            <section ref={refContainer} className={`${ switchContainer ? "opacity-1 pointer-events-auto" : "opacity-0 pointer-events-none"} fixed top-1/2 -translate-y-1/2 w-[250px] h-[400px] z-[10] p-[15px] rounded-[8px] transition-all duration-500 ease-in-out bg-white flex flex-col gap-[10px] shadow-shadowButton`}>
 
                 <div ref={refHeaderMenu} className={"flex justify-between items-center"}>
                     <svg onClick={()=> { setActiveFruits(false); setActiveSubFruits(null)} } className={` ${activeFruits ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none" }`} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
@@ -94,7 +106,6 @@ export const Menu = forwardRef<Ref,Props>(({show, toggleMenu}, ref) => {
 
                 </div>
             </section>
-        </MenuSide>
     )
 })
 

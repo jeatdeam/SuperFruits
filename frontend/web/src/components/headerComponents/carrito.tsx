@@ -1,8 +1,8 @@
 import {useState, useEffect, forwardRef, useRef, useImperativeHandle} from "react";
 import {Link} from "react-router-dom";
-import {FormCompras} from "./formularioPago.tsx";
-import {useGetCarrito} from "../hooks/getCarritoMap.tsx"
-import {useCarrito} from "../contexts/carritoContext.tsx";
+import {FormCompras} from "../bodyComponents/formularioPago.tsx";
+import {useGetCarrito} from "../../hooks/getCarritoMap.tsx"
+import {useCarrito} from "../../contexts/carritoContext.tsx";
 
 
 type CarritoProps = {

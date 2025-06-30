@@ -1,5 +1,5 @@
 import {Outlet} from "react-router-dom";
-import {ProcesoDeCompra} from "../components/procesoDeCompra.tsx";
+import {ProcesoDeCompra} from "../components/bodyComponents/procesoDeCompra.tsx";
 
 
 export const LayoutConProceso = () => {

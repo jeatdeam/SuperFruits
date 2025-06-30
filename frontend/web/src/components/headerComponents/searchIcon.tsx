@@ -1,16 +1,28 @@
 import {forwardRef, useEffect, useRef, useState} from "react";
-import {Modal} from "../pages/modal.tsx";
-import {useFetchProducts} from "../hooks/customProducts.tsx";
+import {useActive} from "../../zustand/useActiveStore.tsx"
+import {Modal} from "../../pages/modal.tsx";
+import {useFetchProducts} from "../../hooks/customProducts.tsx";
 import {Link} from "react-router-dom";
+import {useBlurSearch} from "../../zustand/useBlurSearch.tsx"
 
 export const SearchIcon = ({className}: { className?: string }) => {
+
+    const activeSearch = useActive(state=> state.isActive)
+    const changeStatus = useActive(state=> state.toggleActive)
+    const setRef = useActive((state) => state);
+    const toggleBlur = useBlurSearch(state=> state.toggleBlur);
+
     const [activeBox, setActiveBox] = useState(false);
     const refInput = useRef<BoxGroup | null>(null);
     const refModal = useRef<HTMLDivElement | null>(null);
     const iconRef = useRef<HTMLElement | null>(null);
     // sin | null porque ya es handled internamente
+
     const [clearProducts, setClearProducts] = useState<(() => void) | null>(null);
-    const toggleSearch = () => setActiveBox(prev => !prev);
+    const toggleSearch = () => {
+        changeStatus();
+        toggleBlur();
+    }
     useEffect(() => {
         if (activeBox) {
             refInput.current?.input && (refInput.current.input.value = "");
@@ -27,6 +39,14 @@ export const SearchIcon = ({className}: { className?: string }) => {
 
     }, [activeBox]);
 
+    useEffect(()=>{
+        // console.log('aqui esta el refIcon -> ', iconRef);
+        if(iconRef.current) {
+            useActive.setState({ refSearch : iconRef.current});
+            // useActive()
+        }
+        console.log(changeStatus)
+    },[])
 
     return (
         <>
@@ -35,14 +55,14 @@ export const SearchIcon = ({className}: { className?: string }) => {
                  width="24px" fill="#999999">
                 <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
             </svg>
-            <Modal activeBox={activeBox} ref={refModal}>
-                <BoxSearch
-                    ref={refInput}
-                    closeModal={toggleSearch}
-                    // deleteElements={activeBox ? '/products' : null}
-                    // onClear={(fn) => setClearProducts(() => fn)}
-                />
-            </Modal>
+            {/*<Modal activeBox={activeBox} ref={refModal}>*/}
+            {/*    <BoxSearch*/}
+            {/*        ref={refInput}*/}
+            {/*        closeModal={toggleSearch}*/}
+            {/*        // deleteElements={activeBox ? '/products' : null}*/}
+            {/*        // onClear={(fn) => setClearProducts(() => fn)}*/}
+                {/*/>*/}
+            {/*</Modal>*/}
         </>
     );
 };
@@ -64,7 +84,7 @@ type Products = {
     description : string[];
 }
 
-const BoxSearch = forwardRef<BoxGroup, BoxSearchProps>(({ closeModal }, ref) => {
+export const BoxSearch = forwardRef<BoxGroup, BoxSearchProps>(({ closeModal }, ref) => {
     const [products, setProducts] = useState<Products[]>([]);
     const inputRef = useRef<HTMLInputElement | null>(null);
     const groupRef = useRef<HTMLDivElement | null>(null);

@@ -36,11 +36,10 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(({ children, activeB
     }, [activeBox]);
 
     return ReactDOM.createPortal(
-        <div
-            ref={modalContainer}
-            className="fixed top-[200px] left-[50%] -translate-x-[50%] w-[90%] md:w-[475px] shadow-[0_0_7.5px_rgba(0,0,0,.9)] rounded-[12px]  bg-blue-300 transition-opacity duration-300 p-[15px] flex flex-col gap-[15px]"
-        >
+        <div ref={modalContainer} className={`${activeBox ? "opacity-100":"opacity-0"} fixed top-[200px] left-[50%] -translate-x-[50%] w-[85%] sm:w-[475px] shadow-[0_0_7.5px_rgba(0,0,0,.9)] rounded-[12px]  bg-red-300 transition-opacity duration-300 p-[15px] flex flex-col gap-[15px]`}>
+
             {children}
+
         </div>,
         modalRoot
     );

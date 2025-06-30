@@ -1,4 +1,4 @@
-import {useCarrito} from "../contexts/carritoContext.tsx";
+import {useCarrito} from "../../contexts/carritoContext.tsx";
 import {RefObject} from "react";
 
 

@@ -259,9 +259,8 @@ const getPayProducts = ( req : Request, res : Response) => {
     })
     const flattenedProducts = [...mapProducts]
     mapProducts && res.status(200).json({flattenedProducts})
-    // console.log("aqui esta el mapProducts",flattenedProducts);
-
 }
+
 
 const deleteProduct = (req : Request, res : Response ) => {
     console.log('rebiendo el producto a eliminar -> ',req.body)
@@ -295,7 +294,22 @@ const deleteGroup = (req : Request, res : Response) => {
 
 }
 
+const deleteAllProducts = ( req : Request, res : Response) => {
 
+    carritoCompras.length = 0;
+    console.log(carritoCompras);
+
+    res.status(200).json({carritoCompras, messaje: "el carrito ha sido limpiado con exito"})
+}
+
+const formulario = ( req : Request, res : Response) => {
+
+    const body = req.body
+    console.log(body)
+
+    res.status(200).json({ok: true ,messageBackend: "enviados correctamente"})
+    // console.log(body)
+}
 
 
 interface TaskControllers {
@@ -308,6 +322,8 @@ interface TaskControllers {
     busquedaProducts: (req: Request, res: Response) => void;
     deleteProduct : (req: Request, res: Response) => void;
     deleteGroup : (req: Request, res: Response) => void;
+    deleteAllProducts : (req: Request, res: Response) => void;
+    formulario : (req: Request, res: Response) => void;
 }
 
 const taskControllers: TaskControllers = {
@@ -320,6 +336,8 @@ const taskControllers: TaskControllers = {
     busquedaProducts,
     deleteProduct,
     deleteGroup,
+    deleteAllProducts,
+    formulario,
 };
 
 export default taskControllers;

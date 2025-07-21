@@ -1,12 +1,4 @@
-import {useContext, createContext, useRef, ReactNode} from 'react';
-
-//
-// type RefProcesoContext = {
-//     refProcess : React.RefObject<HTMLDivElement>[];
-// }
-// type RefProcesoContext = {
-    // refProcess : <(HTMLDivElement|null)[]>;
-    // }
+import {useContext, createContext, useRef, ReactNode, useState} from 'react';
 
 type RefProcesoContext = {
     refProcess : (HTMLDivElement|null)[];
@@ -23,8 +15,11 @@ export const ProcesoCompraProvider = ({children}:ProcesoCompraProviderProps) => 
     // const refProcess = useRef<RefProcesoContext>([]);
     // const refPro = useRef<(React.RefObject<HTMLDivElement>)[]>([]);
     const refProcess = useRef<(HTMLDivElement|null)[]>([]);
+    const [checkFormulario, setCheckFormulario] = useState<boolean>(false)
+
+
 return(
-    <ProcesoCompraContext.Provider value={{refProcess : refProcess.current}} >
+    <ProcesoCompraContext.Provider value={{refProcess : refProcess.current, checkFormulario ,setCheckFormulario, }} >
         {children}
     </ProcesoCompraContext.Provider>
 )

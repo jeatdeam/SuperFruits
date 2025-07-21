@@ -6,6 +6,8 @@ import {ButtonBuy} from "../components/buttonsComponent/buttonBuy.tsx";
 import {ButtonAdd} from "../components/buttonsComponent/buttonAdd.tsx";
 import {StarIcon, EmpaqueIcon} from "./payProducts.tsx";
 import {ProcesoDeCompra} from "../components/bodyComponents/procesoDeCompra.tsx";
+import {useBlurSearch} from "../zustand/useBlurSearch.tsx";
+import {useBlurMenu} from "../zustand/useBlurMenu.tsx"
 
 type Products = {
     id: number;
@@ -20,9 +22,6 @@ type Products = {
 
 export const ProductsCards = () => {
     const { product } = useParams<string>();
-    const [allProducts,setAllProducts] = useState<Products[]|null>(null)
-    const [selectedId, setSelectedId] = useState<number|null>(null);
-    // const refProducts = useRef<Products[]|null>(null);
     const [productsFetch, setProductsFetch] = useState<Products[]|null>([]);
     const [ready, setReady] = useState<boolean>(false);
     const refButtonAdd = useRef<(HTMLButtonElement|null)[]>([])
@@ -33,14 +32,9 @@ export const ProductsCards = () => {
     const refPadre = useRef<(HTMLDivElement|null)[]>([])
     const navigate = useNavigate();
 
-    const sendProduct = ( e : MouseEvent) => {
-        const id = e.target?.dataset.id;
-        console.log(id)
-        if( id) {
-            refetch(id);
-            console.log(data)
-        }
-    }
+    const {switchBlur} = useBlurSearch();
+    const {activeBlur} = useBlurMenu();
+
     useEffect(() => {
         // if (!product) return;
         // console.log('cuacksito -> ',refProducts.current)
@@ -105,7 +99,7 @@ export const ProductsCards = () => {
 
 
     return (
-            <main className={"w-full pb-[25px]"}>
+            <main className={`${activeBlur ? "blur-[10px]" : ""} ${switchBlur? "blur-[10px]" : ""}  w-full pb-[25px]`}>
                 <h1 className={"text-center text-titleResponsive mb-[50px]"}>Products Cards</h1>
                 <section className="w-[80%] justify-center mx-auto flex flex-wrap content-start gap-[25px] relative" ref={refSectionProducts}>
                     {productsFetch && productsFetch?.map((el,key)=>(

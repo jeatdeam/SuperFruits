@@ -25,10 +25,54 @@
 
 }
 body{
-    background: #1a1721;
+    background: rgba(0,0,0,1);
 }
 #root{
 
+}
+
+.animation-scale{
+    animation: scale .5s ease-out forwards;
+}
+@keyframes scale {
+    0%{
+         transform : scale(1.1);
+    }
+    100%{
+        transform : scale(1);
+    }
+}
+
+.drop-water{
+    animation: drop 3s ease-out infinite;
+    opacity: 1;
+}
+@keyframes drop {
+    0% {
+        width: 300px;
+        height: 300px;
+        opacity: 1;
+    }
+    100%{
+        width: 7000px;
+        height: 7000px;
+    }
+}
+
+
+.bounce-node{
+    /*animation: bounce 2.5s ease-out alternate-reverse infinite;*/
+}
+@keyframes bounce {
+    0%{
+        /*transform: translateY(100px);*/
+        rotate: 0;
+
+    }
+    100%{
+        /*transform: translateY(0);*/
+        rotate: 120deg;
+    }
 }
 
 

@@ -1,13 +1,15 @@
 import gsap from "gsap";
+import {ScrollSmoother} from "gsap/ScrollSmoother"
 import {ScrollTrigger} from "gsap/ScrollTrigger"
 import {TextPlugin} from 'gsap/TextPlugin'
+import {MotionPathPlugin} from "gsap/MotionPathPlugin"
 // import {ScrollSmoother} from "gsap/ScrollSmoother";
 import React, {forwardRef, useEffect, useRef, useState} from 'react';
 import {Header} from "../components/headerComponents/header.tsx";
 import {useBlurMenu} from "../zustand/useBlurMenu.tsx"
 import {useBlurSearch} from "../zustand/useBlurSearch.tsx";
 
-gsap.registerPlugin(ScrollTrigger, TextPlugin)
+gsap.registerPlugin(ScrollTrigger,ScrollSmoother, TextPlugin, MotionPathPlugin )
 
 
 export function Index() {
@@ -42,6 +44,11 @@ function Introduction() {
 
 
     const aguajeTitleContainer = useRef<HTMLHeadingElement | null>(null);
+    const aguajeTitleJson = useRef<HTMLDivElement|null>(null)
+
+    const containerTitleCamu = useRef<HTMLDivElement | null>(null)
+    const titleCamuTwo = useRef<HTMLDivElement|null>(null)
+
     const aguajeImg = useRef<HTMLImageElement | null>(null);
     const aguajeTwoImg = useRef<HTMLImageElement | null>(null);
     const aguajeThreeImg = useRef<HTMLImageElement | null>(null);
@@ -54,7 +61,7 @@ function Introduction() {
     const aguajeInfoThree = useRef<HTMLDivElement | null>(null);
 
     const svgRef = useRef<SVGSVGElement | null>(null)
-
+    const cilindro = useRef<HTMLDivElement|null>(null)
 
 
 
@@ -100,6 +107,8 @@ function Introduction() {
                 }, 2)
                 .fromTo(aguajeDescriptionOne.current, {opacity: 0, x: -300, rotate: 360},
                     {opacity: 1, x: 0, rotate: 0, ease: "power2.inOut", duration: 3}, 7)
+                .fromTo(aguajeTitleJson.current, {opacity:0},
+                    {opacity: 1, duration: 3},  7)
                 .fromTo(aguajeInfoOne.current, {opacity: 0},
                     {opacity: 1, duration: 3}, 10)
                 .fromTo(aguajeDescriptionTwo.current, {opacity: 0, y: 300, rotate: 360},
@@ -121,12 +130,19 @@ function Introduction() {
                 }
             })
 
+            const allSpanCamu = containerTitleCamu.current.querySelectorAll("span");
 
-            tlTwo.fromTo(aguajeFourImg.current, {x: -400, opacity: 0},
-                {x: 0, opacity: 1, duration: 1})
-
-
+            tlTwo
+                .fromTo(aguajeFourImg.current, {x: -400, opacity: 0},
+                {x: 0, opacity: 1, duration: 1}, 1)
+                .fromTo(allSpanCamu, {opacity: 1, x : 0, y : 0 },
+                    {x: () => gsap.utils.random(-300, 300), y : () => gsap.utils.random(-200, -100), rotate: () => gsap.utils.random(-60,60) ,opacity: 0,stagger: {each: .2, from: "end"} },"<")
+                .fromTo(titleCamuTwo.current, {opacity: 0},
+                    {opacity: 1, duration: 2}, 3)
         }, triggerRef);
+
+        gsap.to(cilindro.current, {rotationY: "+=360", duration:8, ease: "none",repeat: -1})
+
 
         return () => {
             ctx.revert();
@@ -166,16 +182,12 @@ function Introduction() {
         setDistanceOne(null);
     };
 
-
     useEffect(()=>{
-
-        // if(!autoSlide) return;
 
         refInterval.current = setInterval(()=>{
             // !isTransitioning && handleClick('right');
             if(!isTransitioning) handleClick('right')
         },5000)
-
 
         return () => clearInterval(refInterval.current)
 
@@ -186,124 +198,605 @@ function Introduction() {
         handleClick(dir)
     }
 
+    // const horizontalRef = useRef<HTMLDivElement|null>(null)
+
+    const containerRefCamu = useRef<HTMLDivElement|null>(null);
+    const horizontalRef = useRef<HTMLDivElement|null>(null);
+    const horizontalTitleCamu = useRef<HTMLDivElement|null>(null)
+    const containerSlide = useRef<HTMLDivElement|null>(null)
+    const imgCamuOne = useRef<HTMLImageElement|null>(null)
+    const imgCamuTwo = useRef<HTMLImageElement|null>(null)
+    const imgCamuThree = useRef<HTMLImageElement|null>(null)
+    const boxOne = useRef<HTMLDivElement|null>(null)
+    const cuackCamu = useRef<HTMLDivElement|null>(null)
+
+    const allCamuBoxOne = useRef<(HTMLSpanElement|null)[]>([])
+    const allCamuBoxTwo = useRef<(HTMLSpanElement|null)[]>([])
+    const allCamuBoxThree = useRef<(HTMLSpanElement|null)[]>([])
+
+    const circle3D = useRef<HTMLDivElement|null>(null)
+
+    // const widthContainer = useRef<number>(b)
+
+    const containerOneDescription = useRef<HTMLDivElement|null>(null)
+    const containerTwoDescription = useRef<HTMLDivElement|null>(null)
+    const containerThreeDescription = useRef<HTMLDivElement|null>(null)
+
+    const dropBorderOne = useRef<HTMLDivElement|null>(null)
+    const dropBorderTwo = useRef<HTMLDivElement|null>(null)
+
+    useEffect(()=>{
+
+        console.log(allCamuBoxOne.current)
+
+    },[])
+
+    useEffect(()=>{
+
+        const sections = gsap.utils.toArray(".section");
+        const allSpan = boxOne.current.querySelectorAll('div span')
+        const allCamu = cuackCamu.current.querySelectorAll('h1')
+
+        const titleContainerOne = Array(containerOneDescription.current.querySelectorAll('h1'))
+        const titleContainerTwo = Array(containerTwoDescription.current.querySelectorAll('h1'))
+        const titleContainerThree = Array(containerThreeDescription.current.querySelectorAll('h1'))
+
+        const spansContainerOne = Array(containerOneDescription.current.querySelectorAll('p'))
+        const spansContainerTwo = Array(containerTwoDescription.current.querySelectorAll('p'))
+        const spansContainerThree = Array(containerThreeDescription.current.querySelectorAll('p'))
+
+        const imgContainerOne = containerOneDescription.current.querySelector('img')
+        const imgContainerTwo = containerTwoDescription.current.querySelector('img')
+        const imgContainerThree = containerThreeDescription.current.querySelector('img')
+
+
+        const boxOneCenter = boxOne.scrollWidth/2;
+
+        let hasAnimated = false;
+
+        const totalItems = allCamuBoxTwo.current.length;
+        const staggerEach = 0.1;
+        const durationTotal = staggerEach * (totalItems - 1) + 0.25;
+
+        let flagContinue = false;
+
+        const tlCamu = gsap.timeline({
+            scrollTrigger: {
+                trigger: containerRefCamu.current, // Usa el contenedor grande
+                scrub: 1,
+                pin: true,
+                // ease: "none",
+                end: () => "+=9000",
+                onUpdate: (self) => {
+
+                    const total = tlCamu.duration();
+                    // console.log('total ->',total)
+
+                    if((self.progress)*100 > 69) {
+                        // console.log('cuackkk')
+                    }
+
+                    // 0.2338 < self.progress < 0.31716 && gsap.to(allCamuBoxOne.current, {opacity: 1, duration: .05})
+                    // 0.2338 < self.progress < 0.31716 && gsap.to(allCamuBoxTwo.current, {opacity: 1, duration: .05})
+                    // 0.2338 < self.progress < 0.31716 && gsap.to(allCamuBoxThree.current, {opacity: 1, duration: .05})
+
+                    // self.progress < 0.4 && gsap.to(spansContainerOne, {opacity: 0, duration: .10})
+                    // self.progress < 0.678 && gsap.to(spansContainerThree, {opacity: 0, duration: .10})
+                    // self.progress < 0.8445 && gsap.to(spansContainerTwo, {opacity: 0, duration: .10})
+                    console.log(self.progress)
+                    self.progress >= 0.41 && gsap.to(allCamuBoxOne.current,{opacity : 0, duration: .05})
+                    self.progress >= 0.679 && gsap.to(allCamuBoxTwo.current, {opacity: 0, duration: .05})
+                    self.progress >= 0.8446 && gsap.to(allCamuBoxThree.current, {opacity: 0, duration: .05})
+
+                }
+
+            }
+        });
+
+        gsap.to(containerRefCamu.current,{background: "#F50000"})
+        gsap.to(allSpan, {opacity: 0})
+        gsap.to(imgContainerOne,{opacity: 0})
+        gsap.to(imgContainerTwo,{opacity: 0})
+        gsap.to(imgContainerThree,{opacity: 0})
+        gsap.to(spansContainerOne,{opacity: 0})
+        gsap.to(spansContainerTwo,{opacity: 0})
+        gsap.to(spansContainerThree,{opacity: 0})
+
+        tlCamu
+            .fromTo(allCamu, {
+                opacity: 0,
+                y: () => gsap.utils.random(-200, 200)
+            }, {
+                opacity: 1,
+                y: 0,
+                x:0,
+                stagger: { each: 0.1, amount: .25, from: "edges" },
+            }, 0)
+
+            .fromTo(imgCamuOne.current, { y : -200, scale: 2.5},
+                {
+                    y : 0,
+                    scale: 1,
+                    onUpdate: function () {
+                       if(this.progress() >= 1) {
+                           imgCamuOne.current.classList.add('bounce-node')
+                       }
+                    }
+                },0)
+
+            .fromTo(imgCamuTwo.current, { y : 200, scale: .75},
+                {
+                    y : 0,
+                    scale: 1,
+                },0)
+
+
+            .fromTo(imgCamuOne.current,{opacity: 0},
+        {opacity: 1}, "0.2")
+            .fromTo(imgCamuTwo.current, {opacity: 0},
+                {opacity: 1}, "0.2")
+
+
+            .to(sections, {
+                xPercent: -100 * (sections.length - 1),
+                duration: 1,
+                onStart : () => {
+
+                    gsap.to(allCamu, {
+                        yPercent : () => gsap.utils.random(-350,350),
+                        xPercent : () => gsap.utils.random(100,400),
+                        opacity : 0,
+                        onUpdate : function () {
+                            this.progress() >= 1 && gsap.to(allCamu,{yPercent: 0, xPercent:0})
+
+                            if(this.progress() >= 1 && !hasAnimated) {
+                                gsap.fromTo(allSpan,{ opacity: 0, yPercent : () => gsap.utils.random(-250,250) },{ opacity: 1, yPercent: 0 })
+                                hasAnimated = true
+                            }
+
+                        }
+                    })
+
+                    dropBorderOne.current.classList.add('drop-water')
+                    dropBorderTwo.current.classList.add('drop-water')
+                },
+
+
+            }, 1)
+
+
+            .fromTo(imgCamuThree.current, {opacity: 0 },
+            {
+                // delay: 1,
+                opacity: 1,
+                onStart: function () {
+                    gsap.delayedCall(0.05, () => {
+                        gsap.set(allSpan, { opacity: 1 });
+                    });
+
+                }
+
+
+
+            },2)
+
+            // .to(allSpan, {xPercent: ()=> gsap.utils.random(-200,200), yPercent: ()=> gsap.utils.random(-300,300), duration: .25},3)
+
+
+            .to(allCamuBoxOne.current, {
+                x: (indice,el)=>{
+                    const xCenterContainer = containerOneDescription.current.getBoundingClientRect().left + containerOneDescription.current.getBoundingClientRect().width/2;
+
+                    const xCenterElement = el.getBoundingClientRect().left + el.getBoundingClientRect().width/2;
+
+                    return xCenterContainer - xCenterElement;
+                },
+                opacity: 0,
+                rotate: ()=> gsap.utils.random(-120,120),
+                // delay: 1,
+                y : (indice, el) => {
+                    const yCenterContainer = containerOneDescription.current.getBoundingClientRect().top + containerOneDescription.current.getBoundingClientRect().height/2;
+                    const yCenterElement= el.getBoundingClientRect().top + el.getBoundingClientRect().width/2;
+
+                    return yCenterContainer - yCenterElement;
+                },
+                stagger : {
+                    from: "end",
+                    each: .10
+                },
+                onUpdate : function () {
+                    if(this.progress() < 1) {
+                        gsap.to(spansContainerOne,{opacity:0})
+                    }
+                },
+                duration: .25,
+            }, 3)
+
+            .fromTo(titleContainerOne,{opacity: 0},
+                {
+                    opacity: 1,
+                    onUpdate: function () {
+
+                        if(this.progress() >= 1) {
+                            gsap.to(spansContainerOne,
+                                {
+                                    opacity: 1,
+                                    stagger : {
+                                        from : "start",
+                                        each: .10
+                                    }
+                                })
+                            gsap.to(imgContainerOne,{opacity:.85})
+                            gsap.to(containerRefCamu.current, {background: "#EB0000"})
+                        } else {
+                            gsap.to(imgContainerOne, {opacity: 0})
+                        }
+                    },
+                    duration: .25
+                }, ">")
+
+            .to(allCamuBoxTwo.current, {
+                x: (indice,el)=>{
+                    const xCenterContainer = containerThreeDescription.current.getBoundingClientRect().left + containerThreeDescription.current.getBoundingClientRect().width/2;
+                    const xCenterElement = el.getBoundingClientRect().left + el.getBoundingClientRect().width/2;
+
+                    return xCenterContainer - xCenterElement;
+                },
+                rotate: ()=> gsap.utils.random(-120,120),
+                opacity: 0,
+                // delay: 1,
+                y : (indice, el) => {
+                    const yCenterContainer = containerThreeDescription.current.getBoundingClientRect().top + containerThreeDescription.current.getBoundingClientRect().height/2;
+                    const yCenterElement= el.getBoundingClientRect().top + el.getBoundingClientRect().width/2;
+
+                    return yCenterContainer - yCenterElement;
+                },
+                stagger : {
+                    from: "center",
+                    each: .10
+                },
+                onUpdate : function () {
+                    if(this.progress() < 1) {
+                        gsap.to(spansContainerThree,{opacity : 0})
+                    }
+                },
+                duration: .25,
+            }, 5)
+
+            .fromTo(titleContainerThree,{opacity: 0},
+                {
+                    opacity: 1,
+                    onUpdate: function () {
+                        if(this.progress() >= 1) {
+                            gsap.to(spansContainerThree,
+                                {
+                                    opacity: 1,
+                                    stagger : {
+                                        from : "start",
+                                        each: .10
+                                    }
+                                })
+                            gsap.to(imgContainerThree,{opacity:.85})
+
+                            gsap.to(containerRefCamu.current,{background: "#E00000"} )
+                        } else {
+                            gsap.to(imgContainerThree, {opacity: 0})
+                        }
+                    },
+                }, ">")
+
+            .to(allCamuBoxThree.current, {
+                x: (indice,el)=>{
+                    const xCenterContainer = containerTwoDescription.current.getBoundingClientRect().left + containerTwoDescription.current.getBoundingClientRect().width/2;
+                    const xCenterElement = el.getBoundingClientRect().left + el.getBoundingClientRect().width/2;
+
+                    return xCenterContainer - xCenterElement;
+                },
+                rotate: ()=> gsap.utils.random(-120,120),
+                opacity: 0,
+                y : (indice, el) => {
+                    const yCenterContainer = containerTwoDescription.current.getBoundingClientRect().top + containerTwoDescription.current.getBoundingClientRect().height/2;
+                    const yCenterElement= el.getBoundingClientRect().top + el.getBoundingClientRect().width/2;
+
+                    return yCenterContainer - yCenterElement;
+                },
+                stagger : {
+                    from: "start",
+                    each: .10
+                },
+                onUpdate : function () {
+                    if(this.progress() < 1) {
+                        gsap.to(spansContainerTwo, {opacity: 0},)
+                    }
+                },
+                duration: .25,
+            }, 7)
+
+            .fromTo(titleContainerTwo,{opacity: 0},
+                {
+                    opacity: 1,
+                    onUpdate: function () {
+
+                        if(this.progress() >= 1) {
+                            gsap.fromTo(spansContainerTwo, {opacity: 0},
+                                {
+                                    opacity: 1,
+                                    stagger : {
+                                        from : "start",
+                                        each: .10
+                                    }
+                                })
+                            gsap.to(imgContainerTwo,{opacity:.85})
+
+                            gsap.to(containerRefCamu.current,{background:"#D60000"})
+                        } else {
+                            gsap.to(imgContainerTwo, {opacity: 0})
+                        }
+
+                    },
+                }, ">")
+
+
+            .fromTo(circle3D.current, {
+                    scale: .75,
+                    opacity: 0,
+                },
+                {
+                    scale: 1,
+                    opacity: 1,
+                    duration: durationTotal,
+                    onComplete : () => {
+
+                    }
+                }, 9)
+            .to(containerRefCamu.current,
+                {
+                    background: "#CC0000",
+                    duration: durationTotal,
+                    onUpdate : function () {
+                        if(this.progress() >= 1) {
+                            dropBorderOne.current.classList.remove('drop-water')
+                            dropBorderTwo.current.classList.remove('drop-water')
+
+                            // dropBorderOne.current.classList.add('drop-water')
+                            // dropBorderTwo.current.classList.add('drop-water')
+                        }
+                    }
+                }, "<")
+
+    },[])
+
+
 
     return (
-        <>
-            <div className="bg-[#111] text-white font-sans relative overflow-hidden ">
-                <div ref={categoryRef} className={` relative w-full h-[550px] mx-auto border-4 border-red-500`}>
+        <div id={"smooth-wrapper"}>
+            <div id={"smooth-content"}>
 
-                    <div ref={containerSlider}
-                         className={`    flex w-full  ${isTransitioning ? "transition-transform duration-500" : ""} translate-x-[-100%]  ${distanceOne === "right" ? "translate-x-[-200%]" : ""}    ${distanceOne === "left" ? "translate-x-[0]" : ""}`}
-                         onTransitionEnd={handleTransitionEnd}>
-                        {
-                            sliderElements.map((Component, index) => (
-                                <div className="min-w-full" key={index}>
-                                    <Component isActive={index === 1}/>
-                                </div>
-                            ))
-                        }
-                    </div>
+                <div className="text-white font-sans relative overflow-hidden ">
+                    <div ref={categoryRef}
+                         className={`border-2 relative w-full h-[1050px] mx-auto flex flex-col justify-center`}>
 
-                    <div
-                        className={"absolute flex gap-[5px] justify-center h-[30px] top-[92.5%] left-1/2 -translate-x-1/2 transition-half"}>
-                        {
-                            sliderElements.map((circle, index) => (
-                                <div ref={el => groupCircle.current[index] = el} key={index}
-                                     className={`border-2 rounded-full h-[15px] min-w-[15px] ${activeCircle === index ? "bg-white circleSlide" : ""} `}/>
-                            ))
-                        }
-                    </div>
-                    <div className="absolute w-full flex justify-between top-1/2 -translate-y-1/2">
-                        <div onClick={() => onUserClick("left")} className="size-[50px] border-2"/>
-                        <div onClick={() => onUserClick("right")} className="size-[50px] border-2"/>
-                    </div>
-
-
-                </div>
-
-                <div ref={triggerRef}
-                     className={"w-4/5 mx-auto items-center h-screen bg-black flex flex-col justify-evenly"}>
-
-                    <div ref={aguajeTitleContainer}
-                         className={"border-2 border-red-500 w-full h-[300px] flex justify-center items-center"}>
-                        {
-                                 ("Aguaje").split('').map((char, index) => (
-                                    <span className={"text-[150px] inline-block"} key={index}>{char}</span>
+                        <div ref={containerSlider}
+                             className={`    flex w-full  ${isTransitioning ? "transition-transform duration-500" : ""} translate-x-[-100%]  ${distanceOne === "right" ? "translate-x-[-200%]" : ""}    ${distanceOne === "left" ? "translate-x-[0] " : ""}`}
+                             onTransitionEnd={handleTransitionEnd}>
+                            {
+                                sliderElements.map((Component, index) => (
+                                    <div className="min-w-full" key={index}>
+                                        <Component isActive={index === 1}/>
+                                    </div>
                                 ))
-                        }
+                            }
+                        </div>
+
+                        <div
+                            className={"absolute flex gap-[5px] justify-center h-[30px] top-[92.5%] left-1/2 -translate-x-1/2 transition-half"}>
+                            {
+                                sliderElements.map((circle, index) => (
+                                    <div ref={el => groupCircle.current[index] = el} key={index}
+                                         className={`border-2 rounded-full h-[15px] min-w-[15px] ${activeCircle === index ? "bg-white circleSlide" : ""} `}/>
+                                ))
+                            }
+                        </div>
+                        <div className="absolute w-full flex justify-between top-1/2 -translate-y-1/2">
+                            <div onClick={() => onUserClick("left")} className="size-[50px] border-2"/>
+                            <div onClick={() => onUserClick("right")} className="size-[50px] border-2"/>
+                        </div>
+
+
                     </div>
-                    <div className={"relative w-[1280px] h-[700px]"}>
-                        <img ref={aguajeImg}
-                             className={"bg-transparent absolute w-[1024px] h-[700px] object-contain"}
-                             src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1750643317/DeWatermark.ai_1750642722000-Photoroom_zenofw.webp"
-                             alt=""/>
-                        <img ref={aguajeTwoImg}
-                             className={"bg-transparent absolute w-[1024px] h-[700px] origin-left size-[80%] object-contain"}
-                             src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1750646066/plato_echado-Photoroom_xndrsi.webp"
-                             alt=""/>
-                        {/*<img ref={aguajeThreeImg}*/}
-                        {/*     className={"bg-transparent absolute w-[1024px] h-[700px] origin-left size-[80%] object-contain"}*/}
-                        {/*     src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1750479564/aguajina-sin-marca_hf1co8.png"*/}
-                        {/*     alt=""/>*/}
 
-                        <div ref={aguajeDescriptionOne} className={"absolute left-[40%] top-[5%] "}>
-                            <div className={"relative"}>
-                                <img className={"size-[250px] object-contain"}
-                                     src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1750642021/aguaje-pelado-transparente_gfs3jv.webp"
+                    <div ref={triggerRef} className={"bg-gradient-to-r from-yellow-400  to-yellow-400 w-5/5 mx-auto items-center h-screen flex flex-col justify-evenly"}>
+
+                        <div className={"relative w-full h-[300px]"}>
+                            <div ref={aguajeTitleContainer}
+                                 className={"w-full h-[300px] flex justify-center items-center"}>
+                                {
+                                    ("Aguaje").split('').map((char, index) => (
+                                        <span className={"text-[175px] inline-block"} key={index}>{char}</span>
+                                    ))
+                                }
+                            </div>
+                            <div ref={aguajeTitleJson}
+                                 className={"text-[250px] leading-none absolute top-0 left-1/2 -translate-x-1/2"}>
+                                Aguaje
+                            </div>
+                        </div>
+                        <div className={" relative  w-full h-[700px]"}>
+
+                            <div className={"w-3/5  mx-auto"}>
+                                <img ref={aguajeImg}
+                                     className={"bg-transparent absolute w-[1024px] h-[700px] object-contain"}
+                                     src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1750643317/DeWatermark.ai_1750642722000-Photoroom_zenofw.webp"
                                      alt=""/>
-                                <div ref={aguajeInfoOne}
-                                     className={"absolute left-1/2 translate-x-[-50%] flex flex-col items-center bottom-[80%]"}>
-                                    <h1 className={"text-white text-[20px]"}>Fitoestrogenos</h1>
-                                    <div className={"h-[100px] bg-white w-[2px]"}></div>
-                                    <div className={"size-[15px] rounded-full bg-white"}/>
+                                <img ref={aguajeTwoImg}
+                                     className={"bg-transparent absolute w-[1024px] h-[700px] origin-left size-[80%] object-contain"}
+                                     src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1750646066/plato_echado-Photoroom_xndrsi.webp"
+                                     alt=""/>
+
+                                <div ref={aguajeDescriptionOne} className={"absolute left-[40%] top-[5%] "}>
+                                    <div className={"relative"}>
+                                        <img className={"size-[250px] object-contain"}
+                                             src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1750642021/aguaje-pelado-transparente_gfs3jv.webp"
+                                             alt=""/>
+                                        <div ref={aguajeInfoOne}
+                                             className={"absolute left-1/2 translate-x-[-50%] flex flex-col items-center bottom-[80%]"}>
+                                            <h1 className={"text-white text-[20px]"}>Fitoestrogenos</h1>
+                                            <div className={"h-[100px] bg-white w-[2px]"}></div>
+                                            <div className={"size-[15px] rounded-full bg-white"}/>
+                                        </div>
+                                    </div>
                                 </div>
+
+                                <div ref={aguajeDescriptionTwo}
+                                     className={"absolute left-[57.5%] bottom-[10%]"}>
+                                    <div className={"relative"}>
+                                        <img className={"size-[300px] object-contain"}
+                                             src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1750642074/pote-invisible_kuuyuf.webp"
+                                             alt=""/>
+                                        <div ref={aguajeInfoTwo}
+                                             className={"absolute flex flex-col-reverse items-center top-[80%] left-1/2 translate-x-[-50%]"}>
+                                            <h1 className={"text-white text-[20px]"}>Fitoestrogenos</h1>
+                                            <div className={"h-[100px] bg-white w-[2px]"}></div>
+                                            <div className={"size-[15px] rounded-full bg-white"}/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div ref={aguajeDescriptionThree}
+                                     className={"absolute left-[75%] top-[17.5%]"}>
+                                    <div className={"relative"}>
+                                        <img className={"size-[300px] object-contain"}
+                                             src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1750642021/aguajina-invisible_oaj3qf.webp"
+                                             alt=""/>
+                                        <div ref={aguajeInfoThree}
+                                             className={"absolute flex flex-col items-center bottom-[80%] left-1/2 translate-x-[-50%]"}>
+                                            <h1 className={"text-white text-[20px]"}>Fitoestrogenos</h1>
+                                            <div className={"h-[100px] bg-white w-[2.5px]"}></div>
+                                            <div className={"size-[15px] rounded-full bg-white"}/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div ref={triggerRefTwo} className={"h-[100vh] w-full bg-red-600 flex flex-col items-center"}>
+
+                        <div className={"relative h-[475px] text-[175px] flex items-center justify-center"}>
+                            <div ref={containerTitleCamu}>
+                                {
+                                    "Camu-Camu".split('').map((char, indice) => (
+                                        <span className={"leading-none inline-block"} key={indice}>{char}</span>
+                                    ))
+                                }
+                            </div>
+                            <div ref={titleCamuTwo} className={"absolute top-1/2 -translate-y-1/2 leading-none"}>
+                                Camu Camu
                             </div>
                         </div>
 
-                        <div ref={aguajeDescriptionTwo}
-                             className={"absolute left-[50%] bottom-[10%]"}>
-                            <div className={"relative"}>
-                                <img className={"size-[300px] object-contain"}
-                                     src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1750642074/pote-invisible_kuuyuf.webp"
-                                     alt=""/>
-                                <div ref={aguajeInfoTwo}
-                                     className={"absolute flex flex-col-reverse items-center top-[80%] left-1/2 translate-x-[-50%]"}>
-                                    <h1 className={"text-white text-[20px]"}>Fitoestrogenos</h1>
-                                    <div className={"h-[100px] bg-white w-[2px]"}></div>
-                                    <div className={"size-[15px] rounded-full bg-white"}/>
+                        <div ref={cilindro} className={"relative bg-blue-300 size-[400px]"}>
+                            <img ref={aguajeFourImg}
+                                 className={"bg-white absolute border-4 border-red-500  origin-left size-[350px] left-full top-1/2 -translate-y-1/2 object-contain"}
+                                 src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1750479564/aguajina-sin-marca_hf1co8.png"
+                                 alt=""/>
+                        </div>
+                    </div>
+
+                    <div className={"overflow-hidden bg-red-400"} ref={containerRefCamu}>
+                        <div className={"relative flex h-screen items-center"} ref={horizontalTitleCamu}>
+
+                            <div ref={horizontalTitleCamu} className={"z-10 relative section min-w-full h-full  items-center justify-center flex text-center text-black"}>
+                                <img ref={imgCamuOne} className={"drop-shadow-[0px_0px_15px_rgba(0,0,0,.90)] absolute right-0 top-[40%] z-[-1]"} src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1752414254/camu_camu-Photoroom_dm1ahl.webp" alt=""/>
+                                <img ref={imgCamuTwo} className={"drop-shadow-[0px_0px_15px_rgba(0,0,0,.90)] absolute left-[0] top-[10%] z-[-1] rotate-[90deg]"} src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1752414254/camu_camu-Photoroom_dm1ahl.webp" alt=""/>
+
+                            </div>
+                            <div ref={cuackCamu} className={"absolute whitespace-nowrap top-1/2 -translate-y-1/2 left-1/2 text-[150px] -translate-x-1/2 z-[20]"}>
+                                {
+                                    "Camu Camu".split('').map((char, indice) => (
+                                        <h1 key={indice} className={"inline-block"}>{char === " " ? '\u00A0' : char}</h1>
+                                    ))
+                                }
+                            </div>
+                            {/*<div ref={containerSlide} className={"flex w-full h-full"}>*/}
+                            <div ref={boxOne} className={"flex items-center justify-center relative section  h-full min-w-full"}>
+                                <div className={"w-full h-[100px] relative text-center"}>
+                                    {
+                                        "la fruta con ".split('').map((char,indice)=>(
+                                            <span key={indice} ref={ el => allCamuBoxOne.current[indice] = el} className={"transition-half inline-block  text-[75px] leading-none z-[10]"}>{char === " "? "\u00A0" : char }</span>
+                                        ))
+                                    }
+                                    {
+                                        "mayor vitamina c ".split('').map((char, indice) =>(
+                                            <span key={indice} className={"z-[10] transition-half text-[75px] inline-block  leading-none"} ref={el=>allCamuBoxTwo.current[indice] = el}>{char === " " ? "\u00A0": char}</span>
+                                        ))
+                                    }
+                                    {
+                                        "en el mundo".split('').map((char, indice) =>(
+                                            <span key={indice} className={"z-[10] transition-half text-[75px] inline-block  leading-none"} ref={el=>allCamuBoxThree.current[indice] = el}>{char === " " ? "\u00A0": char}</span>
+                                        ))
+                                    }
+                                    <img src={"https://res.cloudinary.com/dfwtyxxba/image/upload/v1752811244/cuack_camu_4_kqwlso.webp"} ref={circle3D} className={" absolute object-contain drop-shadow-[0px_0px_40px_rgba(0,0,0,.75)] size-[1024px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[-1]"}/>
+                                </div>
+
+                                <img ref={imgCamuThree} className={"absolute left-0 bottom-0 z-[-1] size-[.1px] object-contain"} src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1752415446/DeWatermark.ai_1752415343588-Photoroom_syppam.webp" alt=""/>
+
+                                {/*<img src={"https://res.cloudinary.com/dfwtyxxba/image/upload/v1752415446/DeWatermark.ai_1752415343588-Photoroom_syppam.webp"} ref={containerOneDescription} className={"absolute top-[0] left-0 size-[400px]  z-[-1] object-contain"}/>*/}
+                                {/*<img src={"https://res.cloudinary.com/dfwtyxxba/image/upload/v1752811230/cuack_camu_2_nmx790.webp"} ref={containerTwoDescription} className={"absolute top-[0] right-[0] size-[450px]  z-[-1] object-contain"}/>*/}
+                                {/*<img src={"https://res.cloudinary.com/dfwtyxxba/image/upload/v1752811230/cuack_camu_3_exd229.webp"} ref={containerThreeDescription} className={"absolute bottom-0 left-1/2 -translate-x-1/2 size-[450px]  z-[-1] object-contain "}/>*/}
+                                <div ref={containerOneDescription} className={"absolute top-[12.5%] left-[15%] w-[300px] leading-none z-[-1] object-contain flex flex-col gap-[25px]"}>
+                                    <div className={"relative flex flex-col gap-[17.5px]"}>
+                                        <h1 className={"text-[35px]"}>retrasa el envejecimiento prematuro</h1>
+                                        <div className={"flex flex-col gap-[5px]"}>
+                                            <p>Gracias a su alto contenido en antioxidantes</p>
+                                            <p>Reduce la oxidacion celular y el estres oxidativo</p>
+                                            <p>Favorece la elasticidad de la piel y reduce arrugas</p>
+                                            <p>Reduce los transtornos del animo(estres, ansiedad leve)</p>
+                                        </div>
+                                        <img className={"drop-shadow-[0px_0px_15px_rgba(0,0,0,.85)] object-cover absolute top-1/2 left-1/2 -translate-y-1/2 z-[-1]"} src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1752415446/DeWatermark.ai_1752415343588-Photoroom_syppam.webp" alt=""/>
+                                    </div>
+                                </div>
+                                <div ref={containerTwoDescription} className={"absolute top-[35%]  right-[20%] w-[300px] leading-none z-[-1] object-contain flex flex-col gap-[25px]"}>
+                                    <div className={"relative flex flex-col gap-[17.5px]"}>
+                                        <h1 className={"text-[35px] w-[250px]"}>refuerza el sistema inmune</h1>
+                                        <div className={"flex flex-col gap-[5px]"}>
+                                            <p>Estimula la produccion de globulos blancos, fundamentales en la defensa contra
+                                                virus y bacterias</p>
+                                            <p>Esencial para el correcto funcionamiento de las celulas inmunes</p>
+                                            <p>Promueve la produccion de anticuerpos y la respuesta inflamatoria regulada</p>
+                                            <p>Alivia las infecciones respiratorias(gripe, resfriados, bronquitis)</p>
+                                        </div>
+                                        <img className={"drop-shadow-[0px_0px_15px_rgba(0,0,0,.85)] object-cover absolute top-1/2 -translate-y-1/2 left-[40%] z-[-1] min-w-[450px]"} src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1752811230/cuack_camu_3_exd229.webp" alt=""/>
+                                    </div>
+                                </div>
+                                <div ref={containerThreeDescription} className={"absolute bottom-[2.5%]  left-[32.5%] w-[300px] -translate-x-1/2 leading-none  z-[-1] object-contain flex flex-col gap-[25px]"}>
+                                    <div className={"relative flex flex-col gap-[17.5px]"}>
+                                        <h1 className={"text-[35px] w-[250px]"}>20 veces mas vitamina C que el limon</h1>
+                                        <div className={"flex flex-col gap-[5px]"}>
+                                            <p>Mejora la presion arterial alta y enfermedades cardiovasculares</p>
+                                            <p>Reduce el colesterol</p>
+                                            <p>Controla la diabetes tipo 2, mejora la sensibilidad a la insulina y reduce el azucar en la sangre</p>
+                                            <p>Ayuda con la inflamacion cronica(artritis, colitis, etc)</p>
+                                            <p>Previene los problemas hepaticos(higado graso, detoxificacion)</p>
+                                        </div>
+                                        <img className={"drop-shadow-[0px_0px_15px_rgba(0,0,0,.85)] object-cover absolute top-1/2 -translate-y-1/3 left-1/4 z-[-1] min-w-[450px]"} src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1752811230/cuack_camu_2_nmx790.webp" alt=""/>
+                                    </div>
                                 </div>
                             </div>
+
                         </div>
 
-                        <div ref={aguajeDescriptionThree}
-                             className={"absolute left-[77.5%] top-[20%]"}>
-                            <div className={"relative"}>
-                                <img className={"size-[300px] object-contain"}
-                                     src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1750642021/aguajina-invisible_oaj3qf.webp"
-                                     alt=""/>
-                                <div ref={aguajeInfoThree}
-                                     className={"absolute flex flex-col items-center bottom-[80%] left-1/2 translate-x-[-50%]"}>
-                                    <h1 className={"text-white text-[20px]"}>Fitoestrogenos</h1>
-                                    <div className={"h-[100px] bg-white w-[2.5px]"}></div>
-                                    <div className={"size-[15px] rounded-full bg-white"}/>
-                                </div>
-                            </div>
-                        </div>
+                        <div ref={dropBorderOne} className={"origin-center opacity-0 absolute top-0 right-0 translate-y-[-50%] translate-x-[50%] size-[200px] rounded-full border-2"}/>
+                        <div ref={dropBorderTwo} className={"origin-center opacity-0 absolute bottom-0 translate-y-[50%] left-0 translate-x-[-50%] size-[200px] rounded-full border-2"}/>
+
                     </div>
 
                 </div>
-
-                <div ref={triggerRefTwo} className={"h-[100vh] w-full bg-gray-500"}>
-                    <img ref={aguajeFourImg}
-                         className={"bg-white absolute border-4 border-red-500 w-[1024px] h-[700px] origin-left size-[80%] object-contain"}
-                         src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1750479564/aguajina-sin-marca_hf1co8.png"
-                         alt=""/>
-                </div>
-
-                <div style={{height: "200vh", background: "#1a11721"}}>⬇️ Keep Scrolling</div>
 
             </div>
-        </>
+        </div>
     )
 }
 
@@ -346,7 +839,8 @@ const CamuCamuSvg = ({isActive}: { active: boolean }) => {
 
 
     return (
-        <svg className={`${isActive ? "aguajeSvg" : ""} slideElement camuCamu w-full h-[500px]`} id="Capa_1" data-name="Capa 1"
+        <svg className={`${isActive ? "aguajeSvg" : ""} slideElement camuCamu w-full h-[500px]`} id="Capa_1"
+             data-name="Capa 1"
              viewBox="0 0 330.68 153.68">
             <path className="cls-1"
                   d="m36.94,2.16c3.8,2.3,6.55,5.05,8.25,8.25.8,1.6,1.07,3.28.83,5.02-.25,1.75-.75,3.58-1.5,5.48-.75,1.9-1.63,3.85-2.62,5.85-1,2-1.85,4-2.55,6-.3.9-.65,1.45-1.05,1.65-.4.2-1.1.05-2.1-.45-1.8-.9-3.13-2.45-3.97-4.65-.85-2.2-.73-5,.38-8.4.4-1.3.95-2.67,1.65-4.12.7-1.45,1.3-2.8,1.8-4.05.5-1.25.85-2.35,1.05-3.3.2-.95.05-1.62-.45-2.02-.6-.5-1.7-.32-3.3.52-1.6.85-3.4,2.23-5.4,4.12-2,1.9-4.05,4.27-6.15,7.12s-4,5.98-5.7,9.38c-2.1,4.2-3.5,8.1-4.2,11.7-.7,3.6-.83,6.73-.38,9.38.45,2.65,1.4,4.72,2.85,6.22,1.45,1.5,3.27,2.25,5.48,2.25,3.1,0,6.1-.65,9-1.95,2.9-1.3,5.62-3,8.17-5.1s4.88-4.4,6.98-6.9c2.1-2.5,3.9-4.95,5.4-7.35.4-.6.87-.92,1.42-.98.55-.05.98.33,1.28,1.12.2.6.12,1.75-.23,3.45-.35,1.7-1.18,3.55-2.48,5.55-1.4,2.2-3.18,4.27-5.33,6.23-2.15,1.95-4.5,3.67-7.05,5.17s-5.25,2.7-8.1,3.6-5.68,1.35-8.48,1.35c-4.8.1-8.77-.9-11.92-3s-5.4-4.92-6.75-8.48C.42,47.29-.03,43.24.42,38.69c.45-4.55,1.88-9.23,4.27-14.02,2.4-4.7,5.07-8.72,8.03-12.08,2.95-3.35,5.9-6,8.85-7.95,2.95-1.95,5.78-3.12,8.48-3.53,2.7-.4,5-.05,6.9,1.05Z"/>

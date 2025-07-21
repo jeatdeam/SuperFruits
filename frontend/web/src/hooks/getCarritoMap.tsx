@@ -37,8 +37,6 @@ export const useGetCarrito = () => {
 
             setData(result)
             setLoading(false);
-            console.log('si se esta haciendo fetch')
-            // console.log('si se esta haciendo el fetch')
         }catch(error){
             console.error(error.message)
             setError(true);
@@ -52,6 +50,9 @@ export const useGetCarrito = () => {
     useEffect(()=>{
         fetchCarrito();
     },[])
+    useEffect(()=>{
+        console.log([data?.flattenedProducts]);
+    },[data])
 
     return {data, refetch: fetchCarrito};
 }

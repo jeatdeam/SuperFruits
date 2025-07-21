@@ -4,58 +4,77 @@ import { useGetCarrito } from "../hooks/getCarritoMap.tsx";
 import { DeleteGroup } from "../components/buttonsComponent/deleteGroupProducts.tsx";
 import { AddProducts } from "../components/buttonsComponent/addElementGroupProducts.tsx";
 import { LessProducts } from "../components/buttonsComponent/lessElementProductGroup.tsx";
+import {ClearCarrito} from "../components/buttonsComponent/clearCarrito";
+import {FormCompras} from "../components/bodyComponents/formularioPago.tsx"
+import {useBlurSearch} from "../zustand/useBlurSearch.tsx";
+import {useBlurMenu} from "../zustand/useBlurMenu.tsx"
 
 export const PayProducts = () => {
     const { data, refetch } = useGetCarrito();
     const [animateIndex, setAnimateIndex] = useState<number | null>(null);
+    const {switchBlur} = useBlurSearch();
+    const {activeBlur} = useBlurMenu();
+
+    const [activeForm, setActiveForm] = useState<boolean|null>(false);
 
     return (
-        <main className="w-3/4 mx-auto flex flex-col gap-[25px]">
-            <h1 className="text-titleResponsive text-center leading-none">Seccion de Pagos</h1>
+        <main className={`${switchBlur? "blur-[10px]" : ""} ${activeBlur? "blur-[10px]" : ""} w-3/4 mx-auto flex flex-col gap-[25px]`}>
+            <h1 className="text-titleResponsive text-center leading-none z-0">Seccion de Pagos</h1>
 
-            <div className="flex flex-wrap gap-[25px] justify-center p-[10px]">
-                {data?.flattenedProducts.map(([key, value], index) => (
-                    <section
-                        key={index}
-                        className={`transition-all duration-500 ease-in-out flex flex-col justify-between gap-[10px] rounded-[8px] items-center w-[250px] h-[375px] p-[15px] shadow-[0_0_5px_rgba(0,0,0,.8)] relative ${
-                            animateIndex === index ? "showItem" : ""
-                        }`}
-                        onAnimationEnd={() => setAnimateIndex(null)}
-                    >
-                        <img
-                            className="size-[215px] rounded-[8px] object-cover shadow-[0_0_2.5px_rgba(0,0,0,.9)]"
-                            src={value[0].img[0]}
-                            alt=""
-                        />
-                        <h1 className="self-start">{value[0].name} - {value[0].fruit}</h1>
+            <div className={"flex justify-center"}>
+                <div className="flex flex-wrap gap-[25px] justify-center p-[10px] transition-half">
+                    {data && data?.flattenedProducts.map(([key, value], index) => (
+                        <section
+                            key={index}
+                            className={`transition-all duration-500 ease-in-out flex flex-col justify-between gap-[10px] rounded-[8px] items-center w-[250px] h-[375px] p-[15px] shadow-[0_0_5px_rgba(0,0,0,.8)] relative ${
+                                animateIndex === index ? "showItem" : ""
+                            }`}
+                            onAnimationEnd={() => setAnimateIndex(null)}
+                        >
+                            <img
+                                className="size-[215px] rounded-[8px] object-cover shadow-[0_0_2.5px_rgba(0,0,0,.9)]"
+                                src={value[0].img[0]}
+                                alt=""
+                            />
+                            <h1 className="self-start">{value[0].name} - {value[0].fruit}</h1>
 
-                        <div className="flex justify-between w-[85%]">
-                            <div className="flex gap-[10px]">
-                                <StarIcon />
-                                <EmpaqueIcon />
+                            <div className="flex justify-between w-[85%]">
+                                <div className="flex gap-[10px]">
+                                    <StarIcon />
+                                    <EmpaqueIcon />
+                                </div>
+                                <b className="font-medium self-end">S/. {value[0].price}</b>
                             </div>
-                            <b className="font-medium self-end">S/. {value[0].price}</b>
-                        </div>
 
-                        <div className="flex w-1/2 justify-between">
-                            <LessProducts
-                                id={value[0].id}
-                                refetch={refetch}
-                                onAnimate={() => setAnimateIndex(index)}
-                            />
-                            <small className="rounded-full size-[25px] flex items-center justify-center shadow-[0_0_3.5px_rgba(0,0,0,1)]">
-                                {value.length}
-                            </small>
-                            <AddProducts
-                                id={value[0].id}
-                                refetch={refetch}
-                                onAnimate={() => setAnimateIndex(index)}
-                            />
-                        </div>
+                            <div className="flex w-1/2 justify-between">
+                                <LessProducts
+                                    id={value[0].id}
+                                    refetch={refetch}
+                                    onAnimate={() => setAnimateIndex(index)}
+                                />
+                                <small className="rounded-full size-[25px] flex items-center justify-center shadow-[0_0_3.5px_rgba(0,0,0,1)]">
+                                    {value.length}
+                                </small>
+                                <AddProducts
+                                    id={value[0].id}
+                                    refetch={refetch}
+                                    onAnimate={() => setAnimateIndex(index)}
+                                />
+                            </div>
 
-                        <DeleteGroup id={value[0].id} refetch={refetch} />
-                    </section>
-                ))}
+                            <DeleteGroup id={value[0].id} refetch={refetch} />
+                        </section>
+                    ))}
+                </div>
+
+                { activeForm && <FormCompras state={activeForm} setState={setActiveForm}/> }
+
+            </div>
+
+            <div className={"flex w-full justify-between"}>
+                <h1 className={"showItem"}>Total: S/. {data?.flattenedProducts.reduce((total,[indice,value]) => total + value.reduce((subTotal, el) => subTotal + el.price , 0) ,0)} </h1>
+                { data?.flattenedProducts.length > 0 && <button className={"showItem"} onClick={ () => setActiveForm(prev=>!prev)} >rellenar datos</button> }
+                { data?.flattenedProducts.length > 0 && <ClearCarrito refetch={refetch}>borrar carrito</ClearCarrito> }
             </div>
         </main>
     );

@@ -12,6 +12,9 @@ import {NewHeader} from "./pages/newHeader.tsx";
 import {CarritoProvider} from "./contexts/carritoContext.tsx"
 import {ProcesoCompraProvider} from "./contexts/procesoDeCompraContext.tsx";
 import {ProcesoDeCompra} from "./components/bodyComponents/procesoDeCompra.tsx";
+import {InfoProduct} from "./pages/infoProduct.tsx";
+import {PayProducts} from "./pages/payProducts.tsx";
+
 
 import './App.css';
 import {LayoutConProceso} from "./pages/layoutConProceso.tsx";
@@ -28,17 +31,17 @@ function App() {
                     <ProcesoCompraProvider>
                         <Header/>
                         <Routes>
-                            <Route path="/" element={<Index/>}/>
-            {/*             <Route element={<LayoutConProceso/>}>*/}
-            {/*                 <Route path="/:product/" element={<ProductsCards/>}/>*/}
-            {/*                 <Route path="/:product/:name" element={<InfoProduct/>} />*/}
-            {/*                 <Route path="/seccion-de-pagos" element={<PayProducts/>}/>*/}
-            {/*             </Route>*/}
+                         <Route path="/" element={<Index/>}/>
+                         <Route element={<LayoutConProceso/>}>
+                             <Route path="/:product/" element={<ProductsCards/>}/>
+                             <Route path="/:product/:name" element={<InfoProduct/>} />
+                             <Route path="/seccion-de-pagos" element={<PayProducts/>}/>
+                         </Route>
                         </Routes>
                         <Footer/>
                     </ProcesoCompraProvider>
                 </CarritoProvider>
-                {/*<Modal/>*/}
+
                 <ContainerSearch/>
                 <Menu/>
         </>

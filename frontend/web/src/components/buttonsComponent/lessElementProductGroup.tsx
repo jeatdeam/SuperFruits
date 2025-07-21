@@ -1,10 +1,12 @@
 import {useCallback, useEffect, useRef, useState} from "react";
 import {useCarrito} from "../../contexts/carritoContext.tsx";
+import {useProceso} from "../../contexts/procesoDeCompraContext.tsx";
 
 
 export const LessProducts = ({id, refetch, onAnimate,}: { id: number; refetch: () => void; onAnimate: () => void; }) => {
 
     const { incrementCount } = useCarrito();
+    const {setCheckFormulario} = useProceso()
 
     const deleteProduct = async () => {
         try {
@@ -20,6 +22,7 @@ export const LessProducts = ({id, refetch, onAnimate,}: { id: number; refetch: (
             result.carritoCompras && incrementCount(result.carritoCompras.length);
             result.carritoCompras && refetch();
             onAnimate(); // Activa animación en el padre
+            !result.carritoCompras.length && setCheckFormulario(false);
         } catch (e) {
             console.error(e);
         }

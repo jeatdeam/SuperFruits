@@ -1,8 +1,10 @@
 import {useCarrito} from "../../contexts/carritoContext.tsx";
+import {useProceso} from "../../contexts/procesoDeCompraContext.tsx";
 
 export const DeleteGroup = ({id, refetch}:{id:string, refetch: () => void}) => {
 
     const {incrementCount} = useCarrito()
+    const {setCheckFormulario} = useProceso()
 
     const removeGroup = () => {
 
@@ -21,7 +23,7 @@ export const DeleteGroup = ({id, refetch}:{id:string, refetch: () => void}) => {
 
                 result.carritoCompras && incrementCount(result.carritoCompras?.length)
                 result.carritoCompras && refetch()
-
+                !result.carritoCompras.length && setCheckFormulario(false)
 
             }catch(error){
                 console.error(error.message)

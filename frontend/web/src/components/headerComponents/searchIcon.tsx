@@ -95,11 +95,13 @@ export const BoxSearch = forwardRef<BoxGroup, BoxSearchProps>(({ closeModal }, r
 
     const extraerProducts = async () => {
 
-        const txt : string = inputRef.current?.value ?? "no hay valores validos";
+        const txt : string = inputRef.current?.value.toLowerCase() ?? "no hay valores validos";
         const cleanTxt = txt.replace(/\s+/," ");
 
+        console.log(txt)
+
         if(cleanTxt === " " || cleanTxt === "" ) {
-            console.log(cleanTxt)
+            // console.log(cleanTxt)
             setProducts([])
             // withItems.current = false;
             setActive(false)
@@ -133,6 +135,12 @@ export const BoxSearch = forwardRef<BoxGroup, BoxSearchProps>(({ closeModal }, r
     useEffect(()=> {
     },[active, products])
 
+    const rebootState = () => {
+
+        useActive.setState({isActive: false });
+        useBlurSearch.setState({switchBlur : false})
+    }
+
     return (
         <>
             <input
@@ -145,8 +153,8 @@ export const BoxSearch = forwardRef<BoxGroup, BoxSearchProps>(({ closeModal }, r
             <div ref={groupRef} className={`flex flex-col gap-[15px] w-full mx-auto min-h-[150px]`}>
                 { products.length ?  products.map(
                         (el,index) => (
-                            <Link onClick={closeModal} to={`/${el.fruit.replace(/\s+/g,"-")}/${el.name.replace(/\s+/g,"-")}`}>
-                                <div key={index} className="showItem transition-all duration-[250] ease-in-out flex justify-between gap-[15px] items-center shadow-[0_0_7.5px_rgba(0,0,0,.9)] rounded-[8px] hover:bg-amber-50 py-[10px] px-[15px]">
+                            <Link key={index} onClick={rebootState} to={`/${el.fruit.replace(/\s+/g,"-")}/${el.name.replace(/\s+/g,"-")}`}>
+                                <div className="showItem transition-all duration-[250] ease-in-out flex justify-between gap-[15px] items-center shadow-[0_0_7.5px_rgba(0,0,0,.9)] rounded-[8px] hover:bg-amber-50 py-[10px] px-[15px]">
                                     <img className={"size-[75px] rounded-[8px] shadow-[0_0_2.5px_rgba(0,0,0,.9)]"} src={el.img?.[0]??""} alt={el.name} />
                                     <h1 className={"text-start flex-1 "}>{el.name}</h1>
                                     <h2 className={"text-start"}>S/. {el.price}</h2>

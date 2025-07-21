@@ -13,6 +13,7 @@ const port = 3000;
 app.use(cors()); // Permite solicitudes desde otros orígenes
 app.use(morgan('dev')); // Muestra logs de peticiones HTTP
 app.use(helmet()); // Añade seguridad a las cabeceras HTTP
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // Permite leer JSON en los body requests
 
 // Puedes usar 'path' si quieres servir archivos estáticos
@@ -32,9 +33,11 @@ app.get('/lastIdCarrito',taskControllers.getLastIdProducts)
 
 app.post('/filterProducts',taskControllers.busquedaProducts)
 app.post('/addProductCarrito', taskControllers.addProductCarrito)
+app.post("/formulario", taskControllers.formulario)
 
 app.delete("/deleteProduct", taskControllers.deleteProduct)
 app.delete("/deleteGroup", taskControllers.deleteGroup)
+app.delete("/deleteAllProducts", taskControllers.deleteAllProducts);
 
 
 app.listen(port, () => {

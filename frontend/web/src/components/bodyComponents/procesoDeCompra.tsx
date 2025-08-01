@@ -47,7 +47,7 @@ export const ProcesoDeCompra = () => {
                     </div>
                     <div
                         className={"size-[20px] bg-white rounded-full shadow-[0px_0px_0px_2px_rgba(173,216,230,1)] -translate-y-1/2 flex items-center justify-center"}>
-                        {count ? <Check/> : <FormIcon/>}
+                        {0 ? <Check/> : <FormIcon/>}
                     </div>
                 </div>
                 <ProcessThree ref={(cuack) => refProcess.push(cuack)}

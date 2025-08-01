@@ -1,0 +1,1197 @@
+doctype html
+html(lang="es")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Detalles de compras
+        style.
+            * {
+                box-sizing: border-box;
+            }
+            body{
+                /*padding: 50px 0;*/
+            }
+            p {
+                margin: 0;
+                font-weight: bold;
+                font-size: 12.5px;
+                white-space: nowrap;
+                /*line-height: 1;*/
+                padding: 0;
+            }
+            small {
+                padding: 0 5px;
+                font-size: 15px;
+                font-weight: normal;
+                line-height: 1;
+                word-break: break-all;
+                overflow-wrap: break-word;
+                margin: 0;
+            }
+            h2 {
+                margin: 0;
+                font-size: 17.5px;
+            }
+            h4, h5 {
+                line-height: 1.3;
+                margin: 0;
+            }
+            main {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+            th {
+                font-size: 12.5px;
+                border: 1px solid gray;
+                height: 25px;
+            }
+            td {
+                font-size: 15px;
+                border: 1px solid gray;
+                text-align: center;
+                height: 25px;
+            }
+            .containerTable {
+                width: 100%;
+                /*border: 1px solid gray;*/
+                border-bottom: 0;
+            }
+            ul {
+                list-style: none;
+                display: flex;
+                justify-content: space-between;
+                padding: 5px;
+                gap: 5px;
+                background: gray;
+                margin: 0;
+            }
+            li {
+                font-size: 12.5px;
+                font-weight: bold;
+            }
+            li:nth-of-type(1), li:nth-of-type(3), li:nth-of-type(4), li:nth-of-type(5), li:nth-of-type(6), li:nth-of-type(7) {
+                width: 100px;
+                text-align: end;
+            }
+            li:nth-of-type(1) {
+                text-align: start;
+            }
+            li:nth-of-type(2) {
+                width: 300px;
+            }
+            .containerIgv {
+                padding: 5px;
+                border-top: 1px solid gray;
+                display: flex;
+                flex-direction: column;
+                gap: 2.5px;
+            }
+            .igvSection {
+                display: flex;
+            }
+            .igvSection:nth-of-type(1) > div:nth-of-type(1) {
+                width: 475px;
+                text-align: end;
+                margin-right: 10px;
+            }
+            .igvSection:nth-of-type(1) > div:nth-of-type(2) {
+                width: 100px;
+                text-align: center;
+            }
+            .igvSection:nth-of-type(1) > div:nth-of-type(3) {
+                width: 155px;
+                text-align: end;
+            }
+            .igvSection:nth-of-type(1) > div:nth-of-type(4) {
+                flex: 1;
+                text-align: end;
+                font-size: 15px;
+            }
+            .igvSection:not(:nth-of-type(1)) > div:nth-of-type(1) {
+                width: 740px;
+                text-align: end;
+                font-size: 15px;
+            }
+            .igvSection:not(:nth-of-type(1)) > div:nth-of-type(2) {
+                flex: 1;
+                text-align: end;
+                font-size: 15px;
+            }
+            .containerTotal {
+                border-top: 1px solid gray;
+                padding: 5px;
+                display: flex;
+                flex-direction: column;
+                gap: 2.5px;
+            }
+            .subTotal-1, .subTotal-2 {
+                display: flex;
+            }
+            .subTotal-1 > div:nth-of-type(2), .subTotal-2 > div:nth-of-type(2) {
+                width: 85px;
+                text-align: end;
+                font-size: 15px;
+            }
+            .subTotal-1 > div:nth-of-type(1), .subTotal-2 > div:nth-of-type(1) {
+                flex: 1;
+                text-align: end;
+                font-weight: bold;
+                font-size: 12.5px;
+            }
+            .footInfo {
+                justify-content: space-between;
+                display: flex;
+                flex-direction: column;
+                gap: 25px;
+            }
+            .footInfo > div:nth-of-type(2) {
+                display: flex;
+                justify-content: space-between;
+            }
+            .footInfo > div:nth-of-type(2) > div {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+            }
+            .footInfo > div:nth-of-type(2) > div > span {
+                display: block;
+            }
+            .footInfo > div:nth-of-type(2) > div > span:nth-of-type(1) {
+                font-weight: bold;
+                font-size: 15px;
+            }
+            .fila {
+                display: block;
+                page-break-inside: avoid;
+            }
+            tr{
+                page-break-inside: avoid;
+            }
+
+            header{
+
+            }
+            .clientData,.compraData{
+
+            }
+
+            @media print {
+            body {
+                    /*margin: 20mm 15mm;*/
+            }
+
+            table {
+                    page-break-inside: auto;
+                    width: 100%;
+                    border-collapse: collapse;
+            }
+
+            thead {
+                display: table-header-group;
+                margin: 0;
+            }
+
+            tr {
+                page-break-inside: avoid;
+            }
+
+            td, th {
+
+            }
+            @page {
+                margin: 2cm 1.5cm;
+            }
+            }
+    body(style="width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 15px")
+        header(style="display: flex; justify-content: space-between; align-items: center")
+            div(style="line-height: 1; ;width: 300px; gap: 10px; display: flex; flex-direction: column; justify-content: center")
+                h2(style="line-height: 1; white-space: nowrap") SUPERFRUITS-STORE
+                div
+                    h4(style="font-size: 15px; font-weight: 200") SUPERFRUITS E.I.R.L
+                    h4(style="font-size: 15px; font-weight: 200") Psj. San Miguel N° 204
+                    h4(style="font-size: 15px; font-weight: 200") atencionalcliente@superfruitspormayor.com
+                    h4(style="font-size: 15px; font-weight: 200") www.superfruits-store.pe
+            div(style="background-color: gray; width: 275px; display: flex; padding: 10px 0 ;gap: 10px;flex-direction: column; align-items: center; justify-content: center")
+                h2 RUC 10716961929
+                h2 FACTURA ELECTRONICA
+                h2 F006-504
+
+        main
+            div(style="display: flex; gap: 10px; width: 100%")
+                div(class="clientData" style="border: 1px solid gray; display: flex; flex-direction: column; gap: 5px; padding: 5px; width: 55%")
+                    h2(style="line-height: 1") DATOS DEL CLIENTE
+                    h4(style="display: flex;")
+                        p RUC:
+                        small ruc cliente
+                    h4(style="display: flex;")
+                        p NOMBRE:
+                        small nombre del cliente
+                    h4(style="display: flex;")
+                        p(style="white-space: nowrap") DIRECCION DE ENVIO:
+                        small https://www.shopstar.pe/shpseller892?map=seller-/
+                    h4(style="display: flex;")
+                        p TELEFONO:
+                        small numero del cliente
+
+                div(class="compraData" style="border: 1px solid gray; display: flex; gap: 5px; flex-direction: column; padding: 5px; width: 45%")
+                    h2 DETALLES DE COMPRA
+                    h4(style="display: flex;")
+                        p FECHA DE EMISION:
+                        small fecha de compra
+                    h4(style="display: flex;")
+                        p CONDICION DE PAGO:
+                        small metodo de pago
+                    h4(style="display: flex;")
+                        p MEDIO DE PAGO:
+                        small Transferencia bancaria (online)
+                    h4(style="display: flex;")
+                        p MONEDA:
+                        small PEN
+
+            .containerTable
+                table(style="width:100%")
+                    thead
+                        tr
+                            th CODIGO
+                            th DESCRIPTION
+                            th UNIDAD
+                            th CANT.
+                            th V.UNITARIO
+                            th P.UNITARIO
+                            th TOTAL
+                    tbody
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+                        tr
+                            td cuack de cuacks
+                            td cuack de cuacksito
+                            td 123
+                            td 123
+                            td 123
+                            td 123
+
+                .containerIgv(style="border: 1px solid gray; border-top:0")
+                    .igvSection.igvSectionOne
+                        div Total items
+                        div 22.00
+                        div Op. Grabada
+                        div S/. 831.23
+                    .igvSection.igvSectionTwo
+                        div Op. Gratuita
+                        div S/. 0.00
+                    .igvSection.igvSectionThree
+                        div Op. Exonerada
+                        div S/. 0.00
+                    .igvSection.igvSectionFour
+                        div Op. Exonerada
+                        div S/.00
+                .containerTotal(style="border:1px solid gray; border-top: 0 ;")
+                    .subTotal-1
+                        div IGV
+                        div S/. 123.00
+                    .subTotal-2
+                        div IMPORTE TOTAL
+                        div S/. 981.00
+
+            .footInfo
+                div
+                    span importe en letras:
+                    span mil cuatrocientos cuarenta y cinco con 0/100 soles
+                div
+                    div
+                        span OBSERVACIONES:
+                        span Pedido: #20356
+                    div
+                        span Hash:
+                        span 12315812323df1g23sdfgsdfg3sdfg
+
+        footer
+

@@ -8,17 +8,21 @@ import {ClearCarrito} from "../components/buttonsComponent/clearCarrito";
 import {FormCompras} from "../components/bodyComponents/formularioPago.tsx"
 import {useBlurSearch} from "../zustand/useBlurSearch.tsx";
 import {useBlurMenu} from "../zustand/useBlurMenu.tsx"
+import {useCompleteForm} from "../zustand/useCompleteForm.tsx"
+import {useWaitUntil} from "../zustand/useWaitUntil.tsx";
 
 export const PayProducts = () => {
     const { data, refetch } = useGetCarrito();
     const [animateIndex, setAnimateIndex] = useState<number | null>(null);
     const {switchBlur} = useBlurSearch();
     const {activeBlur} = useBlurMenu();
+    const {statusForm} = useCompleteForm();
+    const {statusSpinner} = useWaitUntil();
 
     const [activeForm, setActiveForm] = useState<boolean|null>(false);
 
     return (
-        <main className={`${switchBlur? "blur-[10px]" : ""} ${activeBlur? "blur-[10px]" : ""} w-3/4 mx-auto flex flex-col gap-[25px]`}>
+        <main className={`${statusSpinner ? "blur-[10px]" : ""} ${switchBlur? "blur-[10px]" : ""} ${activeBlur? "blur-[10px]" : ""} w-3/4 mx-auto flex flex-col gap-[25px]`}>
             <h1 className="text-titleResponsive text-center leading-none z-0">Seccion de Pagos</h1>
 
             <div className={"flex justify-center"}>
@@ -73,7 +77,8 @@ export const PayProducts = () => {
 
             <div className={"flex w-full justify-between"}>
                 <h1 className={"showItem"}>Total: S/. {data?.flattenedProducts.reduce((total,[indice,value]) => total + value.reduce((subTotal, el) => subTotal + el.price , 0) ,0)} </h1>
-                { data?.flattenedProducts.length > 0 && <button className={"showItem"} onClick={ () => setActiveForm(prev=>!prev)} >rellenar datos</button> }
+                { data?.flattenedProducts.length > 0 && <button className={`showItem ${statusForm ? "hidden": "pointer-events-auto block"}`} onClick={ () => setActiveForm(prev=>!prev)} >rellenar datos</button> }
+                { statusForm && <button className={"showItem"}>pagar</button>}
                 { data?.flattenedProducts.length > 0 && <ClearCarrito refetch={refetch}>borrar carrito</ClearCarrito> }
             </div>
         </main>

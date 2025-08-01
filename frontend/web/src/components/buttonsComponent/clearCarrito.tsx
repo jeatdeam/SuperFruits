@@ -3,11 +3,13 @@ import {useFetchDeleteAll} from "../../hooks/fetchDeleteAll.tsx";
 import {useCarrito} from "../../contexts/carritoContext.tsx";
 import {useGetCarrito} from "../../hooks/getCarritoMap.tsx";
 import {useProceso} from "../../contexts/procesoDeCompraContext.tsx";
+import {useCompleteForm} from "../../zustand/useCompleteForm.tsx"
 
 export const ClearCarrito = ({refetch}:{refetch: () => void}) => {
     const {loading, error, data, fetchDelete} = useFetchDeleteAll();
     const {incrementCount} = useCarrito();
     const {setCheckFormulario} = useProceso()
+    const {restartForm} = useCompleteForm();
     // const {refetch} = useGetCarrito();
     //
     //
@@ -20,6 +22,7 @@ export const ClearCarrito = ({refetch}:{refetch: () => void}) => {
     },[data])
     const deleteCarrito = async () => {
         await fetchDelete();
+        restartForm();
         setCheckFormulario(false);
         incrementCount(data?.carritoCompras.length)
         refetch()

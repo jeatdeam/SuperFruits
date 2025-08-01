@@ -1,0 +1,33 @@
+html(lang="es")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport" content="width=device-width, initial-scale=1.0")
+        title Detalles de compras
+        link
+    body(style="background-color: lightblue; padding: 25px; border-radius: 8px; width: 450px; margin: 0 auto")
+        header(style="margin: 0 auto; background-color: lightblue")
+            img(style="margin: 0 auto;text-align: center; background-color: lightblue; display: block; object-fit: cover; width: 250px; height: 250px" src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1753212411/shieldBorder-Photoroom_tu73ll.png")
+            h1(style="color: black;text-align: center") Compras realizadas en super fruits
+        main(style="margin: 0 auto; width: 90%;border: 1px solid black;")
+            h2(style="color: black") Detalles de compra:
+            div(style="padding: 10px 0; width: 90%")
+                if carritoCompras.length
+                        table(border="0" style="border: .5px solid black; border-radius: 12.5px ;border-spacing: 10px; width: 450px; margin:0 auto; padding: 5px")
+                            thead(style="")
+                                tr(style="background-color: white")
+                                    th(style="padding: 5px 7.5px; border-radius: 8px ;color: black; background-color: white") ID
+                                    th(style="padding: 5px 7.5px; border-radius: 8px ;color: black; background-color: white") Producto
+                                    th(style="padding: 5px 7.5px; border-radius: 8px ;color: black; background-color: white") Nombre
+                                    th(style="padding: 5px 7.5px; border-radius: 8px ;color: black; background-color: white") Cantidad
+                                    th(style="padding: 5px 7.5px; border-radius: 8px ;color: black; background-color: white") Precio
+                            tbody
+                                each [id, products] of carritoCompras
+                                    tr(style="color:black")
+                                        td(style="text-align:center; width: 35px") #{products[0].id}
+                                        td(style="text-align:center")
+                                            img(src=products[0].img[0] style="text-align: center;vertical-align: middle;width:75px;height:75px;border-radius:8px;object-fit:cover")
+                                        td(style="text-align:start; white-space:nowrap") #{products[0].name}
+                                        td(style="text-align:center; white-space: nowrap") #{products.length}
+                                        td(style="font-weight:bold;text-align: center; white-space: nowrap") S/. #{products[0].price}
+            h4(style="font-size: 14.5px;border-radius: 8px ;border: 1px solid black; font-weight: bold; text-align: end; padding: 2.5px") Compra Total : S/. #{carritoCompras.reduce((total,[indice, productos]) => total + productos.reduce((subtotal,producto)=> subtotal+producto.price,0), 0)}
+        footer

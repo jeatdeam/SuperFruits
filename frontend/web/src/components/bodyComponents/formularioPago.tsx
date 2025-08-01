@@ -1,6 +1,11 @@
 import React, {useState, useEffect, useRef, forwardRef, useImperativeHandle} from "react";
 import {b} from "vite/dist/node/moduleRunnerTransport.d-DJ_mE5sf";
 import {useProceso} from "../../contexts/procesoDeCompraContext.tsx"
+import {useCarrito} from "../../contexts/carritoContext.tsx"
+import {useGetProducts} from "../../contexts/carritoContext.tsx";
+import {useCompleteForm} from "../../zustand/useCompleteForm.tsx"
+import {useWaitUntil} from "../../zustand/useWaitUntil.tsx";
+
 
 type PropsForm = {
     state: boolean;
@@ -10,6 +15,10 @@ type PropsForm = {
 export const FormCompras = ({state, setState}:PropsForm) => {
 
     const {refProcess, setCheckFormulario} = useProceso()
+    const {statusForm, changeStatusForm} = useCompleteForm();
+    const {statusSpinner, changeStatusSpinner} = useWaitUntil();
+    // const {count, incrementCoun, carritoCompras} = useCarrito();
+    const {data,carritoCompras, refetchCarrito} = useGetProducts()
 
     const [indice, setIndice] = useState<number>(1);
     const [activeEnvio, setActiveEnvio] = useState<boolean>(true);
@@ -100,9 +109,11 @@ export const FormCompras = ({state, setState}:PropsForm) => {
         }
     }
 
-    const courierChaced = (e: MouseEvent)  => {
+    const courierChaced = async (e: MouseEvent)  => {
 
         e.preventDefault()
+        await refetchCarrito();
+        console.log(carritoCompras)
 
         const fetchFormulario = async () => {
 
@@ -120,13 +131,15 @@ export const FormCompras = ({state, setState}:PropsForm) => {
                     direccion: valueDireccion,
                     courierDelivery: courier(),
                     textArea: valueTextArea,
+                    carritoCompras
                 } :
                 {
                     nombre: valueName,
                     apellido: valueLastName,
                     email: valueEmail,
                     phone: valuePhone,
-                    phoneTwo: valuePhoneTwo
+                    phoneTwo: valuePhoneTwo,
+                    carritoCompras
                 }
 
             const url = "http://localhost:3000/formulario"
@@ -136,12 +149,15 @@ export const FormCompras = ({state, setState}:PropsForm) => {
                 body: JSON.stringify(usuario),
             }
             try{
+                changeStatusSpinner()
                 const response = await fetch(url,options);
                 if(!response.ok) throw new Error(`Error en la peticion - ${response.status} : ${response.statusText}`)
                 const result = await response.json()
 
                 result.ok ? setCheckFormulario(true) : setCheckFormulario(false)
                 result.ok && setState(false);
+                result.ok && changeStatusForm()
+                changeStatusSpinner()
 
                 console.log(result.messageBackend)
 
@@ -149,15 +165,10 @@ export const FormCompras = ({state, setState}:PropsForm) => {
                 console.error(err.message)
             } finally {
 
-
             }
-
-
         }
         allCheck && fetchFormulario();
-
     }
-
     return(
         <section className={`${ state ? "opacity-100 pointer-events-auto showItem" : "opacity-0 pointer-events-none"} transition-half w-[500px] h-[750px] border-2 border-gray-200`}>
             <form className={"flex flex-col"}>

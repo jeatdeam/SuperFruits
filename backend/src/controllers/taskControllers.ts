@@ -1,6 +1,19 @@
 import {Request, Response} from 'express';
+// const puppeteer = require('puppeteer');
+import puppeteer from 'puppeteer';
+const pug = require('pug')
+const app = require('../app.ts')
+// import nodemailer from 'nodemailer';
+import type { TransportOptions } from 'nodemailer';
 
-type Producto = {
+// const { Request, Response } = require('express');
+const nodemailer = require('nodemailer');
+const dotenv = require('dotenv');
+
+dotenv.config();
+
+
+ type Producto = {
     id: number,
     name: string,
     img: string,
@@ -36,7 +49,7 @@ const baseDatos: Producto[] = [
 ]
 
 
-type Products = {
+export type Products = {
     id : number;
     idCompra : number | null;
     fruit : string;
@@ -111,7 +124,7 @@ type ProductsCarrito = {
     img : string;
     description : string;
 }
-let carritoCompras : Products[] = [
+export let carritoCompras : Products[] = [
 
 ]
 
@@ -302,15 +315,12 @@ const deleteAllProducts = ( req : Request, res : Response) => {
     res.status(200).json({carritoCompras, messaje: "el carrito ha sido limpiado con exito"})
 }
 
-const formulario = ( req : Request, res : Response) => {
+const dataClient = (req: Request, res: Response) => {
 
-    const body = req.body
-    console.log(body)
+    const allInfo = req.body
 
-    res.status(200).json({ok: true ,messageBackend: "enviados correctamente"})
-    // console.log(body)
+
 }
-
 
 interface TaskControllers {
     getProducts: (req: Request, res: Response) => void;
@@ -323,7 +333,8 @@ interface TaskControllers {
     deleteProduct : (req: Request, res: Response) => void;
     deleteGroup : (req: Request, res: Response) => void;
     deleteAllProducts : (req: Request, res: Response) => void;
-    formulario : (req: Request, res: Response) => void;
+    // formulario : (req: Request, res: Response) => void;
+    dataClient : (req: Request, res: Response) => void;
 }
 
 const taskControllers: TaskControllers = {
@@ -337,10 +348,11 @@ const taskControllers: TaskControllers = {
     deleteProduct,
     deleteGroup,
     deleteAllProducts,
-    formulario,
+    // formulario,
+    dataClient,
 };
 
-export default taskControllers;
+module.exports = taskControllers;
 
 
 

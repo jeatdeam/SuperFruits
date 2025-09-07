@@ -8,15 +8,16 @@ import {StarIcon, EmpaqueIcon} from "./payProducts.tsx";
 import {ProcesoDeCompra} from "../components/bodyComponents/procesoDeCompra.tsx";
 import {useBlurSearch} from "../zustand/useBlurSearch.tsx";
 import {useBlurMenu} from "../zustand/useBlurMenu.tsx"
+import {Products} from '../components/headerComponents/searchIcon.tsx'
 
-type Products = {
-    id: number;
-    fruit : string;
-    name : string;
-    price : number;
-    img : string[];
-    description : string[];
-}
+// type Products = {
+//     id: number;
+//     fruit : string;
+//     name : string;
+//     price : number;
+//     img : string[];
+//     description : string[];
+// }
 
 
 
@@ -42,7 +43,7 @@ export const ProductsCards = () => {
             try {
                 // console.log(product, "<-");
 
-                const response = await fetch(`http://localhost:3000/infoProducts/${product}`, {
+                const response = await fetch(`http://localhost:4000/infoProducts/${product}`, {
                     method: "GET",
                     headers: { "Content-Type": "application/json" },
                 });
@@ -52,7 +53,7 @@ export const ProductsCards = () => {
                 const result = await response.json();
                 // refProducts.current = result.data;
                 // console.log(result.productsFilter);
-                setProductsFetch(result.data)
+                setProductsFetch(result.extraerProducts)
                 setReady(true)
                 // console.log(result.data);
 
@@ -105,20 +106,20 @@ export const ProductsCards = () => {
                     {productsFetch && productsFetch?.map((el,key)=>(
                             <div className={"shadow-shadowCard rounded-[15px] w-[250px] h-[400px] p-[15px] flex flex-col items-center justify-between"}
                                 ref={(node) => refPadre.current[key] = node} key={key} onClick={showInfoProduct}>
-                                <img src={el.img[0]} alt="" className={"size-[215px] rounded-[8px] shadow-shadowElement"}/>
+                                <img src={el.img_product?.[0]} alt="" className={"size-[215px] rounded-[8px] shadow-shadowElement"}/>
                                 {/*<h1>{el.fruit}</h1>*/}
-                                <h2 className={"nameProduct self-start"}>{el.fruit} - {el.name}</h2>
+                                <h2 className={"nameProduct self-start"}>{el?.title_product}</h2>
                                 <div className={"flex justify-between w-4/5"}>
                                     <div className={"flex gap-[10px]"}>
                                         <StarIcon/>
                                         <EmpaqueIcon/>
                                     </div>
-                                    <b className={"self-end"}>S/. {el.price}</b>
+                                    <b className={"self-end"}>S/. {el?.price_product}</b>
                                 </div>
                                 <div className={"flex gap-[20px] justify-evenly w-full"}>
-                                    <ButtonAdd ref={(node) => (refButtonCarrito.current[key] = node)} id={el.id}/>
+                                    <ButtonAdd ref={(node) => { refButtonCarrito.current[key] = node}} id={el?.id_product} activeIcon={false}/>
                                     <Link to={`/seccion-de-pagos`}>
-                                        <ButtonBuy ref={(node)=>(refButtonAdd.current[key] = node)} id={el.id} name={el.name}/>
+                                        <ButtonBuy ref={(node)=> { refButtonAdd.current[key] = node }} id={el?.id_product} name={el?.name_product}/>
                                     </Link>
                                 </div>
                             </div>

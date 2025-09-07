@@ -1,7 +1,9 @@
-import {useContext, createContext, useRef, ReactNode, useState} from 'react';
+import {useContext, createContext, useRef, ReactNode, useState, Dispatch, SetStateAction} from 'react';
 
 type RefProcesoContext = {
     refProcess : (HTMLDivElement|null)[];
+    checkFormulario : boolean;
+    setCheckFormulario : Dispatch<SetStateAction<boolean>>;
 }
 
 const ProcesoCompraContext = createContext<RefProcesoContext|null>(null)

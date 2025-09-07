@@ -4,11 +4,10 @@ import { useNavigate } from "react-router-dom";
 import {useEffect, useState} from "react";
 
 type ButtonBuyProps = {
-    id: number;
+    id: string;
     name: string;
 };
 
-// forwardRef espera: forwardRef<refType, propsType>((props, ref) => ...)
 export const ButtonBuy = forwardRef<HTMLButtonElement, ButtonBuyProps>(({ id, name }, ref) => {
     const { incrementCount } = useCarrito();
     const navigate = useNavigate();
@@ -17,7 +16,7 @@ export const ButtonBuy = forwardRef<HTMLButtonElement, ButtonBuyProps>(({ id, na
     const sendProduct = async () => {
         setFlicked(true)
         try {
-            const response = await fetch("http://localhost:3000/addProductCarrito", {
+            const response = await fetch("http://localhost:4000/addProductCarrito", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ id }),

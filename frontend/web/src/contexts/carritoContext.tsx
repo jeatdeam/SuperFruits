@@ -1,39 +1,29 @@
 import {useContext, createContext, useState, useEffect} from 'react'
 import * as url from "node:url";
+import {Products} from "../components/headerComponents/searchIcon"
 
-
-const CarritoContext = createContext(null);
-
-type Products = {
-    id : number;
-    idCompra : number | null;
-    fruit : string;
-    name : string;
-    price : number;
-    img : string[];
-    description : string[];
+type TypeCarritoContext = {
+    count: number;
+    incrementCount: (value: number) => void;
+    carritoCompras: Products[];
 }
+
+
+const CarritoContext = createContext<TypeCarritoContext|null>(null);
 
 export const useGetProducts =  ()=> {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [data, setData] = useState<number|null>(null);
+    const [data, setData] = useState<number>(0);
     const [carritoCompras, setCarritoCompras] = useState<Products[]>([]);
 
-
-    // const
-
     const fetchLength = async () => {
-        const options = {
-            method: 'GET',
-            headers : { "Content-Type": "application/json" },
-        }
+
         try{
-            const response = await fetch("http://localhost:3000/products", options);
+            const response = await fetch("http://localhost:4000/get/carrito");
             if(!response.ok) throw new Error(`Error en la peticion - ${response.status} -> ${response.statusText}`);
             const result = await response.json()
             setCarritoCompras(result.carritoCompras)
-            console.log('aqui esta el result con carritoCompras ->', result.carritoCompras)
             setData(result.carritoCompras.length)
         }catch(error){
             console.error(error.message)
@@ -43,14 +33,8 @@ export const useGetProducts =  ()=> {
     }
 
     useEffect( ()=>{
-
         fetchLength()
-
-
     },[])
-
-
-
 
     return {data, carritoCompras,  refetchCarrito: fetchLength};
 }
@@ -65,10 +49,9 @@ export const CarritoProvider = ({children}) => {
 
     },[data])
     useEffect(()=>{
-        console.log('gaaaaaaaa->', carritoCompras)
     },[carritoCompras])
 
-    const incrementCount = (value) => {
+    const incrementCount = (value : number) => {
         setCount(value);
     }
 

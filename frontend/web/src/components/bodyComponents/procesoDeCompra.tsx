@@ -18,7 +18,7 @@ export const ProcesoDeCompra = () => {
     })
 
     return(
-        <section className={`${switchBlur ? "blur-[10px]": ""} ${activeBlur ? "blur-[10px]" : ""} containerProcess w-[80%] xl:w-[1280px] h-[100px] flex items-center px-[5%] mx-auto`}>
+        <section className={`${switchBlur ? "blur-[10px]": ""} ${activeBlur ? "blur-[10px]" : ""} containerProcess w-[80%] xl:w-[1024px] 2xl:w-[1280px] h-[100px] flex items-center px-[5%] mx-auto`}>
             <div className={"relative processOne flex-1 bg-white h-[5px]"}>
 
                 <div className={"absolute flex flex-col translate-y-[-50%] z-[2]"}>
@@ -109,7 +109,6 @@ const ProcessOne = forwardRef<HTMLDivElement, ProcessProps>(({styleProps}, ref) 
 
 
     useEffect(() => {
-        count && console.log(count, 'cuacksote')
     }, [count]);
 
     return (

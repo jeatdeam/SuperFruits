@@ -3,7 +3,10 @@ import {Link} from "react-router-dom";
 import {FormCompras} from "../bodyComponents/formularioPago.tsx";
 import {useGetCarrito} from "../../hooks/getCarritoMap.tsx"
 import {useCarrito} from "../../contexts/carritoContext.tsx";
-
+import {Products} from './searchIcon.tsx'
+import {ButtonAdd} from '../buttonsComponent/buttonAdd.tsx'
+import {DeleteGroup} from "../buttonsComponent/deleteGroupProducts.tsx";
+import {LessProducts} from "../buttonsComponent/lessElementProductGroup.tsx";
 
 type CarritoProps = {
     validate : boolean | null;
@@ -20,9 +23,23 @@ export const Carrito = forwardRef<CarritoRefs,CarritoProps>( ({validate, closeWi
     const containerCarrito = useRef<HTMLDivElement|null>(null);
     const [total, setTotal] = useState<number|null>(null)
     const {count, incrementCount} = useCarrito()
+    const [mapProducts, setMapProducts] = useState<[string,Products[]][] | null>(null);
+
+
 
     useEffect(()=>{
-        setTotal(data?.flattenedProducts.length)
+        setTotal(data?.length)
+
+        const map = new Map<string, Products[]>();
+
+        data?.forEach((el, _) => {
+                if(map.has(el.name_product)) {
+                    map.get(el.name_product)?.push(el);
+                } else {
+                    map.set(el.name_product, [el])
+                }
+        })
+        setMapProducts([...map])
     },[data])
 
     useImperativeHandle(ref,()=>({
@@ -36,29 +53,40 @@ export const Carrito = forwardRef<CarritoRefs,CarritoProps>( ({validate, closeWi
 
     return(
         <>
-        {
-            total ?
-                ( <div ref={containerCarrito} className={`${ validate ? " opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"} rounded-[8px] p-[10px] gap-[10px] w-[300px] translate-x-[-50%] bg-[pink] absolute top-[200%] left-0 transition-all duration-500 ease-in-out flex flex-col justify-between shadow-[0px_0px_5px_rgba(0,0,0,.5)]`}>
-                <div className={"overflow-auto h-[400px] rounded-[8px] flex flex-col gap-[10px] p-[2.5px]"}>
+        {total ? (
+        <div ref={containerCarrito} className={`${ validate ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"} rounded-[8px] p-[10px] gap-[10px] w-[300px] translate-x-[-50%] bg-red-400/50 backdrop-blur-[15px] absolute top-[200%] left-0 transition-all duration-500 ease-in-out flex flex-col justify-between shadow-[0px_0px_2.5px_1.5px_rgba(0,0,0,.6)]`}>
+                <div className={"overflow-auto h-[400px] rounded-[8px] flex flex-col gap-[10px] p-[2.5px] "}>
                     {
-                        data?.flattenedProducts && data.flattenedProducts.map(([key, value],indice)=>(
-                            <div className={"flex shadow-[0_0_5px_rgba(0,0,0,.9)] rounded-[8px] gap-[5px] pl-[10px] justify-between items-center"} key={indice}>
-                                <div className={"flex flex-col w-[67.5%] gap-[10px]"}>
-                                    <h1 className={"text-[14px]"}>{value[0].name}</h1>
-                                    <b className={"text-[12.5px] font-medium self-end"}>S/. {value[0].price}</b>
+                        mapProducts?.length && mapProducts?.map(( [_, value],indice)=>(
+                            <div className={"min-h-[80px]  relative flex shadow-[0px_0px_2.5px_1.5px_rgba(0,0,0,.5)] rounded-[8px] gap-[7.5px] px-[7.5px] hover:bg-white items-center  transition-half"} key={indice}>
+
+                                <div className={"min-h-[65px] flex flex-col w-[72.5%] gap-[10px] justify-between"}>
+                                    <h1 className={"text-[14px] leading-[1.1]"}>{value?.[0]?.name_product}</h1>
+                                    <div className={"flex w-full justify-between items-center pr-[7.5px]"}>
+                                        <div className={"w-[100px] h-[25px] flex relative justify-between items-center"}>
+                                            <LessProducts id={value?.[value.length-1].id_product} refetch={refetch}/>
+                                            <ButtonAdd id={value?.[0].id_product} activeIcon={true}/>
+                                            <DeleteGroup id={value?.[0].id_product} refetch={refetch} activePosition={false}/>
+                                        </div>
+                                        <b className={"text-[12.5px] font-semibold"}>S/. {value?.[0]?.price_product}</b>
+                                    </div>
+
                                 </div>
-                                {/*<small className={"whitespace-nowrap text-[12.5px]"}>total: {value.reduce((total,product) => product.price + total, 0)}</small>*/}
+
                                 <div className={"relative"}>
-                                    <img className={"size-[75px] object-cover rounded-r-[8px]"} src={value[0]?.img[0]} alt=""/>
-                                    <small className={"absolute right-[3.5px] top-[3.5px] block rounded-full bg-white size-[15px] shadow-[0px_0px_5px_rgba(0,0,0,.5)] flex justify-center items-center text-[10px]"}>{value.length}</small>
+                                    <img className={"size-[65px] shadow-[0px_0px_2.5px_1.25px_rgba(0,0,0,.5)] object-cover rounded-[8px]"} src={value?.[0]?.img_product[0]} alt=""/>
+                                    <small className={"absolute right-[3.5px] top-[3.5px] rounded-full bg-white size-[17.5px] shadow-[0px_0px_2px_.5px_rgba(0,0,0,.9)] flex justify-center items-center text-[10px]"}>{value?.length}</small>
                                 </div>
+
+
                             </div>
+
                         ))
                     }
                 </div>
 
-                <div className={"flex justify-between pr-[10px]"}>
-                    <b className={"text-[14px]"}>Total: S/. {data?.flattenedProducts.reduce((total,[indice,value]) => total + (value.reduce((subTotal, element) => subTotal + element.price,0)) ,0)}</b>
+                <div className={"flex justify-between pr-[10px] items-center"}>
+                    <b className={"text-[14px]"}>Total: S/. {data?.reduce((total, product) => total + parseInt(String(product.price_product)) ,0)}</b>
                     <Link onClick={closeWindow} className={"flex gap-[5px]"} to={"/seccion-de-pagos"}>
                         <MasterCard/>
                         <DinersClub/>
@@ -67,12 +95,14 @@ export const Carrito = forwardRef<CarritoRefs,CarritoProps>( ({validate, closeWi
                         <GooglePay/>
                     </Link>
                 </div>
-                </div> )
+
+                </div>
+                )
                 :
                 (
-                    <div ref={containerCarrito} className={`absolute ${ validate ? "opacity-100" : "opacity-0"} right-1/2 translate-x-1/2 top-[125%] transition-half size-[25px] rounded-full`}>
-                        <h1 className={"text-[12.5px] size-full flex items-center justify-center text-center bg-blue-300 rounded-full"}>{data?.flattenedProducts.length}</h1>
-                    </div>
+                <div ref={containerCarrito} className={`absolute ${ validate ? "opacity-100" : "opacity-0"} right-1/2 translate-x-1/2 top-[135%]  transition-half size-[25px] rounded-full`}>
+                   <h1 className={"text-[12.5px] size-full flex items-center justify-center text-center bg-blue-300 rounded-full"}>{data?.length ?? 0}</h1>
+                </div>
                 )
 
         }

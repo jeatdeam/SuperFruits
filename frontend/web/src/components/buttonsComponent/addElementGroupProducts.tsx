@@ -2,7 +2,7 @@ import {useCarrito} from "../../contexts/carritoContext.tsx";
 import {RefObject} from "react";
 
 
-export const AddProducts = ({id, refetch, onAnimate} : {id: number, refetch : () => void, onAnimate: () => void }) => {
+export const AddProducts = ({id, refetch} : {id: string, refetch : () => void }) => {
     const {incrementCount} = useCarrito();
 
     const addCarrito = (e:MouseEvent) => {
@@ -13,7 +13,8 @@ export const AddProducts = ({id, refetch, onAnimate} : {id: number, refetch : ()
             headers : {"Content-Type":"application/json"},
             body : JSON.stringify({id})
         }
-        const url = "http://localhost:3000/addProductCarrito"
+        console.log()
+        const url = "http://localhost:4000/addProductCarrito"
         try{
             const fetchAdd = async () => {
                 const response = await fetch(url,options);
@@ -22,7 +23,7 @@ export const AddProducts = ({id, refetch, onAnimate} : {id: number, refetch : ()
 
                 result.carritoCompras && incrementCount(result.carritoCompras.length);
                 result.carritoCompras && refetch();
-                onAnimate()
+                // onAnimate()
             }
             fetchAdd()
         }catch(error){

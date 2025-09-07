@@ -22,10 +22,11 @@ export const FormCompras = ({state, setState}:PropsForm) => {
 
     const [indice, setIndice] = useState<number>(1);
     const [activeEnvio, setActiveEnvio] = useState<boolean>(true);
+    const directionRef = useRef<HTMLInputElement|null>(null)
+    const [validateInputs, setValidateInputs] = useState<boolean>(true)
+
 
     const [activeTextArea, setActiveTextArea] = useState<boolean>(false);
-
-
     const [validateName, setValidateName] = useState<boolean>(false);
     const [validateLastName, setValidateLastName] = useState<boolean>(false);
     const [validateEmail, setValidateEmail] = useState<boolean>(false);
@@ -58,13 +59,13 @@ export const FormCompras = ({state, setState}:PropsForm) => {
     useEffect(()=>{
 
         if(activeEnvio) {
-            if (validateName, validateLastName, validateEmail, validatePhone, validateDepartamento, validateProvincia, validateDistrito, validateDireccion, validateCourier) {
+            if (validateName && validateLastName && validateEmail && validatePhone && validateDepartamento && validateProvincia && validateDistrito && validateDireccion && validateCourier) {
                 setAllCheck(true);
             } else {
                 setAllCheck(false)
             }
         } else {
-            if(validateName, validateLastName, validateEmail, validatePhone) {
+            if(validateName && validateLastName && validateEmail && validatePhone) {
                 setAllCheck(true);
             } else {
                 setAllCheck(false)
@@ -109,11 +110,12 @@ export const FormCompras = ({state, setState}:PropsForm) => {
         }
     }
 
-    const courierChaced = async (e: MouseEvent)  => {
+    const courierChaced = async (e: React.MouseEvent)  => {
 
         e.preventDefault()
-        await refetchCarrito();
-        console.log(carritoCompras)
+        // await refetchCarrito();
+        allCheck ? setValidateInputs(true) : setValidateInputs(false);
+
 
         const fetchFormulario = async () => {
 
@@ -131,7 +133,6 @@ export const FormCompras = ({state, setState}:PropsForm) => {
                     direccion: valueDireccion,
                     courierDelivery: courier(),
                     textArea: valueTextArea,
-                    carritoCompras
                 } :
                 {
                     nombre: valueName,
@@ -139,10 +140,9 @@ export const FormCompras = ({state, setState}:PropsForm) => {
                     email: valueEmail,
                     phone: valuePhone,
                     phoneTwo: valuePhoneTwo,
-                    carritoCompras
                 }
 
-            const url = "http://localhost:3000/formulario"
+            const url = "http://localhost:4000/formulario"
             const options = {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -159,89 +159,90 @@ export const FormCompras = ({state, setState}:PropsForm) => {
                 result.ok && changeStatusForm()
                 changeStatusSpinner()
 
-                console.log(result.messageBackend)
-
             }catch(err){
                 console.error(err.message)
             } finally {
 
             }
         }
-        allCheck && fetchFormulario();
+
+        if(allCheck) {
+            fetchFormulario();
+            // setValidateInputs(true);
+        }
+
     }
     return(
-        <section className={`${ state ? "opacity-100 pointer-events-auto showItem" : "opacity-0 pointer-events-none"} transition-half w-[500px] h-[750px] border-2 border-gray-200`}>
-            <form className={"flex flex-col"}>
+        <section className={`${ state ? "opacity-100 pointer-events-auto showItem" : "opacity-0 pointer-events-none"} transition-half min-h-[275px] w-[500px] relative border-2 border-gray-200 shadow-[0px_0px_2px_2px_rgba(0,0,0,.5)] p-[15px] rounded-[7.5px]`}>
+            <form className={"flex flex-col gap-[15px]"}>
 
-                <button onClick={(e : MouseEvent) => { e.preventDefault(); setActiveEnvio(prev=>!prev) } } className={`${ activeEnvio ? "bg-white" : "bg-blue-300"}  w-[250px] self-center`}>{`${activeEnvio ? "envio del producto" : "recojo en tienda"}`}</button>
-                <div>
+                <button onClick={(e : React.MouseEvent) => { e.preventDefault(); setActiveEnvio(prev=>!prev) } } className={`${ activeEnvio ? "bg-yellow-500" : "bg-blue-300"}  w-[250px] self-center rounded-[7.5px] h-[30px]`}>{`${activeEnvio ? "Envio del producto" : "Recojo en tienda"}`}</button>
+                <div className={"flex flex-col gap-[15px]"}>
 
                     <div className={"flex items-center"}>
-                        <div className={"h-[2px] w-[50%] bg-black"}/>
-                        <small>rellene todos los campos requeridos</small>
-                        <div className={"h-[2px] w-1/2 bg-black"}/>
+                        <div className={"h-[2px] w-[42.5%] bg-black"}/>
+                        <small className={"block text-center leading-none"}>rellene todos los campos requeridos</small>
+                        <div className={"h-[2px] w-[42.5%] bg-black"}/>
                     </div>
 
-                    <div className={"flex justify-between gap-[10px]"}>
-                        <InputText indicador={"ingrese sus nombres"} tipo={"text"} placeholderName={"Andre Julian"} requiredText={true} validate={setValidateName} setName={setValueName}/>
-                        <InputText indicador={"ingrese sus apellidos"} tipo={"text"} placeholderName={"Espinoza Rodriguez"} requiredText={true} validate={setValidateLastName} setName={setValueLastName}/>
+                    <div className={"flex justify-between"}>
+                        <InputText indicador={"Ingrese sus nombres"} tipo={"text"} placeholderName={"Andre Julian"} requiredText={true} validate={setValidateName} setName={setValueName}/>
+                        <InputText indicador={"Ingrese sus apellidos"} tipo={"text"} placeholderName={"Espinoza Rodriguez"} requiredText={true} validate={setValidateLastName} setName={setValueLastName}/>
                     </div>
 
-                    <InputEmail indicador={"ingrese un correo electronico"} tipo={"email"} placeholderEmail={"tuscompras@tienda.com"} validate={setValidateEmail} setName={setValueEmail}/>
+                    <InputEmail indicador={"Ingrese un correo electronico"} tipo={"email"} placeholderEmail={"tuscompras@tienda.com"} validate={setValidateEmail} setName={setValueEmail}/>
 
                     <div className={"flex justify-between gap-[10px]"}>
-                        <InputPhone indicador={"ingrese su numero de telefono"} tipo={"tel"} activeRequired={true} placeholderPhone={"+51 999 999 999"} validate={setValidatePhone} setName={setValuePhone}/>
-                        <InputPhone indicador={"ingrese un numero de respaldo"} tipo={"tel"} activeRequired={false} placeholderPhone={"+51 988 888 888"} validate={null} setName={setValuePhoneTwo}/>
+                        <InputPhone indicador={"Ingrese su numero de telefono"} tipo={"tel"} activeRequired={true} placeholderPhone={"+51 999 999 999"} validate={setValidatePhone} setName={setValuePhone}/>
+                        <InputPhone indicador={"Ingrese un numero de respaldo"} tipo={"tel"} activeRequired={false} placeholderPhone={"+51 988 888 888"} validate={null} setName={setValuePhoneTwo}/>
                     </div>
                 </div>
                 {
                     activeEnvio &&
-                    <div className={"showItem"}>
-                        <div className={"flex items-center"}>
-                            <div className={"h-[2px] w-[50%] bg-black"}/>
-                            <small>datos de envio</small>
-                            <div className={"h-[2px] w-1/2 bg-black"}/>
+                    <div className={"showItem flex flex-col gap-[15px]"}>
+                        <div className={"flex items-center justify-around"}>
+                            <div className={"h-[2px] w-[37.5%] bg-black"}/>
+                            <small className={"leading-none h-[20px] flex items-center text-center"}>datos de envio</small>
+                            <div className={"h-[2px] w-[37.5%] bg-black"}/>
                         </div>
-                            <div>
+                        <div className={"flex flex-col gap-[15px]"}>
                                 <div className={"flex justify-between"}>
-                                    <InputText indicador={"departamento"} tipo={"text"} requiredText={true} placeholderName={"departamento"} validate={setValidateDepartamento} setName={setValueDepartamento}/>
-                                    <InputText indicador={"provincia"} tipo={"text"} requiredText={true} placeholderName={"provincia"} validate={setValidateProvincia} setName={setValueProvincia}/>
+                                    <InputText indicador={"Departamento"} tipo={"text"} requiredText={true} placeholderName={"departamento"} validate={setValidateDepartamento} setName={setValueDepartamento}/>
+                                    <InputText indicador={"Provincia"} tipo={"text"} requiredText={true} placeholderName={"provincia"} validate={setValidateProvincia} setName={setValueProvincia}/>
                                 </div>
-                                <InputText indicador={"distrito"} tipo={"text"} requiredText={true} placeholderName={"distrito"} validate={setValidateDistrito} setName={setValueDistrito}/>
-                                <div>
-                                    <h1>direccion</h1>
-                                    <input  onBlur={ (e) => { setValidateDireccion(true); setAllCheck(true); setValueDireccion(e.currentTarget.value) } } onChange={ (e) => { setValidateDireccion(true);  setValueDireccion(e.currentTarget.value); setAllCheck(true);  } } type="text" required placeholder={"ingrese una direccion valida"} name={"direccion"} />
-                                </div>
-                            </div>
+                                <InputText indicador={"Distrito"} tipo={"text"} requiredText={true} placeholderName={"distrito"} validate={setValidateDistrito} setName={setValueDistrito}/>
+                                <InputDirection/>
+                        </div>
                         {
                             indice &&
                             <div className={"flex gap-[10px]"}>
                                 <div onClick={() => { setValidateCourier(true); setIndice(2); setActiveTextArea(true)}}
-                                     className={`${indice === 2 ? "bg-yellow-400" : ""} transition-half border-2 w-[125px]`}>olva
+                                     className={`${indice === 2 ? "bg-yellow-400" : ""} transition-half border-2 w-[125px] rounded-[7.5px] px-[5px] text-center`}>olva
                                     courier
                                 </div>
                                 <div onClick={() => { setValidateCourier(true); setIndice(3); setActiveTextArea(true)}}
-                                     className={`${indice === 3 ? "bg-red-600" : ""} transition-half border-2 w-[125px]`}>shalom
+                                     className={`${indice === 3 ? "bg-red-600" : ""} transition-half border-2 w-[125px] rounded-[7.5px] px-[5px] text-center`}>shalom
                                 </div>
                                 <div onClick={() => { setValidateCourier(true); setIndice(4); setActiveTextArea(true)}}
-                                     className={`${indice === 4 ? "bg-green-400" : ""} transition-half border-2 w-[125px]`}>dino
+                                     className={`${indice === 4 ? "bg-green-400" : ""} transition-half border-2 w-[125px] rounded-[7.5px] px-[5px] text-center`}>dino
                                     courier
                                 </div>
                                 <div onClick={() => { setValidateCourier(true); setIndice(5); setActiveTextArea(true)}}
-                                     className={`${indice === 5 ? "bg-gray-500" : ""} transition-half border-2 w-[125px]`}>otros
+                                     className={`${indice === 5 ? "bg-gray-500" : ""} transition-half border-2 w-[125px] rounded-[7.5px] px-[5px] text-center`}>otros
                                 </div>
                             </div>
                         }
                         {
                             activeTextArea &&
                             <div>
-                                <textarea onBlur={(e)=>setValueTextArea(e.currentTarget.value)} name="infoEnvio" id="" cols="30" rows="10" placeholder={"ingrese sede y lugar de recojo "}></textarea>
+                                <textarea className={"w-full rounded-[7.5px] p-[5px] border-2 border-gray-500"} onBlur={(e)=>setValueTextArea(e.currentTarget.value)} name="infoEnvio" id="" cols="30" rows="10" placeholder={"ingrese sede y lugar de recojo "}></textarea>
                             </div>
                         }
                     </div>
                 }
-                <button  onClick={courierChaced} className={`${ allCheck ? "bg-blue-300" : "bg-red-600"}`}>Enviar</button>
+                <button  onClick={courierChaced} className={`${ allCheck ? "bg-blue-300" : "bg-red-600 " }  rounded-[7.5px] h-[30px] p-[5px]"}`}>Enviar</button>
             </form>
+            <b className={` ${ validateInputs ? "hidden" : "showItem"} ${allCheck ? "hidden" : ""} text-red-600 font-medium text-[12.5px] w-[300px] text-center absolute bottom-[5%] left-1/2 -translate-x-1/2`}>*campos imcompletos, rellene todos los campos*</b>
         </section>
     )
 }
@@ -297,17 +298,17 @@ const InputText = ({indicador, tipo, placeholderName, requiredText, validate, se
     }
 
     return (
-        <div className={"relative flex flex-col w-[225px]"}>
+        <div className={"relative flex flex-col w-[225px] "}>
             <label htmlFor="">{indicador}</label>
-            <div className={"relative"}>
-                <input type={tipo} className={"w-full"} onChange={filterChange} onBlur={filterBlur} value={textInput} placeholder={placeholderName} required={requiredText}/>
+            <div className={"relative w-[230px]"}>
+                <input type={tipo} className={"w-[230px] border-2 border-gray-500 rounded-[7.5px] px-[5px]"} onChange={filterChange} onBlur={filterBlur} value={textInput} placeholder={placeholderName} required={requiredText}/>
                 {
                     activeError &&
-                    <small className={"showItem absolute bg-red-600 top-1/2 -translate-y-1/2 leading-none left-full"}>patron invalido</small>
+                    <svg className={"showItem absolute size-[25px] rounded-full  top-1/2 -translate-y-1/2 leading-none left-[87.5%] "} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="red"><path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>
                 }
                 {
                     activeCheck &&
-                    <svg className={"showItem rounded-full shadow-[0px_0px_0px_2px_rgba(255,255,255,1)] absolute top-1/2 leading-nine left-full -translate-y-1/2"} xmlns="http://www.w3.org/2000/svg" height="17.5px" viewBox="0 -960 960 960" width="17.5px"
+                    <svg className={"showItem rounded-full shadow-[0px_0px_0px_2px_rgba(255,255,255,1)] size-[20px] border-[2px] border-gray-500 absolute top-1/2 leading-nine left-[87.5%] -translate-y-1/2"} xmlns="http://www.w3.org/2000/svg" height="17.5px" viewBox="0 -960 960 960" width="17.5px"
                          fill="lightgreen">
                         <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/>
                     </svg>
@@ -361,23 +362,19 @@ const InputEmail = ({indicador, tipo, placeholderEmail, validate, setName} : Ema
         }
 
     }
-    const filterBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const enteredText = e.currentTarget.value;
-        const cleanText = /^[a-zA-Z0-9._%+\-áéíóúÁÉÍÓÚñÑ]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-    }
 
     return(
-        <div className={"flex flex-col gap-[10px] w-1/2"}>
+        <div className={"flex flex-col w-[230px]"}>
             <label htmlFor="">{indicador}</label>
-            <div className={"relative"}>
-                <input type={tipo} value={textEmail} className={`${activeError ? "border-2 border-red-500":""} w-full`} onChange={filterChange} onBlur={filterBlur} onKeyDown={handleKeyDown} placeholder={placeholderEmail} required/>
+            <div className={"relative w-[230px]"}>
+                <input type={tipo} value={textEmail} className={`${activeError ? "border-2 border-red-500":""} w-full border-2 border-gray-500 rounded-[7.5px] px-[10px]`} onChange={filterChange} onKeyDown={handleKeyDown} placeholder={placeholderEmail} required/>
                 {
                     activeError &&
-                    <small className={"showItem absolute bg-red-600 top-[90%] leading-none left-1/2"}>patron invalido</small>
+                    <svg className={"showItem absolute size-[25px] rounded-full  top-1/2 -translate-y-1/2 leading-none left-[87.5%] "} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="red"><path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>
                 }
                 {
                     activeCheck &&
-                    <svg className={"showItem rounded-full shadow-[0px_0px_0px_2px_rgba(255,255,255,1)] absolute top-1/2 leading-nine left-full -translate-y-1/2"} xmlns="http://www.w3.org/2000/svg" height="17.5px" viewBox="0 -960 960 960" width="17.5px"
+                    <svg className={"showItem rounded-full border-2 border-gray-500 shadow-[0px_0px_0px_2px_rgba(255,255,255,1)] absolute size-[20px] top-1/2 leading-nine left-[87.5%]  -translate-y-1/2"} xmlns="http://www.w3.org/2000/svg" height="17.5px" viewBox="0 -960 960 960" width="17.5px"
                          fill="lightgreen">
                         <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/>
                     </svg>
@@ -449,24 +446,67 @@ const InputPhone = ({indicador, tipo, activeRequired, placeholderPhone, validate
 
     }
 
-
     return(
         <div className={"relative"}>
             <label htmlFor="">{indicador}</label>
-            <div className={"relative"}>
-                <input type={tipo} className={"w-full"} value={phoneText} required={activeRequired} onChange={filterChange} onBlur={filterBlur} placeholder={placeholderPhone}/>
+            <div className={"relative w-[230px]"}>
+                <input type={tipo} className={"w-[230px] border-2 border-gray-500 rounded-[7.5px] px-[5px]"} value={phoneText} required={activeRequired} onChange={filterChange} onBlur={filterBlur} placeholder={placeholderPhone}/>
                 {
                     activeError &&
-                    <small className={"showItem absolute bg-red-600 top-[90%] leading-none left-1/2"}>{messageError}</small>
+                    <svg className={"showItem absolute size-[25px] rounded-full  top-1/2 -translate-y-1/2 leading-none left-[87.5%] "} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="red"><path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>
                 }
                 {
                     activeCheck &&
-                    <svg className={"showItem rounded-full shadow-[0px_0px_0px_2px_rgba(255,255,255,1)] absolute top-1/2 leading-nine left-full -translate-y-1/2"} xmlns="http://www.w3.org/2000/svg" height="17.5px" viewBox="0 -960 960 960" width="17.5px"
+                    <svg className={"showItem rounded-full size-[20px] border-2 border-gray-500 shadow-[0px_0px_0px_2px_rgba(255,255,255,1)] absolute top-1/2 leading-nine left-[87.5%] -translate-y-1/2"} xmlns="http://www.w3.org/2000/svg" height="17.5px" viewBox="0 -960 960 960" width="17.5px"
                          fill="lightgreen">
                         <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/>
                     </svg>
                 }
             </div>
         </div>
+    )
+}
+
+const InputDirection = () => {
+    const directionRef = useRef<HTMLInputElement|null>(null)
+    const [activeError, setActiveError] = useState<boolean>(false);
+    const [activeCheck, setActiveCheck] = useState<boolean>(false);
+
+
+
+   const filterText = (e : React.ChangeEvent<HTMLInputElement>) => {
+        const txt = e.currentTarget.value
+
+        console.log('aqui ta el text -> ', txt)
+
+
+        if(txt === "") {
+            setActiveError(true);
+            setActiveCheck(false);
+        } else {
+            setActiveError(false);
+            setActiveCheck(true);
+        }
+
+
+   }
+
+    return(
+            <div className={"relative"}>
+                <h1>Direccion</h1>
+                <div className={"relative w-[230px]"}>
+                    <input onChange={filterText} ref={directionRef} className={"border-2 border-gray-500 rounded-[7.5px] px-[5px] w-[230px]"} type="text" required placeholder={"Ingrese una direccion valida"} name={"direccion"} />
+                    {
+                        activeError &&
+                        <svg className={"showItem absolute size-[25px] rounded-full  top-1/2 -translate-y-1/2 leading-none left-[87.5%] "} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="red"><path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54
+                        127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>
+                    }
+                    {
+                        activeCheck &&
+                        <svg className={"showItem rounded-full border-2 border-gray-500 size-[20px] shadow-[0px_0px_0px_2px_rgba(255,255,255,1)] absolute top-1/2 leading-nine left-[87.5%] -translate-y-1/2"} xmlns="http://www.w3.org/2000/svg" height="17.5px" viewBox="0 -960 960 960" width="17.5px" fill="lightgreen"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/>
+                        </svg>
+                    }
+                </div>
+            </div>
     )
 }

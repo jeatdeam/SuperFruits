@@ -10,16 +10,7 @@ export const BagIcon = () => {
     const {count} = useCarrito()
 
     const getInfo = () : void =>{
-
-
-        if(refCarrito.current) {
-            const {carrito, access} = refCarrito.current ?? {};
-            // access();
-        }
-
-        // setUrl('/products');
         setValidate(prev=>!prev)
-        // refetch()
     }
 
     const hideCarrito = ( e : MouseEvent) => {
@@ -61,7 +52,7 @@ export const BagIcon = () => {
             </svg>
             <Carrito ref={refCarrito} validate={validate} closeWindow={closeWindowCarrito}/>
             <div className={`${  count ? "opacity-100" : "opacity-0"} itemCount transition-element size-[20px]  rounded-full absolute top-[-90%] left-[50%] translate-x-[-50%] center-flex text-[10px]`}>
-                { count}
+                {count}
             </div>
         </div>
     )

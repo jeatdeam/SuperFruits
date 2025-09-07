@@ -1,23 +1,17 @@
 import {useState, useEffect, useRef} from "react";
 
 
-
-type DataReceived = {
-    carritoCompras : [];
-    message: string
-}
-
 export const useFetchDeleteAll = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<boolean>(false);
-    const [data, setData] = useState<DataReceived|null>(null);
+    const [data, setData] = useState<[]>([]);
 
 
     // useEffect(()=>{
 
 
         const fetchDelete = async () => {
-            const url = "http://localhost:3000/deleteAllProducts";
+            const url = "http://localhost:4000/deleteAllProducts";
             const options = {
                 method: "DELETE",
                 headers: {"Content-Type" : "application/json"},
@@ -29,7 +23,7 @@ export const useFetchDeleteAll = () => {
                 if(!response.ok) throw new Error(`Error en la peticion ${response.status} -> ${response.statusText}`);
 
                 const result = await response.json()
-                setData(result)
+                setData(result.carritoCompras);
                 console.log("cuack fettAll->",result)
 
             }catch(error){
@@ -47,7 +41,6 @@ export const useFetchDeleteAll = () => {
 
     useEffect(()=>{
         // setData(data)
-        console.log(data)
     },[data])
 
     return {loading, error, data, fetchDelete}

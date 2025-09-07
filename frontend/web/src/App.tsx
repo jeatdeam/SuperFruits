@@ -33,7 +33,7 @@ function App() {
                         <Routes>
                          <Route path="/" element={<Index/>}/>
                          <Route element={<LayoutConProceso/>}>
-                             <Route path="/:product/" element={<ProductsCards/>}/>
+                             <Route path="/:product" element={<ProductsCards/>}/>
                              <Route path="/:product/:name" element={<InfoProduct/>} />
                              <Route path="/seccion-de-pagos" element={<PayProducts/>}/>
                          </Route>

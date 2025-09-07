@@ -40,12 +40,9 @@ export const SearchIcon = ({className}: { className?: string }) => {
     }, [activeBox]);
 
     useEffect(()=>{
-        // console.log('aqui esta el refIcon -> ', iconRef);
         if(iconRef.current) {
             useActive.setState({ refSearch : iconRef.current});
-            // useActive()
         }
-        console.log(changeStatus)
     },[])
 
     return (
@@ -74,14 +71,20 @@ type BoxGroup = {
     input: HTMLInputElement | null;
     group: HTMLDivElement | null
 }
-type Products = {
-    id : number;
-    idCompra : number | null;
-    fruit : string;
-    name : string;
-    price : number;
-    img : string[];
-    description : string[];
+export type Products = {
+    id_product : string;
+    price_product : number;
+    stock_product : number;
+    status_product : string;
+    name_product : string;
+    title_product : string;
+    tratamiento_product : string[];
+    descuento_product: number;
+    img_product : string[];
+    detalles_product : string[];
+    caracteristicas_product : string[];
+    calificacion_client : number;
+    type_fruit : string;
 }
 
 export const BoxSearch = forwardRef<BoxGroup, BoxSearchProps>(({ closeModal }, ref) => {
@@ -114,14 +117,14 @@ export const BoxSearch = forwardRef<BoxGroup, BoxSearchProps>(({ closeModal }, r
             headers : {"Content-Type":"application/json"},
             body: JSON.stringify({txt})
         }
-        const url = "http://localhost:3000/filterProducts";
+        const url = "http://localhost:4000/filterProductsBusqueda";
         try{
             const response = await fetch(url,options)
             if(!response.ok) throw new Error('error en la peticion')
             const result = await response.json()
-            console.log(result.productsFilter)
-            setProducts(result.productsFilter)
-            !result.productsFilter.lenght && (setActive(true))
+            console.log(result.productosFilter)
+            setProducts(result.productosFilter)
+            !result.productosFilter.lenght && (setActive(true))
             setContador(prev => prev + 1 )
             // withItems.current = result.void
             // setActive()
@@ -131,9 +134,6 @@ export const BoxSearch = forwardRef<BoxGroup, BoxSearchProps>(({ closeModal }, r
 
         }
     }
-
-    useEffect(()=> {
-    },[active, products])
 
     const rebootState = () => {
 
@@ -151,13 +151,12 @@ export const BoxSearch = forwardRef<BoxGroup, BoxSearchProps>(({ closeModal }, r
                 placeholder="busque un producto"
             />
             <div ref={groupRef} className={`flex flex-col gap-[15px] w-full mx-auto min-h-[150px]`}>
-                { products.length ?  products.map(
-                        (el,index) => (
-                            <Link key={index} onClick={rebootState} to={`/${el.fruit.replace(/\s+/g,"-")}/${el.name.replace(/\s+/g,"-")}`}>
+                { products.length ?  products.map((el,index) => (
+                            <Link key={index} onClick={rebootState} to={`/${el.type_fruit.replace(/\s+/g,"-")}/${el.name_product.replace(/\s+/g,"-")}`}>
                                 <div className="showItem transition-all duration-[250] ease-in-out flex justify-between gap-[15px] items-center shadow-[0_0_7.5px_rgba(0,0,0,.9)] rounded-[8px] hover:bg-amber-50 py-[10px] px-[15px]">
-                                    <img className={"size-[75px] rounded-[8px] shadow-[0_0_2.5px_rgba(0,0,0,.9)]"} src={el.img?.[0]??""} alt={el.name} />
-                                    <h1 className={"text-start flex-1 "}>{el.name}</h1>
-                                    <h2 className={"text-start"}>S/. {el.price}</h2>
+                                    <img className={"size-[75px] rounded-[8px] shadow-[0_0_2.5px_rgba(0,0,0,.9)]"} src={el.img_product?.[0]??""} alt={el.name_product} />
+                                    <h1 className={"text-start flex-1 "}>{el.name_product}</h1>
+                                    <h2 className={"text-start"}>S/. {el.price_product}</h2>
                                 </div>
                             </Link>
                         ))

@@ -72,17 +72,17 @@ export const Menu = forwardRef<Ref,Props>(({show, toggleMenu}, ref) => {
                         <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/>
                     </svg>
                     <h1 className={" text-[20px]"}>Productos</h1>
-                    <h1 className={"bg-[lightblue] size-[40px] rounded-full"}></h1>
+                    <h1 className={"bg-red-600 size-[40px] rounded-full"}></h1>
                 </div>
 
-                <div className={`w-full flex flex-col gap-[15px] ${activeFruits ? "-translate-x-full" : ""} transition-all duration-500 ease-in-out relative`}>
+                <div className={`w-full flex flex-col gap-[15px] ${ activeFruits ? "-translate-x-full" : ""} transition-all duration-500 ease-in-out relative`}>
 
-                    {fruits.length && fruits.map(([key, value],index) => (
+                    { (products?.length ?? 0) > 0 && products.map(([key, value],index) => (
                         <div className={`w-full transition-all duration-500 ease-in-out  flex justify-between  gap-[15px]`} key={index}>
                             <div className={`relative flex gap-[15px] justify-between items-center min-w-full hover:bg-blue-300 rounded-[8px] ${activeFruits ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
 
-                                <Link className={"w-full shadow-shadowButton px-[15px] rounded-[8px] h-[30px] flex items-center  transition-half"} to={`/${value[0].fruit.replace(/\s+/g,'-')}`} onClick={() => toggleMenu()}>
-                                    <h1 className={``}>{value[0].fruit}</h1>
+                                <Link className={"w-full shadow-shadowButton px-[15px] rounded-[8px] h-[30px] flex items-center  transition-half"} to={`/${value[0]?.type_fruit.replace(/\s+/g,'-')}`} onClick={() => toggleMenu()}>
+                                    <h1 className={``}>{key}</h1>
                                 </Link>
                                 <svg  className={"absolute right-[15px] size-[20px]"} onClick={() => {setActiveFruits(true); setActiveSubFruits(index)}} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
                                      width="24px" fill="#999999">
@@ -93,9 +93,9 @@ export const Menu = forwardRef<Ref,Props>(({show, toggleMenu}, ref) => {
                             <div className={`min-w-full flex flex-col gap-[15px] ${index === activeSubFruits ? "block absolute top-0 right-[-100%]" : "hidden"}`}>
 
                             {value.map((el,indice) => (
-                                    <Link className={"w-full rounded-[8px] px-[15px] h-[30px] shadow-shadowButton transition-half flex items-center hover:bg-blue-300"} key={indice} to={`/${el.fruit}/${el.name.replace(/\s+/g,"-")}`} onClick={()=>{toggleMenu();setActiveFruits(false); setActiveSubFruits(null)}}>
+                                    <Link className={"w-full rounded-[8px] px-[15px] h-[30px] shadow-shadowButton transition-half flex items-center hover:bg-blue-300"} key={indice} to={`/${el.type_fruit}/${el.name_product.replace(/\s+/g,"-")}`} onClick={()=>{toggleMenu();setActiveFruits(false); setActiveSubFruits(null)}}>
                                         <div className={`w-full`}>
-                                            {el.name}
+                                            {el.name_product}
                                         </div>
                                     </Link>
                             ))}

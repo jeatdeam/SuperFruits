@@ -581,7 +581,7 @@ function Introduction() {
                              onTransitionEnd={handleTransitionEnd}>
                             {
                                 sliderElements.map((Component, index) => (
-                                    <div className="min-w-full" key={index}>
+                                    <div className="min-w-full bg-gray-500" key={index}>
                                         <Component isActive={index === 1}/>
                                     </div>
                                 ))
@@ -700,7 +700,7 @@ function Introduction() {
                         <div ref={cilindro} className={"relative bg-blue-300 size-[400px]"}>
                             <img ref={aguajeFourImg}
                                  className={"bg-white absolute border-4 border-red-500  origin-left size-[350px] left-full top-1/2 -translate-y-1/2 object-contain"}
-                                 src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1750479564/aguajina-sin-marca_hf1co8.png"
+                                 src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1750642022/cuackssito_fino_lqinny.webp"
                                  alt=""/>
                         </div>
                     </div>

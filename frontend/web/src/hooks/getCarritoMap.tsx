@@ -1,22 +1,10 @@
 import {useEffect, useState} from "react";
+import {Products} from "../components/headerComponents/searchIcon"
 
-type Productos = {
-    id: number;
-    idCompra: number|null;
-    fruit: string;
-    name: string;
-    price: number;
-    img : string[];
-    description: string[];
-}
-
-type ResponseData = {
-    flattenedProducts: [number, Productos[]][];
-}
 
 export const useGetCarrito = () => {
 
-    const [data, setData]   = useState<ResponseData|null>(null);
+    const [data, setData]   = useState<Products[]|null>(null);
     const [error, setError]   = useState<boolean>(false);
     const [loading, setLoading]   = useState<boolean>(false);
 
@@ -27,18 +15,22 @@ export const useGetCarrito = () => {
             method : 'GET',
             headers : {"Content-Type" : "application/json"},
         }
-        const url = "http://localhost:3000/payProducts";
+        const url = "http://localhost:4000/get/carrito";
 
         setLoading(true)
         try{
+            // console.log('vamos a intentar el fetch')
             const response = await fetch(url,options);
             if(!response.ok) throw new Error(`error en la peticion | ${response.status} -> ${response.statusText}`)
             const result = await response.json()
 
-            setData(result)
+            // console.log(result)
+            setData(result.carritoCompras)
             setLoading(false);
         }catch(error){
-            console.error(error.message)
+            if (error instanceof Error) {
+                console.error(error.message);
+            }
             setError(true);
             setLoading(false)
         }finally{
@@ -51,7 +43,7 @@ export const useGetCarrito = () => {
         fetchCarrito();
     },[])
     useEffect(()=>{
-        console.log([data?.flattenedProducts]);
+        // console.log([data?.flattenedProducts]);
     },[data])
 
     return {data, refetch: fetchCarrito};

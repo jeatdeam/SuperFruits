@@ -4,65 +4,74 @@ import {useCarrito} from "../../contexts/carritoContext.tsx";
 import {useGetCarrito} from "../../hooks/getCarritoMap.tsx";
 import {useBlurSearch} from "../../zustand/useBlurSearch.tsx";
 import {useBlurMenu} from "../../zustand/useBlurMenu.tsx"
+import {useWaitUntil} from "../../zustand/useWaitUntil.tsx";
 
 export const ProcesoDeCompra = () => {
     const {refProcess, checkFormulario} = useProceso();
     const {count} = useCarrito()
     const {switchBlur, toggleBlur } = useBlurSearch()
     const {activeBlur} = useBlurMenu()
+    const {statusSpinner} = useWaitUntil()
 
     useEffect(()=>{
         // refProcess[1]?.classList.add('animate-process')
         // console.log(refProcess)
         // console.log('cuanto es ', count)
+
     })
 
     return(
-        <section className={`${switchBlur ? "blur-[10px]": ""} ${activeBlur ? "blur-[10px]" : ""} containerProcess w-[80%] xl:w-[1024px] 2xl:w-[1280px] h-[100px] flex items-center px-[5%] mx-auto`}>
-            <div className={"relative processOne flex-1 bg-white h-[5px]"}>
+        <section className={`${statusSpinner ? "blur-[20px]" : ""} ${ count ? "" : ""} ${switchBlur ? "blur-[10px]": ""} ${activeBlur ? "blur-[10px]" : ""} containerProcess w-[80%] xl:w-[1024px] 2xl:w-[1280px] h-[100px]  flex items-center justify-between px-[5%] mx-auto`}>
 
-                <div className={"absolute flex flex-col translate-y-[-50%] z-[2]"}>
-                    <div className={"size-[25px] bg-blue-300 rounded-full flex items-center justify-center text-[12.5px] z-[2]"}> 1 </div>
-                    <div className={"shadow-[0_0_0_2.5px_rgba(173,216,230,1)] size-[20px] whitespace-pre-line absolute left-1/2 translate-x-[-50%] bg-white rounded-full top-[125%] flex items-center justify-center text-[12.5px] z-[2]"}>{count ?
-                        <Check/> : <ShoppingCar/>}
+            <div className={`${count? "opacity-100" : "opacity-20" } relative processOne flex-1 h-[5px] bg-white`}>
+                <div className={"absolute flex flex-col z-[2] items-center"}>
+                    <div className={"flex items-center flex-col gap-[5px] -translate-y-[12.25px] -translate-x-[2.25px] "}>
+                        <div className={"size-[25px] bg-blue-300 rounded-full flex items-center justify-center text-[12.5px] z-[2]"}> 1 </div>
+                        <div className={"shadow-[0_0_0_2.5px_rgba(173,216,230,1)] size-[20px] whitespace-pre-line bg-white rounded-full flex items-center justify-center text-[12.5px] z-[2] "}>{count ?
+                            <Check/> : <ShoppingCar/>}
+                        </div>
                     </div>
+
                 </div>
-                <ProcessOne ref={(cuack) => refProcess.push(cuack)} styleProps={"w-full h-full absolute border border-gray-400 origin-left z-[1]"}/>
+                <ProcessOne ref={(cuack) => refProcess.push(cuack)} styleProps={"h-full w-full absolute origin-left z-[0]"}/>
             </div>
 
-            <div className={"relative processTwo flex-1 bg-white h-[5px]"}>
-                <div className={"absolute flex flex-col items-center h-[60px] gap-[4px] z-[2]"}>
-                    <div className={"size-[25px] bg-blue-300  left-[-5px]  -translate-y-1/2 rounded-full flex items-center justify-center text-[12.5px] z-[2]"}> 2 </div>
-                    <div className={"size-[20px] bg-white rounded-full shadow-[0px_0px_0px_2px_rgba(173,216,230,1)] -translate-y-1/2 flex items-center justify-center"}>
-                        {checkFormulario? <Check/> : <FormIcon/>}
+            <div className={`${count? "opacity-100" : "opacity-20" } relative processTwo flex-1 bg-white h-[5px]`}>
+                <div className={"absolute flex flex-col items-center"}>
+                    <div className={"flex items-center flex-col gap-[5px] -translate-y-[12.25px] -translate-x-[2.25px] z-[3]"}>
+                        <div className={"size-[25px] bg-blue-300 rounded-full flex items-center justify-center text-[12.5px]"}> 2 </div>
+                        <div className={"size-[20px] bg-white rounded-full shadow-[0px_0px_0px_2px_rgba(173,216,230,1)] flex items-center justify-center"}>
+                            {checkFormulario? <Check/> : <FormIcon/>}
+                        </div>
                     </div>
                 </div>
-                <ProcessTwo ref={(cuack)=>refProcess.push(cuack)} styleProps={"w-full h-full absolute  border border-gray-400 origin-left z-[1]"}/>
+                <ProcessTwo ref={(cuack)=>refProcess.push(cuack)} styleProps={"w-full h-full absolute origin-left z-[1]"}/>
             </div>
 
-            <div className={"relative processThree flex-1 bg-white h-[5px]"}>
-                <div className={"absolute flex flex-col items-center h-[60px] gap-[4px]"}>
-                    <div
-                        className={"size-[25px] bg-blue-300  left-[-5px]  -translate-y-1/2 rounded-full flex items-center justify-center text-[12.5px] z-[2]"}> 2
-                    </div>
-                    <div
-                        className={"size-[20px] bg-white rounded-full shadow-[0px_0px_0px_2px_rgba(173,216,230,1)] -translate-y-1/2 flex items-center justify-center"}>
-                        {0 ? <Check/> : <FormIcon/>}
+            <div className={`${checkFormulario ? "opacity-100" : "opacity-20" } relative processThree flex-1 bg-white h-[5px]`}>
+                <div className={"absolute flex flex-col items-center gap-[4px]"}>
+                    <div className={"flex flex-col items-center -translate-y-[12.25px] -translate-x-[2.25px] gap-[5px] "}>
+                        <div className={"size-[25px] bg-blue-300 rounded-full flex items-center justify-center text-[12.5px] z-[2]"}> 3</div>
+                        <div className={"size-[20px] bg-white rounded-full shadow-[0px_0px_0px_2px_rgba(173,216,230,1)]  flex items-center justify-center"}>
+                            {0 ? <Check/> : <FormIcon/>}
+                        </div>
                     </div>
                 </div>
                 <ProcessThree ref={(cuack) => refProcess.push(cuack)}
-                              styleProps={"w-full h-full absolute  border border-gray-400 origin-left z-[1]"}/>
+                              styleProps={"w-full h-full absolute  origin-left z-[1]"}/>
+
             </div>
-            <div className={"relative processFour flex-1 bg-white h-[5px]"}>
-                <div
-                    className={"size-[25px] bg-blue-300 absolute left-[-5px] top-1/2 -translate-y-1/2 rounded-full flex items-center justify-center text-[12.5px] z-[2]"}>4
+
+            <div className={`${checkFormulario ? "opacity-20" : "opacity-20"} relative processFour  bg-white h-[5px]`}>
+                <div className={"flex flex-col gap-[5px] items-center -translate-y-[12.25px] translate-x-[2.25px]"}>
+                    <div className={"size-[25px] bg-blue-300 right-[-25px] rounded-full flex items-center justify-center text-[12.5px] z-[2]"}> 4 </div>
+                    <div className={"size-[20px] bg-white rounded-full shadow-[0px_0px_0px_2px_rgba(173,216,230,1)]  flex items-center justify-center"}>
+                        {0 ? <Check/> : <FormIcon/>}
+                    </div>
                 </div>
-                <div
-                    className={"size-[25px] bg-blue-300 absolute right-[-20px] top-1/2 -translate-y-1/2 rounded-full flex items-center justify-center text-[12.5px] z-[2]"}>5
-                </div>
-                <ProcessFour ref={(cuack)=>refProcess.push(cuack)}
-                     styleProps={"w-full h-full absolute  border border-gray-400 origin-left z-[1]"}/>
+                <ProcessFour ref={(cuack)=>refProcess.push(cuack)} styleProps={"w-full h-full absolute origin-left z-[1]"}/>
             </div>
+
         </section>
     )
 }

@@ -1,11 +1,8 @@
-import {Header} from '../components/headerComponents/header.tsx';
-import {Footer} from "../components/footerComponents/footer.tsx";
 import {ButtonAdd} from "../components/buttonsComponent/buttonAdd.tsx"
 import {ButtonBuy} from "../components/buttonsComponent/buttonBuy.tsx";
 
-import { useState, useEffect, useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 import {useParams} from "react-router-dom"
-import {ProcesoDeCompra} from "../components/bodyComponents/procesoDeCompra.tsx";
 
 type Products = {
     id_product : string;
@@ -123,39 +120,105 @@ export const InfoProduct = () => {
     const {product, name} = useParams();
     const {dataProduct} = useFetchItem(name);
     const {allTypeProducts} = useFetchType(product);
+    const allImg = useRef<(HTMLImageElement|null)[]>([])
+    const count = useRef<number>(0)
+
+    const [stateImg, setStateImg] = useState<(string)[]>([]);
+    const safeInterval = useRef<ReturnType<typeof setInterval> | null>(null)
+    const [positionCircle, setPositionCircle] = useState<number>(0)
+    const [activeAnimation, setActiveAnimation] = useState<boolean>(false)
 
     useEffect(()=>{
-        console.log(product)
-        console.log(name)
-        console.log(allTypeProducts)
-    },[allTypeProducts])
+
+        setStateImg([dataProduct?.img_product[0]!,dataProduct?.img_product[1]!, dataProduct?.img_product[2]!, dataProduct?.img_product[3]! ])
+
+    },[dataProduct])
+
+
+    const autoChangeImg = () => {
+        safeInterval.current = setInterval(() => {
+            if (dataProduct?.img_product?.length) {
+                changeRightSide()
+                setActiveAnimation(true);
+            }
+        }, 5000);
+    }
+
+    useEffect(()=>{
+        autoChangeImg();
+        return () => {
+           safeInterval.current && clearInterval(safeInterval.current)
+        }
+    },[dataProduct])
+
+    const changeLeftSide = () => {
+        if( dataProduct?.img_product[0] && dataProduct?.img_product[1] && dataProduct?.img_product[2] && dataProduct?.img_product[3]) {
+            count.current =  ( count.current + dataProduct.img_product.length - 1) % dataProduct?.img_product.length!;
+            setStateImg([
+                dataProduct?.img_product[( allImg.current.length + count.current)%allImg.current.length]!,
+                dataProduct?.img_product[( allImg.current.length + count.current + 1)%allImg.current.length]!,
+                dataProduct?.img_product[( allImg.current.length + count.current + 2)%allImg.current.length]!,
+                dataProduct?.img_product[( allImg.current.length + count.current + 3)%allImg.current.length]!
+            ]);
+            setPositionCircle(count.current);
+        }
+    }
+    const changeRightSide = () => {
+        if(dataProduct?.img_product[0] && dataProduct?.img_product[1] && dataProduct?.img_product[2] && dataProduct?.img_product[3]) {
+            count.current =  (count.current + 1) % dataProduct?.img_product.length!;
+            setStateImg([
+                dataProduct?.img_product[(allImg.current.length - count.current + allImg.current.length) % allImg.current.length]!,
+                dataProduct?.img_product[(allImg.current.length - count.current - 3 + allImg.current.length) % allImg.current.length]!,
+                dataProduct?.img_product[(allImg.current.length - count.current - 2 + allImg.current.length) % allImg.current.length]!,
+                dataProduct?.img_product[(allImg.current.length - count.current - 1 + allImg.current.length) % allImg.current.length]!
+            ]);
+            setPositionCircle(count.current);
+        }
+    }
+
+    const changeImg = (direction : string) => {
+            clearInterval(safeInterval.current!);
+            setActiveAnimation(true);
+            direction === 'left' ? changeLeftSide() : changeRightSide();
+            autoChangeImg();
+
+        }
 
     return (
         <main>
             <section className={"w-4/5 xl:w-[1024px] 2xl:w-[1250px] mx-auto flex flex-col gap-[20px] lg:gap-[25px]"}>
-                <h1 className={"w-full text-titleResponsive text-center mb-[25px] leading-none"}>{name.replace(/-/g,' ')}</h1>
+                <h1 className={"w-full text-titleResponsive text-center mb-[25px] leading-none"}>{name?.replace(/-/g,' ')}</h1>
                 <div className={"w-full mx-auto flex-col flex md:flex-row gap-[25px] shadow-[0px_0px_7.5px_rgba(0,0,0,.5)] p-[25px] rounded-[8px]"} >
-                        <div className={"w-full md:w-1/2 rounded-[8px] h-full flex flex-col justify-center items-center gap-[10px]"}>
-                            <img className={"shadow-shadowElement size-[250px] object-cover border rounded-[8px]"} src={dataProduct?.img_product[0]} alt=""/>
-                            <div className={"flex gap-[10px] justify-between"}>
-                                <img className={"shadow-shadowElement size-[75px] object-cover border rounded-[8px]"}  src={dataProduct?.img_product[1]} alt=""/>
-                                <img className={"shadow-shadowElement size-[75px] object-cover border rounded-[8px]"}  src={dataProduct?.img_product[2]} alt=""/>
-                                <img className={"shadow-shadowElement size-[75px] object-cover border rounded-[8px]"}  src={dataProduct?.img_product[3]} alt=""/>
+
+                        <div className={"w-full md:w-1/2 rounded-[8px] h-full flex flex-col justify-center items-center gap-[10px] noSelectUser"}>
+                            <img onAnimationEnd = {()=>{setActiveAnimation(false)}} ref={(el)=> {allImg.current[0] = el}} className={`${ activeAnimation ? "showItem" : ""} shadow-shadowElement size-[250px] object-cover border rounded-[8px]`} src={stateImg?.[0]} alt="" draggable={false}/>
+                            <div className={"flex gap-[10px] justify-between relative"}>
+                                <img ref={(el)=> {allImg.current[1]=el}} className={"shadow-shadowElement size-[75px] object-cover border rounded-[8px]"}  src={stateImg?.[1]} alt="" draggable={false}/>
+                                <img ref={(el)=>{allImg.current[2]=el}} className={"shadow-shadowElement size-[75px] object-cover border rounded-[8px]"}  src={stateImg?.[2]} alt="" draggable={false}/>
+                                <img ref={(el)=>{allImg.current[3]=el}} className={"shadow-shadowElement size-[75px] object-cover border rounded-[8px]"}  src={stateImg?.[3]} alt="" draggable={false}/>
+                                <div className={"w-[125%] left-[-12%] absolute flex  justify-between items-center h-[15px] top-1/2 -translate-y-1/2"}>
+                                    <svg onClick={ () => changeImg("left")} className={"size-[30px]"} xmlns="http://www.w3.org/2000/svg" height="25px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>
+                                    <svg onClick={ () => changeImg("right")} className={"size-[30px] "} xmlns="http://www.w3.org/2000/svg" height="25px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/></svg>
+                                </div>
                             </div>
                             <div className={"flex gap-[10px] justify-center items-center translate-y-1/2"}>
-                                <span className={"size-[20px] rounded-full bg-red-600 inline-block"}></span>
-                                <span className={"size-[20px] rounded-full bg-red-600 inline-block"}></span>
-                                <span className={"size-[20px] rounded-full bg-red-600 inline-block"}></span>
-                                <span className={"size-[20px] rounded-full bg-red-600 inline-block"}></span>
+                                {
+                                    (dataProduct?.img_product?.length ?? 0) > 0 && dataProduct?.img_product.map((_,index)=>(
+                                        <span key={index} className={` ${ index === positionCircle ? "bg-black" : ""}  size-[20px] rounded-full border border-gray-500 inline-block`}></span>
+                                    ))
+                                }
+                                    
+
                             </div>
                         </div>
+
                         <div className={"w-full md:w-1/2  flex flex-col gap-[15px]"}>
                             <h1 className={"leading-none text-[27.5px]"}>{ dataProduct && dataProduct?.name_product} - { dataProduct && dataProduct?.type_fruit}</h1>
                             <div className={"flex justify-between items-center"}>
                                 <div className={"flex gap-[5px] flex-col"}>
                                     <span className={"text-red-600 text-[12.5px]"}>{dataProduct?.descuento_product}% descuento</span>
                                     <div className={"flex gap-[10px]"}>
-                                        <span className={""}>S/. {dataProduct?.price_product * ( 100 - dataProduct?.descuento_product)/100}</span>
+                                        <span className={""}>S/. {dataProduct?.price_product! * ( 100 - dataProduct?.descuento_product!)/100}</span>
                                         <span className={"line-through text-red-600"}>S/. {dataProduct?.price_product}</span>
                                     </div>
                                 </div>

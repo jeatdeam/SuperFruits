@@ -1,13 +1,15 @@
 import {useState, useEffect, useRef} from 'react';
 import {useBlurMenu} from "../../zustand/useBlurMenu.tsx"
 import {useBlurSearch} from "../../zustand/useBlurSearch.tsx";
+import {useWaitUntil} from "../../zustand/useWaitUntil.tsx";
 
 export function Footer() {
     const toggleBlur = useBlurMenu(state => state.activeBlur)
     const switchBlurSearch = useBlurSearch(state=>state.switchBlur)
+    const {statusSpinner} = useWaitUntil()
 
     return (
-        <footer className={`${switchBlurSearch? "blur-[20px]":""}  ${toggleBlur ? "blur-[20px]" : ""} w-full flex flex-col gap-[30px] bg-gradient-to-br from-purple-700 via-black to-gray-900 px-[20px] pb-[50px]`}>
+        <footer className={`${statusSpinner ? "blur-[20px]" : ""} ${switchBlurSearch? "blur-[20px]":""}  ${toggleBlur ? "blur-[20px]" : ""} w-full flex flex-col gap-[30px] bg-gradient-to-br from-purple-700 via-black to-gray-900 px-[20px] pb-[50px]`}>
             <div className={"w-[90%] mx-auto flex flex-col gap-[50px]"}>
 
                 <div

@@ -10,6 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@lyracom/embedded-form-glue": "^1.4.4",
+    "axios": "^1.12.2",
+    "decimal.js": "^10.6.0",
     "gsap": "^3.13.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

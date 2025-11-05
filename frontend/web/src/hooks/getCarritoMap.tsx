@@ -26,6 +26,7 @@ export const useGetCarrito = () => {
 
             // console.log(result)
             setData(result.carritoCompras)
+            console.log('aqui esta el nuevo array de productos -> ',result.carritoCompras)
             setLoading(false);
         }catch(error){
             if (error instanceof Error) {

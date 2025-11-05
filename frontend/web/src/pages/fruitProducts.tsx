@@ -9,6 +9,7 @@ import {ProcesoDeCompra} from "../components/bodyComponents/procesoDeCompra.tsx"
 import {useBlurSearch} from "../zustand/useBlurSearch.tsx";
 import {useBlurMenu} from "../zustand/useBlurMenu.tsx"
 import {Products} from '../components/headerComponents/searchIcon.tsx'
+import {useGetCarrito} from "../hooks/getCarritoMap.tsx";
 
 // type Products = {
 //     id: number;
@@ -26,7 +27,7 @@ export const ProductsCards = () => {
     const [productsFetch, setProductsFetch] = useState<Products[]|null>([]);
     const [ready, setReady] = useState<boolean>(false);
     const refButtonAdd = useRef<(HTMLButtonElement|null)[]>([])
-    const {data, loading, error, refetch} = useLastId()
+    // const {data, loading, error, refetch} = useLastId()
     const refSectionProducts = useRef<HTMLDivElement|null>(null);
     const refCard = useRef<RefsCard|null>(null);
     const refButtonCarrito = useRef<(HTMLButtonElement|null)[]>([]);
@@ -35,6 +36,7 @@ export const ProductsCards = () => {
 
     const {switchBlur} = useBlurSearch();
     const {activeBlur} = useBlurMenu();
+    const {data, refetch} = useGetCarrito()
 
     useEffect(() => {
         // if (!product) return;
@@ -100,31 +102,40 @@ export const ProductsCards = () => {
 
 
     return (
-            <main className={`${activeBlur ? "blur-[10px]" : ""} ${switchBlur? "blur-[10px]" : ""}  w-full pb-[25px]`}>
-                <h1 className={"text-center text-titleResponsive mb-[50px]"}>Products Cards</h1>
-                <section className="w-[80%] justify-center mx-auto flex flex-wrap content-start gap-[25px] relative" ref={refSectionProducts}>
-                    {productsFetch && productsFetch?.map((el,key)=>(
-                            <div className={"shadow-shadowCard rounded-[15px] w-[250px] h-[400px] p-[15px] flex flex-col items-center justify-between"}
-                                ref={(node) => refPadre.current[key] = node} key={key} onClick={showInfoProduct}>
-                                <img src={el.img_product?.[0]} alt="" className={"size-[215px] rounded-[8px] shadow-shadowElement"}/>
-                                {/*<h1>{el.fruit}</h1>*/}
-                                <h2 className={"nameProduct self-start"}>{el?.title_product}</h2>
-                                <div className={"flex justify-between w-4/5"}>
-                                    <div className={"flex gap-[10px]"}>
-                                        <StarIcon/>
-                                        <EmpaqueIcon/>
+            <main className={`${activeBlur ? "blur-[10px]" : ""} ${switchBlur? "blur-[10px]" : ""}  w-full pb-[25px] mb-[25px]`}>
+                {
+                    productsFetch && (productsFetch.length ?? 0 > 0) ?
+                        <>
+                            <h1 className={"text-center text-titleResponsive mb-[50px]"}>{product?.toUpperCase()}</h1>
+                            <section className="w-[80%] justify-center mx-auto flex flex-wrap content-start gap-[25px] relative" ref={refSectionProducts}>
+                                {productsFetch && productsFetch?.map((el,key)=>(
+                                    <div className={"shadow-shadowCard rounded-[15px] w-[250px] h-[400px] p-[15px] flex flex-col items-center justify-between"}
+                                         ref={(node) => refPadre.current[key] = node} key={key} onClick={showInfoProduct}>
+                                        <img src={el.img_product?.[0]} alt="" className={"size-[215px] rounded-[8px] shadow-shadowElement"}/>
+                                        {/*<h1>{el.fruit}</h1>*/}
+                                        <h2 className={"nameProduct self-start"}>{el?.title_product}</h2>
+                                        <div className={"flex justify-between w-4/5"}>
+                                            <div className={"flex gap-[10px]"}>
+                                                <StarIcon/>
+                                                <EmpaqueIcon/>
+                                            </div>
+                                            <b className={"self-end"}>S/. {el?.price_product}</b>
+                                        </div>
+                                        <div className={"flex gap-[20px] justify-evenly w-full"}>
+                                            <ButtonAdd ref={(node) => { refButtonCarrito.current[key] = node}} id={el?.id_product} activeIcon={false} refetch={refetch}/>
+                                            <Link to={`/seccion-de-pagos`}>
+                                                <ButtonBuy ref={(node)=> { refButtonAdd.current[key] = node }} id={el?.id_product} name={el?.name_product}/>
+                                            </Link>
+                                        </div>
                                     </div>
-                                    <b className={"self-end"}>S/. {el?.price_product}</b>
-                                </div>
-                                <div className={"flex gap-[20px] justify-evenly w-full"}>
-                                    <ButtonAdd ref={(node) => { refButtonCarrito.current[key] = node}} id={el?.id_product} activeIcon={false}/>
-                                    <Link to={`/seccion-de-pagos`}>
-                                        <ButtonBuy ref={(node)=> { refButtonAdd.current[key] = node }} id={el?.id_product} name={el?.name_product}/>
-                                    </Link>
-                                </div>
-                            </div>
-                    ))}
-                </section>
+                                ))}
+                            </section>
+                        </>
+                        :
+                        <h1 className={"text-[50px] w-3/5 mx-auto text-center"}>Error no se encontraron coincidencias, pruebe otra vez.</h1>
+
+                }
+
             </main>
     );
 };

@@ -9,6 +9,7 @@ import {Link} from "react-router-dom"
 import {Options} from "autoprefixer";
 import {useBlurMenu} from "../../zustand/useBlurMenu.tsx"
 import {useBlurSearch} from "../../zustand/useBlurSearch.tsx"
+import {useWaitUntil} from '../../zustand/useWaitUntil.tsx'
 
 
 export function Header() {
@@ -20,6 +21,9 @@ export function Header() {
     const redirectIndex = () => {
         window.location.href="/"
     }
+    const {statusSpinner} = useWaitUntil();
+
+
 
     useEffect(()=>{
 
@@ -43,7 +47,7 @@ export function Header() {
 
     return (
         <>
-            <header ref={refHeader} className={`${switchBlurSearch ? "blur-[20px]":""}  ${toggleBlur ? "blur-[20px]" : ""} w-full h-[200px] bg-pink-200 border-red-500 border-4 flex flex-col items-center justify-center`}>
+            <header ref={refHeader} className={`${statusSpinner ? "blur-[20px]" : ""} ${switchBlurSearch ? "blur-[20px]":""}  ${toggleBlur ? "blur-[20px]" : ""} w-full h-[200px] bg-pink-200 flex flex-col items-center justify-center`}>
 
                 { !desacoplar &&
                 <div className={`relative mx-auto w-[90%] xs:w-[80%] xl:w-[1024px] flex justify-between items-center rounded-[16px] z-10`}>

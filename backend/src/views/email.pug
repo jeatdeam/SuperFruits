@@ -23,11 +23,11 @@ html(lang="es")
                             tbody
                                 each [id, products] of carritoCompras
                                     tr(style="color:black")
-                                        td(style="text-align:center; width: 35px") #{products[0].id}
+                                        td(style="text-align:center; width: 35px") #{products[0].id_product}
                                         td(style="text-align:center")
-                                            img(src=products[0].img[0] style="text-align: center;vertical-align: middle;width:75px;height:75px;border-radius:8px;object-fit:cover")
-                                        td(style="text-align:start; white-space:nowrap") #{products[0].name}
+                                            img(src=products[0].img_product[0] style="text-align: center;vertical-align: middle;width:75px;height:75px;border-radius:8px;object-fit:cover")
+                                        td(style="text-align:start; white-space:nowrap") #{products[0].name_product}
                                         td(style="text-align:center; white-space: nowrap") #{products.length}
-                                        td(style="font-weight:bold;text-align: center; white-space: nowrap") S/. #{products[0].price}
-            h4(style="font-size: 14.5px;border-radius: 8px ;border: 1px solid black; font-weight: bold; text-align: end; padding: 2.5px") Compra Total : S/. #{carritoCompras.reduce((total,[indice, productos]) => total + productos.reduce((subtotal,producto)=> subtotal+producto.price,0), 0)}
+                                        td(style="font-weight:bold;text-align: center; white-space: nowrap") S/. #{products[0].price_product}
+            h4(style="font-size: 14.5px;border-radius: 8px ;border: 1px solid black; font-weight: bold; text-align: end; padding: 5px 15px") Compra Total : S/. #{carritoCompras.reduce((total,[indice, productos]) => total + productos.reduce((subtotal,producto)=> subtotal+Number(producto.price_product),0), 0)}
         footer

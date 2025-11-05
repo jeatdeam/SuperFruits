@@ -6,6 +6,7 @@ type TypeCarritoContext = {
     count: number;
     incrementCount: (value: number) => void;
     carritoCompras: Products[];
+    refetchCarrito : ()=>void;
 }
 
 
@@ -40,7 +41,7 @@ export const useGetProducts =  ()=> {
 }
 
 export const CarritoProvider = ({children}) => {
-    const {data, carritoCompras} = useGetProducts();
+    const {data, carritoCompras, refetchCarrito} = useGetProducts();
     const [count, setCount] = useState<number>(data);
 
     useEffect(()=>{
@@ -56,7 +57,7 @@ export const CarritoProvider = ({children}) => {
     }
 
     return(
-        <CarritoContext.Provider value = {{count, incrementCount, carritoCompras}}>
+        <CarritoContext.Provider value = {{count, incrementCount, carritoCompras, refetchCarrito}}>
             {children}
         </CarritoContext.Provider>
     )

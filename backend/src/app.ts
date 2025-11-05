@@ -1,12 +1,17 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
+import type {Request, Response} from 'express';
 import path from 'path';
+import {fileURLToPath} from 'url';
 import morgan from 'morgan';
 import cors from 'cors';
 import helmet from 'helmet';
-import taskControllers from './controllers/taskControllers';
-import { formulario } from './services/generatePDF';
+import taskControllers from './controllers/taskControllers.ts';
+// import { formulario } from './services/generatePDF.ts';
 
 console.log('🟢 app.ts está iniciando...');
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = 4000;
@@ -19,8 +24,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // Vistas
-app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
 
 // Archivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
@@ -44,7 +49,8 @@ app.get('/lastIdCarrito', taskControllers.getLastIdProducts);
 
 
 app.post('/filterProductsBusqueda', taskControllers.busquedaProducts);
-
+app.post('/api/crear-sesion', taskControllers.crearSesion)
+app.post('/datosPago', taskControllers.generarSesion);
 
 app.post('/typeProduct', taskControllers.typeProduct);
 app.post('/addProductCarrito', taskControllers.addProductCarrito);

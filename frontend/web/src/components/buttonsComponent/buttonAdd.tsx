@@ -9,7 +9,7 @@ type PropsButton = {
 }
 
 export const ButtonAdd = forwardRef<HTMLButtonElement, PropsButton>(({id, activeIcon, refetch}, ref) => {
-    const {incrementCount} = useCarrito()
+    const {incrementCount} = useCarrito();
     const [flicked, setFlicked] = useState<boolean>(false);
 
     const sendProduct = async (
@@ -17,27 +17,25 @@ export const ButtonAdd = forwardRef<HTMLButtonElement, PropsButton>(({id, active
     ) => {
         setFlicked(true);
         await fetchAdd(id);
-        console.log('cuack add product despues del fetch');
     };
 
-
     const fetchAdd = async (id : string) => {
-        // console.log("aqui esta el id", id)
         const options = {
             method: 'POST',
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({id})
         }
-        console.log('aqui esta el id que estamos pasando -> ',id)
         try {
             const response = await fetch('http://localhost:4000/addProductCarrito', options);
             if (!response.ok) throw new Error(`Error al agregar el producto - type error -> ${response.status} : ${response.statusText}`);
             const result = await response.json();
-            //añadir al panel del carrito
-            incrementCount(result.carritoCompras?.length)
-            result.carritoCompras?.length && refetch();
-            console.log(result.carritoCompras)
-            // incrementCount(result.carritoCompras.length);
+            incrementCount(result.carritoCompras?.length);
+            // result.carritoCompras?.length && refetch();
+            if(result.carritoCompras?.length) {
+                console.log('-----si estamos haciendo refetch----')
+                refetch()
+                console.log('-----estamos saliendo del refetch----')
+            }
 
         } catch (error) {
             if (error instanceof Error) {

@@ -19,20 +19,19 @@ export type CarritoRefs = {
 
 
 export const Carrito = forwardRef<CarritoRefs,CarritoProps>( ({validate, closeWindow}, ref)=> {
-    const {data, refetch} = useGetCarrito()
+    const {count,carritoCompras, incrementCount,refetchCarrito} = useCarrito()
     const containerCarrito = useRef<HTMLDivElement|null>(null);
     const [total, setTotal] = useState<number|null>(null)
-    const {count, incrementCount} = useCarrito()
     const [mapProducts, setMapProducts] = useState<[string,Products[]][] | null>(null);
 
 
 
     useEffect(()=>{
-        setTotal(data?.length)
+        setTotal(carritoCompras?.length)
 
         const map = new Map<string, Products[]>();
 
-        data?.forEach((el, _) => {
+        carritoCompras?.forEach((el, _) => {
                 if(map.has(el.name_product)) {
                     map.get(el.name_product)?.push(el);
                 } else {
@@ -40,14 +39,14 @@ export const Carrito = forwardRef<CarritoRefs,CarritoProps>( ({validate, closeWi
                 }
         })
         setMapProducts([...map])
-    },[data])
+    },[carritoCompras])
 
     useImperativeHandle(ref,()=>({
         carrito : containerCarrito.current,
     }))
 
     useEffect(()=>{
-        refetch()
+        refetchCarrito()
     },[ count])
 
 
@@ -64,9 +63,9 @@ export const Carrito = forwardRef<CarritoRefs,CarritoProps>( ({validate, closeWi
                                     <h1 className={"text-[14px] leading-[1.1]"}>{value?.[0]?.name_product}</h1>
                                     <div className={"flex w-full justify-between items-center pr-[7.5px]"}>
                                         <div className={"w-[100px] h-[25px] flex relative justify-between items-center"}>
-                                            <LessProducts id={value?.[value.length-1].id_product} refetch={refetch}/>
-                                            <ButtonAdd id={value?.[0].id_product} activeIcon={true}/>
-                                            <DeleteGroup id={value?.[0].id_product} refetch={refetch} activePosition={false}/>
+                                            <LessProducts id={value?.[value.length-1].id_product} refetch={refetchCarrito}/>
+                                            <ButtonAdd id={value?.[0].id_product} activeIcon={true} refetch={refetchCarrito}/>
+                                            <DeleteGroup id={value?.[0].id_product} refetch={refetchCarrito} activePosition={false}/>
                                         </div>
                                         <b className={"text-[12.5px] font-semibold"}>S/. {value?.[0]?.price_product}</b>
                                     </div>
@@ -86,7 +85,7 @@ export const Carrito = forwardRef<CarritoRefs,CarritoProps>( ({validate, closeWi
                 </div>
 
                 <div className={"flex justify-between pr-[10px] items-center"}>
-                    <b className={"text-[14px]"}>Total: S/. {data?.reduce((total, product) => total + parseInt(String(product.price_product)) ,0)}</b>
+                    <b className={"text-[14px]"}>Total: S/. {carritoCompras?.reduce((total, product) => total + parseInt(String(product.price_product)) ,0)}</b>
                     <Link onClick={closeWindow} className={"flex gap-[5px]"} to={"/seccion-de-pagos"}>
                         <MasterCard/>
                         <DinersClub/>
@@ -101,7 +100,7 @@ export const Carrito = forwardRef<CarritoRefs,CarritoProps>( ({validate, closeWi
                 :
                 (
                 <div ref={containerCarrito} className={`absolute ${ validate ? "opacity-100" : "opacity-0"} right-1/2 translate-x-1/2 top-[135%]  transition-half size-[25px] rounded-full`}>
-                   <h1 className={"text-[12.5px] size-full flex items-center justify-center text-center bg-blue-300 rounded-full"}>{data?.length ?? 0}</h1>
+                   <h1 className={"text-[12.5px] size-full flex items-center justify-center text-center bg-blue-300 rounded-full"}>{carritoCompras?.length ?? 0}</h1>
                 </div>
                 )
 

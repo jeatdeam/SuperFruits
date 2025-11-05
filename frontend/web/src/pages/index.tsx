@@ -33,14 +33,9 @@ export function Index() {
 function Introduction() {
     const triggerRef = useRef<HTMLDivElement | null>(null);
     const triggerRefTwo = useRef<HTMLDivElement | null>(null);
-
-
     const groupCircle = useRef<(HTMLDivElement | null)[]>([])
-
-    const [activeTitleAguaje, setActiveTitleAguaje] = useState<boolean>(false)
-
-
     const categoryRef = useRef<HTMLDivElement | null>(null)
+    const [activeTitleAguaje, setActiveTitleAguaje] = useState<boolean>(false)
 
 
     const aguajeTitleContainer = useRef<HTMLHeadingElement | null>(null);
@@ -67,88 +62,201 @@ function Introduction() {
 
     useEffect(() => {
 
-        const ctx = gsap.context(() => {
-            ScrollTrigger.refresh();
+        const mm = gsap.matchMedia();
 
-            const allSpan = aguajeTitleContainer.current.querySelectorAll("span");
+        mm.add("(min-width: 768px)", () => {
 
+            const ctx = gsap.context(() => {
+                ScrollTrigger.refresh();
 
-            const tl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: triggerRef.current,
-                    start: "top top",
-                    end: "+=3000",
-                    scrub: true,
-                    pin: true,
+                const allSpan = aguajeTitleContainer.current.querySelectorAll("span");
+
+                const tl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: triggerRef.current,
+                        start: "top top",
+                        end: "+=3000",
+                        scrub: true,
+                        pin: true,
                     }
-            });
+                });
 
-            tl
-                .fromTo(aguajeTitleContainer.current, {opacity: 0},
-                    {scale: 1.25, opacity: 1, ease: "power2.inOut", duration: 2}, 0)
-                .fromTo(aguajeImg.current, {scale: 1.25, opacity: 1}, {
-                    scale: .75,
-                    opacity: 0,
-                    rotate: -360,
-                    ease: "power2.inOut",
-                    duration: 2
-                }, 2)
-                .fromTo(aguajeTwoImg.current, {opacity: 0, x: -800},
-                    {opacity: 1, x: -500, duration: 2}, "-=.25")
-                .to(allSpan, {
-                    y: () => gsap.utils.random(-200, 200),
-                    rotate: () => gsap.utils.random(-90, 90),
-                    opacity: 0,
-                    stagger: {each: .1, from: "center"},
-                    duration: 2,
-                    onComplete: () => {
-                        console.log('ya termino de animarse')
+                tl
+                    .fromTo(aguajeTitleContainer.current, {opacity: 1},
+                        {scale: 1.25, opacity: 1, ease: "power2.inOut", duration: 2}, 0)
+                    .fromTo(aguajeImg.current, {scale: 1, opacity: 1}, {
+                        scale: .75,
+                        opacity: 0,
+                        rotate: -360,
+                        ease: "power2.inOut",
+                        duration: 2
+                    }, 2)
+                    .fromTo(aguajeTwoImg.current, {opacity: 0, x: -800},
+                        {opacity: 1, x: -175, y: 60 ,duration: 2}, "-=.25")
+                    .to(allSpan, {
+                        y: () => gsap.utils.random(-200, 200),
+                        rotate: () => gsap.utils.random(-90, 90),
+                        opacity: 0,
+                        stagger: {each: .1, from: "center"},
+                        duration: 2,
+                        onComplete: () => {
+                            console.log('ya termino de animarse')
+                        }
+                    }, 2)
+                    .fromTo(aguajeDescriptionOne.current, {opacity: 0, x: -300, rotate: 360},
+                        {opacity: 1, x: 0, rotate: 0, ease: "power2.inOut", duration: 3}, 7)
+                    .fromTo(aguajeTitleJson.current, {opacity:0}, //segundo title de aguaje
+                        {opacity: 1,duration: 3},  7)
+                    .fromTo(aguajeInfoOne.current, {opacity: 0},
+                        {opacity: 1,duration: 3}, 10)
+                    .fromTo(aguajeDescriptionTwo.current, {opacity: 0, y: 300, rotate: 360},
+                        {opacity: 1, y: 0, rotate: 0, ease: "power2.inOut", duration: 3}, 13)
+                    .fromTo(aguajeInfoTwo.current, {opacity: 0},
+                        {opacity: 1, duration: 3}, 16)
+                    .fromTo(aguajeDescriptionThree.current, {opacity: 0, x: 300, rotate: 360},
+                        {opacity: 1, x: 0,rotate: 0, ease: "power2.inOut", duration: 3}, 19)
+                    .fromTo(aguajeInfoThree.current, {opacity: 0},
+                        {opacity: 1, duration: 3}, 22)
+
+                const tlTwo = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: triggerRefTwo.current,
+                        start: "top top",
+                        end: "bottom top",
+                        scrub: true,
+                        pin: true
                     }
-                }, 2)
-                .fromTo(aguajeDescriptionOne.current, {opacity: 0, x: -300, rotate: 360},
-                    {opacity: 1, x: 0, rotate: 0, ease: "power2.inOut", duration: 3}, 7)
-                .fromTo(aguajeTitleJson.current, {opacity:0},
-                    {opacity: 1, duration: 3},  7)
-                .fromTo(aguajeInfoOne.current, {opacity: 0},
-                    {opacity: 1, duration: 3}, 10)
-                .fromTo(aguajeDescriptionTwo.current, {opacity: 0, y: 300, rotate: 360},
-                    {opacity: 1, y: 0, rotate: 0, ease: "power2.inOut", duration: 3}, 13)
-                .fromTo(aguajeInfoTwo.current, {opacity: 0},
-                    {opacity: 1, duration: 3}, 16)
-                .fromTo(aguajeDescriptionThree.current, {opacity: 0, x: 300, rotate: 360},
-                    {opacity: 1, x: 0, rotate: 0, ease: "power2.inOut", duration: 3}, 19)
-                .fromTo(aguajeInfoThree.current, {opacity: 0},
-                    {opacity: 1, duration: 3}, 22)
+                })
 
-            const tlTwo = gsap.timeline({
-                scrollTrigger: {
-                    trigger: triggerRefTwo.current,
-                    start: "top top",
-                    end: "bottom top",
-                    scrub: true,
-                    pin: true
-                }
+                const allSpanCamu = containerTitleCamu.current.querySelectorAll("span");
+
+                tlTwo
+                    .fromTo(aguajeFourImg.current, {x: -400, opacity: 0},
+                        {x: 0, opacity: 1, duration: 1}, 1)
+                    .fromTo(allSpanCamu, {opacity: 1, x : 0, y : 0 },
+                        {x: () => gsap.utils.random(-300, 300), y : () => gsap.utils.random(-200, -100), rotate: () => gsap.utils.random(-60,60) ,opacity: 0,stagger: {each: .2, from: "end"} },"<")
+                    .fromTo(titleCamuTwo.current, {opacity: 0},
+                        {opacity: 1, duration: 2}, 3)
+            }, triggerRef);
+
+            gsap.to(cilindro.current, {rotationY: "+=360", duration:8, ease: "none",repeat: -1})
+
+
+            return () => {
+                ctx.revert();
+                ScrollTrigger.killAll();
+            };
+        })
+
+        mm.add('(max-width: 767px)', () => {
+            console.log('version movil: gsap desactivado o animaciones simples')
+            const ctx = gsap.context(() => {
+
+            const allSpans = aguajeTitleContainer.current!.querySelectorAll('span');
+
+
+                gsap.fromTo( allSpans, {
+                    x: () => gsap.utils.random(-300,200),
+                    opacity:0,
+                } ,{
+                        scrollTrigger : {
+                            trigger: triggerRef.current,
+                            start: 'top 90%',
+                            end: 'bottom bottom',
+                            toggleActions: 'play none none none',
+                            scrub: true,
+                            // markers: true,
+                        },
+                        x: 0,
+                        opacity: 1,
+                        duration: 1,
+                })
+
+                gsap.fromTo(aguajeImg.current, {
+                    opacity: 1 },{
+                        scrollTrigger: {
+                            trigger: triggerRef.current,
+                            start: 'top 50%',
+                            end: 'bottom 95%',
+                            scrub: true,
+                            markers: true,
+                        },
+                    opacity: 0,
+                    rotate: 360,
+                })
+
+                gsap.fromTo(aguajeTwoImg.current, {
+                    opacity: 0,
+                }, {
+                    scrollTrigger: {
+                        trigger: triggerRef.current,
+                        start: 'top 7.5%',
+                        end: 'bottom bottom',
+                        toggleActions: 'play none none none',
+                        scrub: true,
+                        markers: true,
+                    },
+                    opacity:1,
+                })
+
+                gsap.fromTo(aguajeDescriptionOne.current, {
+                    opacity: 0,
+                },{
+                    scrollTrigger: {
+                        trigger: triggerRef.current,
+                        start: 'top 5%',
+                        end: 'bottom bottom',
+                        toggleActions: 'play none none none',
+                        scrub: true,
+                        markers: true,
+                    },
+                    opacity: 1,
+                })
+
+                gsap.fromTo(aguajeDescriptionTwo.current, {
+                    opacity: 0,
+                }, {
+                    scrollTrigger: {
+                        trigger: triggerRef.current,
+                        start: 'top 2.5%',
+                        end: 'bottom bottom',
+                        toggleActions: 'play none none none',
+                        scrub: true,
+                        markers: true,
+                    },
+                    opacity: 1,
+                })
+
+                gsap.fromTo(aguajeDescriptionThree.current, {
+                    opacity: 0,
+                }, {
+                    scrollTrigger: {
+                        trigger: triggerRef.current,
+                        start: 'top 0%',
+                        end: 'bottom bottom',
+                        toggleActions: 'play none none none',
+                        scrub: true,
+                        markers: true,
+                    },
+                    opacity: 1,
+                })
+
+
+
+
+
             })
-
-            const allSpanCamu = containerTitleCamu.current.querySelectorAll("span");
-
-            tlTwo
-                .fromTo(aguajeFourImg.current, {x: -400, opacity: 0},
-                {x: 0, opacity: 1, duration: 1}, 1)
-                .fromTo(allSpanCamu, {opacity: 1, x : 0, y : 0 },
-                    {x: () => gsap.utils.random(-300, 300), y : () => gsap.utils.random(-200, -100), rotate: () => gsap.utils.random(-60,60) ,opacity: 0,stagger: {each: .2, from: "end"} },"<")
-                .fromTo(titleCamuTwo.current, {opacity: 0},
-                    {opacity: 1, duration: 2}, 3)
-        }, triggerRef);
-
-        gsap.to(cilindro.current, {rotationY: "+=360", duration:8, ease: "none",repeat: -1})
+            return () => ctx.revert()
 
 
-        return () => {
-            ctx.revert();
-            ScrollTrigger.killAll();
-        };
+
+
+        })
+
+        return () => mm.revert();
     }, []);
+
+
 
     const refInterval = useRef<number|null>(null);
     const containerSlider = useRef<HTMLDivElement | null>(null)
@@ -275,14 +383,6 @@ function Introduction() {
                     if((self.progress)*100 > 69) {
                         // console.log('cuackkk')
                     }
-
-                    // 0.2338 < self.progress < 0.31716 && gsap.to(allCamuBoxOne.current, {opacity: 1, duration: .05})
-                    // 0.2338 < self.progress < 0.31716 && gsap.to(allCamuBoxTwo.current, {opacity: 1, duration: .05})
-                    // 0.2338 < self.progress < 0.31716 && gsap.to(allCamuBoxThree.current, {opacity: 1, duration: .05})
-
-                    // self.progress < 0.4 && gsap.to(spansContainerOne, {opacity: 0, duration: .10})
-                    // self.progress < 0.678 && gsap.to(spansContainerThree, {opacity: 0, duration: .10})
-                    // self.progress < 0.8445 && gsap.to(spansContainerTwo, {opacity: 0, duration: .10})
                     console.log(self.progress)
                     self.progress >= 0.41 && gsap.to(allCamuBoxOne.current,{opacity : 0, duration: .05})
                     self.progress >= 0.679 && gsap.to(allCamuBoxTwo.current, {opacity: 0, duration: .05})
@@ -376,12 +476,7 @@ function Introduction() {
 
                 }
 
-
-
             },2)
-
-            // .to(allSpan, {xPercent: ()=> gsap.utils.random(-200,200), yPercent: ()=> gsap.utils.random(-300,300), duration: .25},3)
-
 
             .to(allCamuBoxOne.current, {
                 x: (indice,el)=>{
@@ -536,7 +631,6 @@ function Introduction() {
                     },
                 }, ">")
 
-
             .fromTo(circle3D.current, {
                     scale: .75,
                     opacity: 0,
@@ -566,15 +660,12 @@ function Introduction() {
 
     },[])
 
-
-
     return (
         <div id={"smooth-wrapper"}>
             <div id={"smooth-content"}>
 
                 <div className="text-white font-sans relative overflow-hidden ">
-                    <div ref={categoryRef}
-                         className={`border-2 relative w-full h-[1050px] mx-auto flex flex-col justify-center`}>
+                    <div ref={categoryRef} className={`border-8 border-red-500 relative w-full h-[1050px] mx-auto flex flex-col justify-center`}>
 
                         <div ref={containerSlider}
                              className={`    flex w-full  ${isTransitioning ? "transition-transform duration-500" : ""} translate-x-[-100%]  ${distanceOne === "right" ? "translate-x-[-200%]" : ""}    ${distanceOne === "left" ? "translate-x-[0] " : ""}`}
@@ -597,10 +688,28 @@ function Introduction() {
                                 ))
                             }
                         </div>
-                        <div className="absolute w-full flex justify-between top-1/2 -translate-y-1/2">
-                            <div onClick={() => onUserClick("left")} className="size-[50px] border-2"/>
-                            <div onClick={() => onUserClick("right")} className="size-[50px] border-2"/>
+                        <div className="absolute w-full flex justify-between items-center top-1/2 -translate-y-1/2">
+                            <svg
+                                onClick={() => onUserClick("left")}
+                                className="w-[50px] translate-x-[25%] aspect-square rounded flex items-center justify-center"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 -960 960 960"
+                                fill="#e3e3e3"
+                            >
+                                <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z"/>
+                            </svg>
+
+                            <svg
+                                onClick={() => onUserClick("right")}
+                                className="w-[50px] rounded flex items-center justify-center"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 -960 960 960"
+                                fill="#e3e3e3"
+                            >
+                                <path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z"/>
+                            </svg>
                         </div>
+
 
 
                     </div>
@@ -612,30 +721,30 @@ function Introduction() {
                                  className={"w-full h-[300px] flex justify-center items-center"}>
                                 {
                                     ("Aguaje").split('').map((char, index) => (
-                                        <span className={"text-[175px] inline-block"} key={index}>{char}</span>
+                                        <span className={"text-[135px] md:text-[150px] lg:text-[175px] inline-block"} key={index}>{char}</span>
                                     ))
                                 }
                             </div>
                             <div ref={aguajeTitleJson}
-                                 className={"text-[250px] leading-none absolute top-0 left-1/2 -translate-x-1/2"}>
+                                 className={"opacity-0 text-[250px] md:text-[200px] md:leading-[1.5] lg:text-[250px] lg:leading-none absolute top-0 left-1/2 -translate-x-1/2"}>
                                 Aguaje
                             </div>
                         </div>
                         <div className={" relative  w-full h-[700px]"}>
 
-                            <div className={"w-3/5  mx-auto"}>
+                            <div className={"w-full flex justify-center h-[700px]  mx-auto relative"}>
                                 <img ref={aguajeImg}
                                      className={"bg-transparent absolute w-[1024px] h-[700px] object-contain"}
                                      src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1750643317/DeWatermark.ai_1750642722000-Photoroom_zenofw.webp"
                                      alt=""/>
                                 <img ref={aguajeTwoImg}
-                                     className={"bg-transparent absolute w-[1024px] h-[700px] origin-left size-[80%] object-contain"}
+                                     className={"w-[350px] left-[-25px] transition-half md:w-[400px] lg:w-[450px] lg:left-[200px] bg-transparent absolute xl:w-[550px] xl:left-[250px] 2xl:w-[600px] 2xl:left-[300px] h-[700px] origin-left object-contain"}
                                      src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1750646066/plato_echado-Photoroom_xndrsi.webp"
                                      alt=""/>
 
-                                <div ref={aguajeDescriptionOne} className={"absolute left-[40%] top-[5%] "}>
+                                <div ref={aguajeDescriptionOne} className={"top-[0%] xl:left-[45%] absolute left-[40%] md:top-[5%] "}>
                                     <div className={"relative"}>
-                                        <img className={"size-[250px] object-contain"}
+                                        <img className={" size-[150px] md:size-[175px] lg:size-[200px] xl:size-[225px] object-contain"}
                                              src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1750642021/aguaje-pelado-transparente_gfs3jv.webp"
                                              alt=""/>
                                         <div ref={aguajeInfoOne}
@@ -648,9 +757,9 @@ function Introduction() {
                                 </div>
 
                                 <div ref={aguajeDescriptionTwo}
-                                     className={"absolute left-[57.5%] bottom-[10%]"}>
+                                     className={"absolute left-[57.5%] md:bottom-[10%] bottom-[2.5%]"}>
                                     <div className={"relative"}>
-                                        <img className={"size-[300px] object-contain"}
+                                        <img className={"size-[175px] md:size-[200px] lg:size-[225px] xl:size-[250px] object-contain"}
                                              src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1750642074/pote-invisible_kuuyuf.webp"
                                              alt=""/>
                                         <div ref={aguajeInfoTwo}
@@ -663,9 +772,9 @@ function Introduction() {
                                 </div>
 
                                 <div ref={aguajeDescriptionThree}
-                                     className={"absolute left-[75%] top-[17.5%]"}>
+                                     className={"absolute left-[75%] md:top-[17.5%] top-[30%]"}>
                                     <div className={"relative"}>
-                                        <img className={"size-[300px] object-contain"}
+                                        <img className={"size-[175px] md:size-[200px] lg:size-[225px] xl:size-[300px] object-contain"}
                                              src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1750642021/aguajina-invisible_oaj3qf.webp"
                                              alt=""/>
                                         <div ref={aguajeInfoThree}
@@ -685,7 +794,7 @@ function Introduction() {
                     <div ref={triggerRefTwo} className={"h-[100vh] w-full bg-red-600 flex flex-col items-center"}>
 
                         <div className={"relative h-[475px] text-[175px] flex items-center justify-center"}>
-                            <div ref={containerTitleCamu}>
+                            <div className={"border-8"} ref={containerTitleCamu}>
                                 {
                                     "Camu-Camu".split('').map((char, indice) => (
                                         <span className={"leading-none inline-block"} key={indice}>{char}</span>
@@ -705,15 +814,15 @@ function Introduction() {
                         </div>
                     </div>
 
-                    <div className={"overflow-hidden bg-red-400"} ref={containerRefCamu}>
+                    <div className={"overflow-hidden bg-red-400 border-8"} ref={containerRefCamu}>
                         <div className={"relative flex h-screen items-center"} ref={horizontalTitleCamu}>
 
                             <div ref={horizontalTitleCamu} className={"z-10 relative section min-w-full h-full  items-center justify-center flex text-center text-black"}>
-                                <img ref={imgCamuOne} className={"drop-shadow-[0px_0px_15px_rgba(0,0,0,.90)] absolute right-0 top-[40%] z-[-1]"} src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1752414254/camu_camu-Photoroom_dm1ahl.webp" alt=""/>
-                                <img ref={imgCamuTwo} className={"drop-shadow-[0px_0px_15px_rgba(0,0,0,.90)] absolute left-[0] top-[10%] z-[-1] rotate-[90deg]"} src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1752414254/camu_camu-Photoroom_dm1ahl.webp" alt=""/>
+                                <img ref={imgCamuOne} className={"md:h-[800px] md:w-[900px] md:top-[54%] md:right-[-75px] 2xl:w-[1100px] 2xl:h-[900px]  border-4 border-yellow-400 drop-shadow-[0px_0px_15px_rgba(0,0,0,.90)] absolute right-0 top-[40%] 2xl:top-[42.5%] 2xl:right-[-125px] z-[-1] md:rotate-180"} src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1752414254/camu_camu-Photoroom_dm1ahl.webp" alt=""/>
+                                <img ref={imgCamuTwo} className={"md:w-[900px] md:h-[700px] 2xl:w-[1100px] 2xl:h-[900px] md:left-[-250px] md:top-[25px] border-4 drop-shadow-[0px_0px_15px_rgba(0,0,0,.90)] absolute left-[0] top-[10%] z-[-1] rotate-[90deg]"} src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1752414254/camu_camu-Photoroom_dm1ahl.webp" alt=""/>
 
                             </div>
-                            <div ref={cuackCamu} className={"absolute whitespace-nowrap top-1/2 -translate-y-1/2 left-1/2 text-[150px] -translate-x-1/2 z-[20]"}>
+                            <div ref={cuackCamu} className={"absolute whitespace-nowrap top-1/2 -translate-y-1/2 left-1/2 md:text-[125px] 2xl:text-[200px] text-[150px] font-bold -translate-x-1/2 z-[20]"}>
                                 {
                                     "Camu Camu".split('').map((char, indice) => (
                                         <h1 key={indice} className={"inline-block"}>{char === " " ? '\u00A0' : char}</h1>
@@ -810,7 +919,7 @@ const AguajeSvg = forwardRef<SVGSVGElement, SvgProps>(({isActive}, ref) => {
     return (
         <svg
             ref={ref}
-            className={`${isActive ? "aguajeSvg" : ""}  slideElement aguaje w-full h-[500px] border-violet-600 border-4`}
+            className={`${isActive ? "aguajeSvg" : ""}  slideElement aguaje w-full h-[500px]`}
             id="Capa_1"
             data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 431.23 177.39">
             <path

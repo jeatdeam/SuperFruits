@@ -3,17 +3,24 @@ import {b} from "vite/dist/node/moduleRunnerTransport.d-DJ_mE5sf";
 import {useProceso} from "../../contexts/procesoDeCompraContext.tsx"
 import {useCarrito} from "../../contexts/carritoContext.tsx"
 import {useGetProducts} from "../../contexts/carritoContext.tsx";
-import {useCompleteForm} from "../../zustand/useCompleteForm.tsx"
 import {useWaitUntil} from "../../zustand/useWaitUntil.tsx";
-
+import {useCompleteForm} from "../../zustand/useCompleteForm.tsx"
+import {FormToken} from "../../zustand/useFormToken.tsx";
+import KRGlue from '@lyracom/embedded-form-glue';
+import {products} from "prisma-client-31dbe9c101021983b522dcd6c0571e96b28b45ea83036d11b435b0030c41a9f6";
+import {useNavigate} from 'react-router-dom'
+import Decimal from 'decimal.js'
 
 type PropsForm = {
     state: boolean;
-    setState: (prev : boolean) => void;
 }
 
-export const FormCompras = ({state, setState}:PropsForm) => {
+export const FormCompras = ({state} : PropsForm) => {
 
+    const navigate = useNavigate();
+    const {updateValueFormToken, updatePublicKey} = FormToken();
+
+    const {completeForm, toggleCompleteForm} = useCompleteForm()
     const {refProcess, setCheckFormulario} = useProceso()
     const {statusForm, changeStatusForm} = useCompleteForm();
     const {statusSpinner, changeStatusSpinner} = useWaitUntil();
@@ -23,6 +30,7 @@ export const FormCompras = ({state, setState}:PropsForm) => {
     const [indice, setIndice] = useState<number>(1);
     const [activeEnvio, setActiveEnvio] = useState<boolean>(true);
     const directionRef = useRef<HTMLInputElement|null>(null)
+
     const [validateInputs, setValidateInputs] = useState<boolean>(true)
 
 
@@ -57,6 +65,17 @@ export const FormCompras = ({state, setState}:PropsForm) => {
     const allCheckEnvio = useRef<boolean[]>([validateName, validateLastName, validateEmail, validatePhone, validateDepartamento, validateProvincia, validateDistrito, validateDireccion, validateCourier]);
 
     useEffect(()=>{
+
+        // console.log('activeEnvio -> ', activeEnvio);
+        // console.log('validateName -> ', validateName);
+        // console.log('validateLastName -> ', validateLastName);
+        // console.log('validateEmail -> ', validateEmail);
+        // console.log('validatePhone -> ', validatePhone);
+        // console.log('validateDepartamento -> ', validateDepartamento);
+        // console.log('validateProvincia -> ', validateProvincia);
+        // console.log('validateDistrito -> ', validateDistrito);
+        // console.log('validateDireccion -> ', validateDireccion);
+        // console.log('validateCourier -> ', validateCourier);
 
         if(activeEnvio) {
             if (validateName && validateLastName && validateEmail && validatePhone && validateDepartamento && validateProvincia && validateDistrito && validateDireccion && validateCourier) {
@@ -114,12 +133,29 @@ export const FormCompras = ({state, setState}:PropsForm) => {
 
         e.preventDefault()
         // await refetchCarrito();
+        // console.log('vamos a pasar a mostrar que campos estan completos')
+        // console.log('activeEnvio -> ', activeEnvio);
+        // console.log('validateName -> ', validateName);
+        // console.log('validateLastName -> ', validateLastName);
+        // console.log('validateEmail -> ', validateEmail);
+        // console.log('validatePhone -> ', validatePhone);
+        // console.log('validateDepartamento -> ', validateDepartamento);
+        // console.log('validateProvincia -> ', validateProvincia);
+        // console.log('validateDistrito -> ', validateDistrito);
+        // console.log('validateDireccion -> ', validateDireccion);
+        // console.log('validateCourier -> ', validateCourier);
+
         allCheck ? setValidateInputs(true) : setValidateInputs(false);
 
 
         const fetchFormulario = async () => {
 
+            const amount: Decimal = carritoCompras.reduce(
+                (total: Decimal, el) => total.add(el.price_product),
+                new Decimal(0)
+            );
 
+            console.log('el amount en el frontend es -> ', amount.toNumber())
             const usuario = activeEnvio ?
                 {
                     nombre: valueName,
@@ -133,6 +169,8 @@ export const FormCompras = ({state, setState}:PropsForm) => {
                     direccion: valueDireccion,
                     courierDelivery: courier(),
                     textArea: valueTextArea,
+                    amount,
+                    activeEnvio
                 } :
                 {
                     nombre: valueName,
@@ -140,6 +178,8 @@ export const FormCompras = ({state, setState}:PropsForm) => {
                     email: valueEmail,
                     phone: valuePhone,
                     phoneTwo: valuePhoneTwo,
+                    amount,
+                    activeEnvio
                 }
 
             const url = "http://localhost:4000/formulario"
@@ -154,10 +194,14 @@ export const FormCompras = ({state, setState}:PropsForm) => {
                 if(!response.ok) throw new Error(`Error en la peticion - ${response.status} : ${response.statusText}`)
                 const result = await response.json()
 
+                console.log('aqui esta el result del formulario-> ',result)
                 result.ok ? setCheckFormulario(true) : setCheckFormulario(false)
-                result.ok && setState(false);
-                result.ok && changeStatusForm()
+                result.ok && toggleCompleteForm();
+                result.ok && changeStatusForm();
+                result.ok && updateValueFormToken(result.formToken);
+                result.ok && updatePublicKey(result.publicKey);
                 changeStatusSpinner()
+                navigate("/pagoProducts",{state:result})
 
             }catch(err){
                 console.error(err.message)
@@ -173,7 +217,7 @@ export const FormCompras = ({state, setState}:PropsForm) => {
 
     }
     return(
-        <section className={`${ state ? "opacity-100 pointer-events-auto showItem" : "opacity-0 pointer-events-none"} transition-half min-h-[275px] w-[500px] relative border-2 border-gray-200 shadow-[0px_0px_2px_2px_rgba(0,0,0,.5)] p-[15px] rounded-[7.5px]`}>
+        <section className={`${ state ? "showItem" : "hidden"} transition-half min-h-[275px] w-[500px] relative border-4 border-gray-200 shadow-[0px_0px_2px_2px_rgba(0,0,0,.5)] p-[15px] rounded-[7.5px]`}>
             <form className={"flex flex-col gap-[15px]"}>
 
                 <button onClick={(e : React.MouseEvent) => { e.preventDefault(); setActiveEnvio(prev=>!prev) } } className={`${ activeEnvio ? "bg-yellow-500" : "bg-blue-300"}  w-[250px] self-center rounded-[7.5px] h-[30px]`}>{`${activeEnvio ? "Envio del producto" : "Recojo en tienda"}`}</button>
@@ -211,7 +255,7 @@ export const FormCompras = ({state, setState}:PropsForm) => {
                                     <InputText indicador={"Provincia"} tipo={"text"} requiredText={true} placeholderName={"provincia"} validate={setValidateProvincia} setName={setValueProvincia}/>
                                 </div>
                                 <InputText indicador={"Distrito"} tipo={"text"} requiredText={true} placeholderName={"distrito"} validate={setValidateDistrito} setName={setValueDistrito}/>
-                                <InputDirection/>
+                                <InputDirection validate={setValidateDireccion} setDireccion={setValueDireccion}/>
                         </div>
                         {
                             indice &&
@@ -235,7 +279,7 @@ export const FormCompras = ({state, setState}:PropsForm) => {
                         {
                             activeTextArea &&
                             <div>
-                                <textarea className={"w-full rounded-[7.5px] p-[5px] border-2 border-gray-500"} onBlur={(e)=>setValueTextArea(e.currentTarget.value)} name="infoEnvio" id="" cols="30" rows="10" placeholder={"ingrese sede y lugar de recojo "}></textarea>
+                                <textarea className={"w-full rounded-[7.5px] p-[5px] border-2 border-gray-500"} onBlur={(e)=> {setValueTextArea(e.currentTarget.value)}} name="infoEnvio" id="" cols="30" rows="10" placeholder={"ingrese sede y lugar de recojo "}/>
                             </div>
                         }
                     </div>
@@ -467,7 +511,13 @@ const InputPhone = ({indicador, tipo, activeRequired, placeholderPhone, validate
     )
 }
 
-const InputDirection = () => {
+
+type PropsDirection = {
+    validate : (prev: boolean) => void;
+    setDireccion : (prev: string) => void;
+}
+
+const InputDirection = ({validate, setDireccion} : PropsDirection) => {
     const directionRef = useRef<HTMLInputElement|null>(null)
     const [activeError, setActiveError] = useState<boolean>(false);
     const [activeCheck, setActiveCheck] = useState<boolean>(false);
@@ -483,11 +533,13 @@ const InputDirection = () => {
         if(txt === "") {
             setActiveError(true);
             setActiveCheck(false);
+            validate(false);
         } else {
             setActiveError(false);
             setActiveCheck(true);
+            validate(true);
+            setDireccion(txt)
         }
-
 
    }
 

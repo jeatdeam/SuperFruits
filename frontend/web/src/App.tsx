@@ -1,4 +1,3 @@
-
 import {Index} from "./pages/index.tsx"
 import {ContainerSearch} from "./components/headerComponents/containerSearch.tsx";
 import {Menu} from "./components/headerComponents/menu.tsx";
@@ -14,13 +13,15 @@ import {ProcesoCompraProvider} from "./contexts/procesoDeCompraContext.tsx";
 import {ProcesoDeCompra} from "./components/bodyComponents/procesoDeCompra.tsx";
 import {InfoProduct} from "./pages/infoProduct.tsx";
 import {PayProducts} from "./pages/payProducts.tsx";
-
+import {IziPayForm} from "./pages/iziPayForm.tsx"
+import {NotFound} from "./pages/notFound.tsx";
 
 import './App.css';
 import {LayoutConProceso} from "./pages/layoutConProceso.tsx";
 
 import {useActive} from './zustand/useActiveStore.tsx'
-
+import {ErrorPage} from './pages/comprasError.tsx'
+import {SuccessPage} from './pages/compraSuccess.tsx'
 
 
 function App() {
@@ -36,7 +37,12 @@ function App() {
                              <Route path="/:product" element={<ProductsCards/>}/>
                              <Route path="/:product/:name" element={<InfoProduct/>} />
                              <Route path="/seccion-de-pagos" element={<PayProducts/>}/>
+                             <Route path="/pagoProducts" element={<IziPayForm/>}/>
+                             <Route path="/errorPage" element={<ErrorPage/>}/>
+                             <Route path="/successPage" element={<SuccessPage/>}/>
                          </Route>
+                            {/* ruta de fallback */}
+                            <Route path={"*"} element={<NotFound/>}></Route>
                         </Routes>
                         <Footer/>
                     </ProcesoCompraProvider>

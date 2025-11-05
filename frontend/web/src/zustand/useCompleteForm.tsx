@@ -1,15 +1,18 @@
-import {create} from "zustand";
+import {create} from 'zustand'
 
-type CompleteFormState = {
-    statusForm : boolean;
-    changeStatusForm : () => void;
+
+type FormProps = {
+    statusForm: boolean;
+    changeStatusForm: () => void;
     restartForm: () => void;
+    completeForm: boolean;
+    toggleCompleteForm: () => void;
 }
 
- export const useCompleteForm = create<CompleteFormState>((set,get)=>({
-    statusForm : false,
-    changeStatusForm : () => set((state)=> ({statusForm: !state.statusForm})),
-    restartForm : () => set({statusForm: false}),
+export const useCompleteForm = create<FormProps>((set)=>({
+    statusForm: false,
+    changeStatusForm : () => set((state)=>({statusForm:!state.statusForm})),
+    restartForm: () => set(({statusForm: false})),
+    completeForm: false,
+    toggleCompleteForm: () => set((state)=>({completeForm:!state.completeForm}))
 }))
-
-

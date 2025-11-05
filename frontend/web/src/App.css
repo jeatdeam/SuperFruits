@@ -236,6 +236,27 @@ body{
     /*background-position: left center;*/
 }
 
+/* Forzar botón al centro */
+/* Forzar que el botón del SDK quede centrado */
+
+.kr-payment-button{
+    text-align: center !important;
+}
+
+.animation-spinner{
+    animation: spinner 1s infinite linear;
+}
+
+@keyframes spinner {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+
 .title-two{
     background: linear-gradient(to right, rgba(255,192,203,.5), pink 20%);
     /*backdrop-filter: blur(4px);*/
@@ -379,6 +400,9 @@ body{
 }
 /*end-Header 424 371 503.5*/
 
+.noSelectUser{
+    user-select: none;
+}
 
 .containerCheck{
     position: relative;
@@ -452,14 +476,14 @@ body{
     }
 }
 
-@keyframes spinner {
-    0%{
-        transform: rotate(0);
-    }
-    100%{
-        transform: rotate(360deg);
-    }
-}
+/*@keyframes spinner {*/
+/*    0%{*/
+/*        transform: rotate(0);*/
+/*    }*/
+/*    100%{*/
+/*        transform: rotate(360deg);*/
+/*    }*/
+/*}*/
 
 
 .fade-in-section {

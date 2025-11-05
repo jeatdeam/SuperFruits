@@ -9,24 +9,30 @@ import {useBlurMenu} from "../zustand/useBlurMenu.tsx"
 import {Products} from '../components/headerComponents/searchIcon.tsx'
 import {ClearCarrito} from '../components/buttonsComponent/clearCarrito.tsx'
 import {useCompleteForm} from '../zustand/useCompleteForm.tsx'
+import {useCarrito} from '../contexts/carritoContext.tsx'
+import {ButtonPay} from '../components/buttonsComponent/buttonIziPay.tsx'
 
 
 import {useWaitUntil} from "../zustand/useWaitUntil.tsx";
 
+
 export const PayProducts = () => {
-    const { data, refetch } = useGetCarrito();
+    // const { data, refetch } = useGetCarrito();
+    const {carritoCompras, refetchCarrito} = useCarrito();
     const [animateIndex, setAnimateIndex] = useState<number | null>(null);
     const {switchBlur} = useBlurSearch();
     const {activeBlur} = useBlurMenu();
     const [mapProducts, setMapProducts] = useState<[string,Products[]][]|null>(null)
-    const {statusForm, changeStatusForm, restartForm} = useCompleteForm();
+    const {statusForm, changeStatusForm, restartForm, completeForm} = useCompleteForm();
     const {statusSpinner} = useWaitUntil();
+    const [activeDelay, setActiveDelay] = useState<boolean>(true)
+    // const [activeForm, setActiveForm] = useState<boolean|null>(false);
 
 
     useEffect(()=>{
         const map = new Map<string,Products[]>(null)
 
-        data?.forEach(product=>{
+        carritoCompras?.forEach(product=>{
             if(map.has(product.id_product)) {
                 map.get(product.id_product)?.push(product)
             } else {
@@ -35,24 +41,17 @@ export const PayProducts = () => {
         })
         setMapProducts([...map])
 
-    },[data])
+    },[carritoCompras])
 
-    const sendProductsToPay = () => {
-
-
-
-        console.log('gaaaaaaaaaaaaaaaaaaaaaaa')
-    }
-
-    const [activeForm, setActiveForm] = useState<boolean|null>(false);
 
     return (
-        <section className={"relative"}>
+          <section className={"relative"}>
             <main className={`${statusSpinner ? "blur-[20px]" : ""} ${switchBlur? "blur-[20px]" : ""} ${activeBlur? "blur-[20px]" : ""} w-3/4 mx-auto flex flex-col gap-[25px] pb-[25px]`}>
-                <h1 className="text-titleResponsive text-center leading-none z-0">{ ((mapProducts?.length ?? 0) > 0) ? "Seccion de pagos" : "Ups...Necesita agregar productos al carrito"}</h1>
+                <h1 className="text-titleResponsive text-center leading-none z-0">{ ((mapProducts?.length ?? 0) > 0) ? "Sección de pagos" : "Ups...Necesita agregar productos al carrito"}</h1>
 
-                <div className={"flex justify-center"}>
-                    <div className="flex flex-wrap gap-[25px] justify-center p-[10px] transition-half">
+                {((mapProducts?.length ?? 0) > 0) &&
+                <div className={`flex showItem lg:flex-row lg:items-center  flex-col gap-[25px] justify-center items-center`}>
+                    <div onTransitionEnd={()=>{setActiveDelay(false)}} className={`${ statusForm ? "hidden" : "showItem"} max-w-[900px] justify-center flex flex-wrap content-start gap-[25px] p-[10px] transition-half`}>
                         {((mapProducts?.length ?? 0) > 0) && mapProducts?.map(([_, value], index) => (
                             <section
                                 key={index}
@@ -79,7 +78,7 @@ export const PayProducts = () => {
                                 <div className="flex w-1/2 justify-between">
                                     <LessProducts
                                         id={value[0].id_product}
-                                        refetch={refetch}
+                                        refetch={refetchCarrito}
                                     />
                                     <small className="rounded-full size-[25px] flex items-center justify-center shadow-[0_0_3.5px_rgba(0,0,0,1)]">
                                         {value.length}
@@ -87,39 +86,46 @@ export const PayProducts = () => {
                                     <ButtonAdd
                                         id={value[0].id_product}
                                         activeIcon={true}
-                                        refetch={refetch}
+                                        refetch={refetchCarrito}
                                     />
                                 </div>
 
-                                <DeleteGroup id={value[0].id_product} refetch={refetch} activePosition={true}/>
+                                <DeleteGroup id={value[0].id_product} refetch={refetchCarrito} activePosition={true}/>
                             </section>
                         ))}
                     </div>
 
-                    { activeForm && <FormCompras state={activeForm} setState={setActiveForm}/> }
+                    { !completeForm && <FormCompras state={statusForm}/> }
 
-                </div>
+                </div> }
 
                 <div className={"flex w-full justify-between"}>
                     { (mapProducts?.length ?? 0) > 0 && <h1 className={"font-medium border-b-2 border-gray-900 px-[5px] py-[2.5px] h-[35px] w-[125px] text-center showItem"}>
                         Total: S/. {mapProducts?.reduce((total,[_,value]) => total + value.reduce((subTotal, el) => subTotal + parseInt(String(el.price_product)) , 0) ,0)}
 
                     </h1>}
-                    { (mapProducts?.length ?? 0 )> 0 && <button className={`showItem ${ statusForm ? "hidden": "pointer-events-auto block"} font-medium border-2 border-gray-500 px-[5px] py-[2.5px] h-[35px] w-[125px] text-center rounded-[7.5px]`} onClick={ () => setActiveForm(prev=>!prev)} >rellenar datos</button> }
+                    { (mapProducts?.length ?? 0 )> 0 && <button className={`showItem ${ completeForm ? "hidden": "pointer-events-auto block"} font-medium border-2 border-gray-500 px-[5px] py-[2.5px] h-[35px] w-[125px] text-center rounded-[7.5px]`} onClick={ () => changeStatusForm()} >rellenar datos</button> }
 
-                    { (((mapProducts?.length ?? 0)>0) && statusForm) && <button className={"showItem border-2 border-gray-500 px-[5px] py-[2.5px] h-[35px] rounded-[7.5px] w-[125px] text-center font.medium"} onClick={sendProductsToPay}>pagar</button>}
+                    { (((mapProducts?.length ?? 0)>0) && completeForm) && <ButtonPay/> }
 
-                    { (mapProducts?.length ?? 0) > 0 && <ClearCarrito refetch={refetch}/> }
+                    { (mapProducts?.length ?? 0) > 0 && <ClearCarrito refetch={refetchCarrito}/> }
 
 
                 </div>
 
             </main>
             {statusSpinner &&
-                <div className={"size-[150px] bg-blue-500 rounded-full top-1/2 left-1/2 absolute -translate-x-1/2 -translate-y-1/2"}/>
-            }
-        </section>
+                <div className={"size-[200px] flex items-center justify-center bg-white rounded-full top-1/2 left-1/2 absolute -translate-x-1/2 -translate-y-1/2"}>
+                    <div className={"relative flex items-center justify-center"}>
+                        <div className={"absolute top-1/2 left-1/2 size-[200px] border-8 animation-spinner rounded-full border-blue-500 border-l-white"}/>
+                        <div className={"flex items-center justify-center"}>
+                            cargando...
+                        </div>
+                    </div>
 
+                </div>
+            }
+          </section>
     );
 };
 

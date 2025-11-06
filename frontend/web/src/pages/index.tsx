@@ -118,25 +118,6 @@ function Introduction() {
                     .fromTo(aguajeInfoThree.current, {opacity: 0},
                         {opacity: 1, duration: 3}, 22)
 
-                const tlTwo = gsap.timeline({
-                    scrollTrigger: {
-                        trigger: triggerRefTwo.current,
-                        start: "top top",
-                        end: "bottom top",
-                        scrub: true,
-                        pin: true
-                    }
-                })
-
-                const allSpanCamu = containerTitleCamu.current.querySelectorAll("span");
-
-                tlTwo
-                    .fromTo(aguajeFourImg.current, {x: -400, opacity: 0},
-                        {x: 0, opacity: 1, duration: 1}, 1)
-                    .fromTo(allSpanCamu, {opacity: 1, x : 0, y : 0 },
-                        {x: () => gsap.utils.random(-300, 300), y : () => gsap.utils.random(-200, -100), rotate: () => gsap.utils.random(-60,60) ,opacity: 0,stagger: {each: .2, from: "end"} },"<")
-                    .fromTo(titleCamuTwo.current, {opacity: 0},
-                        {opacity: 1, duration: 2}, 3)
             }, triggerRef);
 
             gsap.to(cilindro.current, {rotationY: "+=360", duration:8, ease: "none",repeat: -1})
@@ -240,19 +221,9 @@ function Introduction() {
                     },
                     opacity: 1,
                 })
-
-
-
-
-
             })
             return () => ctx.revert()
-
-
-
-
         })
-
         return () => mm.revert();
     }, []);
 
@@ -306,7 +277,6 @@ function Introduction() {
         handleClick(dir)
     }
 
-    // const horizontalRef = useRef<HTMLDivElement|null>(null)
 
     const containerRefCamu = useRef<HTMLDivElement|null>(null);
     const horizontalRef = useRef<HTMLDivElement|null>(null);
@@ -460,10 +430,7 @@ function Introduction() {
                     dropBorderOne.current.classList.add('drop-water')
                     dropBorderTwo.current.classList.add('drop-water')
                 },
-
-
             }, 1)
-
 
             .fromTo(imgCamuThree.current, {opacity: 0 },
             {
@@ -522,7 +489,7 @@ function Introduction() {
                                     }
                                 })
                             gsap.to(imgContainerOne,{opacity:.85})
-                            gsap.to(containerRefCamu.current, {background: "#EB0000"})
+                            gsap.to(containerRefCamu.current, {background: "#D60000"})
                         } else {
                             gsap.to(imgContainerOne, {opacity: 0})
                         }
@@ -573,7 +540,7 @@ function Introduction() {
                                 })
                             gsap.to(imgContainerThree,{opacity:.85})
 
-                            gsap.to(containerRefCamu.current,{background: "#E00000"} )
+                            gsap.to(containerRefCamu.current,{background: "#D60000"} )
                         } else {
                             gsap.to(imgContainerThree, {opacity: 0})
                         }
@@ -639,8 +606,7 @@ function Introduction() {
                     scale: 1,
                     opacity: 1,
                     duration: durationTotal,
-                    onComplete : () => {
-
+                    onComplete : function ()  {
                     }
                 }, 9)
             .to(containerRefCamu.current,
@@ -651,12 +617,18 @@ function Introduction() {
                         if(this.progress() >= 1) {
                             dropBorderOne.current.classList.remove('drop-water')
                             dropBorderTwo.current.classList.remove('drop-water')
-
-                            // dropBorderOne.current.classList.add('drop-water')
-                            // dropBorderTwo.current.classList.add('drop-water')
                         }
                     }
                 }, "<")
+            .to(containerOneDescription.current, {
+                opacity: 0,
+            }, "<")
+            .to(containerTwoDescription.current, {
+                opacity: 0,
+            }, "<")
+            .to(containerThreeDescription.current, {
+                opacity: 0,
+            }, "<")
 
     },[])
 
@@ -791,62 +763,70 @@ function Introduction() {
 
                     </div>
 
-                    <div ref={triggerRefTwo} className={"h-[100vh] w-full bg-red-600 flex flex-col items-center"}>
+                    {/*<div ref={triggerRefTwo} style={{backgroundColor: "#991b1b"}} className={"h-[100vh] w-full flex flex-col items-center"}>*/}
 
-                        <div className={"relative h-[475px] text-[175px] flex items-center justify-center"}>
-                            <div className={"border-8"} ref={containerTitleCamu}>
-                                {
-                                    "Camu-Camu".split('').map((char, indice) => (
-                                        <span className={"leading-none inline-block"} key={indice}>{char}</span>
-                                    ))
-                                }
-                            </div>
-                            <div ref={titleCamuTwo} className={"absolute top-1/2 -translate-y-1/2 leading-none"}>
-                                Camu Camu
-                            </div>
-                        </div>
+                    {/*    <div className={"relative h-[475px] text-[175px] flex items-center justify-center"}>*/}
+                    {/*        <div className={"border-8"} ref={containerTitleCamu}>*/}
+                    {/*            {*/}
+                    {/*                "Camu-Camu".split('').map((char, indice) => (*/}
+                    {/*                    <span className={"leading-none inline-block"} key={indice}>{char}</span>*/}
+                    {/*                ))*/}
+                    {/*            }*/}
+                    {/*        </div>*/}
+                    {/*        <div ref={titleCamuTwo} className={"absolute top-1/2 -translate-y-1/2 leading-none"}>*/}
+                    {/*            Camu Camu*/}
+                    {/*        </div>*/}
+                    {/*    </div>*/}
 
-                        <div ref={cilindro} className={"relative bg-blue-300 size-[400px]"}>
-                            <img ref={aguajeFourImg}
-                                 className={"bg-white absolute border-4 border-red-500  origin-left size-[350px] left-full top-1/2 -translate-y-1/2 object-contain"}
-                                 src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1750642022/cuackssito_fino_lqinny.webp"
-                                 alt=""/>
-                        </div>
-                    </div>
+                    {/*    <div ref={cilindro} className={"relative bg-blue-300 size-[400px]"}>*/}
+                    {/*        <img ref={aguajeFourImg}*/}
+                    {/*             className={"bg-white absolute border-4 border-red-500  origin-left size-[350px] left-full top-1/2 -translate-y-1/2 object-contain"}*/}
+                    {/*             src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1750642022/cuackssito_fino_lqinny.webp"*/}
+                    {/*             alt=""/>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
 
-                    <div className={"overflow-hidden bg-red-400 border-8"} ref={containerRefCamu}>
+                    <div className={"overflow-hidden"} style={{backgroundColor: "#dc2626"}} ref={containerRefCamu}>
                         <div className={"relative flex h-screen items-center"} ref={horizontalTitleCamu}>
 
                             <div ref={horizontalTitleCamu} className={"z-10 relative section min-w-full h-full  items-center justify-center flex text-center text-black"}>
-                                <img ref={imgCamuOne} className={"md:h-[800px] md:w-[900px] md:top-[54%] md:right-[-75px] 2xl:w-[1100px] 2xl:h-[900px]  border-4 border-yellow-400 drop-shadow-[0px_0px_15px_rgba(0,0,0,.90)] absolute right-0 top-[40%] 2xl:top-[42.5%] 2xl:right-[-125px] z-[-1] md:rotate-180"} src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1752414254/camu_camu-Photoroom_dm1ahl.webp" alt=""/>
-                                <img ref={imgCamuTwo} className={"md:w-[900px] md:h-[700px] 2xl:w-[1100px] 2xl:h-[900px] md:left-[-250px] md:top-[25px] border-4 drop-shadow-[0px_0px_15px_rgba(0,0,0,.90)] absolute left-[0] top-[10%] z-[-1] rotate-[90deg]"} src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1752414254/camu_camu-Photoroom_dm1ahl.webp" alt=""/>
+                                <img ref={imgCamuOne} className={"sm:right-[7.5%] sm:h-[700px] sm:w-[800px] md:h-[800px] md:w-[900px] md:top-[52%] lg:top-[50%] md:right-[-75px] 2xl:w-[1100px] 2xl:h-[900px]  drop-shadow-[0px_0px_15px_rgba(0,0,0,.90)] absolute right-0 top-[55%] 2xl:top-[42.5%] 2xl:right-[-125px] z-[-1] md:rotate-180"} src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1752414254/camu_camu-Photoroom_dm1ahl.webp" alt=""/>
+                                <img ref={imgCamuTwo} className={"sm:left-[25%] md:w-[900px] md:h-[700px] 2xl:w-[1100px] 2xl:h-[900px] md:left-[-250px] md:top-[25px] drop-shadow-[0px_0px_15px_rgba(0,0,0,.90)] absolute left-[0] top-[10%] z-[-1] rotate-[90deg]"} src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1752414254/camu_camu-Photoroom_dm1ahl.webp" alt=""/>
 
                             </div>
-                            <div ref={cuackCamu} className={"absolute whitespace-nowrap top-1/2 -translate-y-1/2 left-1/2 md:text-[125px] 2xl:text-[200px] text-[150px] font-bold -translate-x-1/2 z-[20]"}>
+                            <div ref={cuackCamu} className={"w-[350px] text-[100px] absolute sm:w-[350px] text-center md:w-full top-1/2 -translate-y-1/2 left-1/2 md:text-[125px] lg:text-[150px] xl:text-[175px] 2xl:text-[200px] font-bold -translate-x-1/2 z-[20]"}>
                                 {
                                     "Camu Camu".split('').map((char, indice) => (
-                                        <h1 key={indice} className={"inline-block"}>{char === " " ? '\u00A0' : char}</h1>
+                                        <h1 key={indice} className={"inline-block text-center"}>{char === " " ? '\u00A0' : char}</h1>
                                     ))
                                 }
                             </div>
                             {/*<div ref={containerSlide} className={"flex w-full h-full"}>*/}
                             <div ref={boxOne} className={"flex items-center justify-center relative section  h-full min-w-full"}>
-                                <div className={"w-full h-[100px] relative text-center"}>
-                                    {
-                                        "la fruta con ".split('').map((char,indice)=>(
-                                            <span key={indice} ref={ el => allCamuBoxOne.current[indice] = el} className={"transition-half inline-block  text-[75px] leading-none z-[10]"}>{char === " "? "\u00A0" : char }</span>
-                                        ))
-                                    }
-                                    {
-                                        "mayor vitamina c ".split('').map((char, indice) =>(
-                                            <span key={indice} className={"z-[10] transition-half text-[75px] inline-block  leading-none"} ref={el=>allCamuBoxTwo.current[indice] = el}>{char === " " ? "\u00A0": char}</span>
-                                        ))
-                                    }
-                                    {
-                                        "en el mundo".split('').map((char, indice) =>(
-                                            <span key={indice} className={"z-[10] transition-half text-[75px] inline-block  leading-none"} ref={el=>allCamuBoxThree.current[indice] = el}>{char === " " ? "\u00A0": char}</span>
-                                        ))
-                                    }
+                                <div className={"w-full flex flex-wrap justify-center h-[100px] relative text-center"}>
+                                        <div className={"flex items-center"}>
+                                            {
+                                            "la fruta con ".split('').map((char,indice)=>(
+                                            <span key={indice} ref={ el => allCamuBoxOne.current[indice] = el} className={"transition-half inline-block  leading-none z-[10] text-[60px] md:text-[75px]"}>{char === " "? "\u00A0" : char }</span>
+                                            ))
+                                            }
+                                        </div>
+
+                                        <div className={"flex items-center"}>
+                                            {
+                                            "mayor vitamina c ".split('').map((char, indice) =>(
+                                            <span key={indice} className={"z-[10] text-[60px] transition-half md:text-[75px] inline-block leading-[1]"} ref={el=>allCamuBoxTwo.current[indice] = el}>{char === " " ? "\u00A0": char}</span>
+                                            ))
+                                            }
+                                        </div>
+
+                                        <div className={"flex items-center"}>
+                                            {
+                                            "en el mundo".split('').map((char, indice) =>(
+                                            <span key={indice} className={"z-[10] text-[60px] transition-half md:text-[75px] inline-block  leading-none"} ref={el=>allCamuBoxThree.current[indice] = el}>{char === " " ? "\u00A0": char}</span>
+                                            ))
+                                            }
+                                        </div>
                                     <img src={"https://res.cloudinary.com/dfwtyxxba/image/upload/v1752811244/cuack_camu_4_kqwlso.webp"} ref={circle3D} className={" absolute object-contain drop-shadow-[0px_0px_40px_rgba(0,0,0,.75)] size-[1024px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[-1]"}/>
                                 </div>
 
@@ -867,7 +847,7 @@ function Introduction() {
                                         <img className={"drop-shadow-[0px_0px_15px_rgba(0,0,0,.85)] object-cover absolute top-1/2 left-1/2 -translate-y-1/2 z-[-1]"} src="https://res.cloudinary.com/dfwtyxxba/image/upload/v1752415446/DeWatermark.ai_1752415343588-Photoroom_syppam.webp" alt=""/>
                                     </div>
                                 </div>
-                                <div ref={containerTwoDescription} className={"absolute top-[35%]  right-[20%] w-[300px] leading-none z-[-1] object-contain flex flex-col gap-[25px]"}>
+                                <div ref={containerTwoDescription} className={"absolute  top-[45%] right-[30%]  sm:right-[17.5%] w-[300px] leading-none z-[-1] object-contain flex flex-col gap-[25px]"}>
                                     <div className={"relative flex flex-col gap-[17.5px]"}>
                                         <h1 className={"text-[35px] w-[250px]"}>refuerza el sistema inmune</h1>
                                         <div className={"flex flex-col gap-[5px]"}>

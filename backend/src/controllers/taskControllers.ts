@@ -279,8 +279,6 @@ type PropsSecond = {
 const sendInfoDataBase = (data : DataTypes)  => {
 
 
-
-
     return async ({validate, carritoCompras} : PropsSecond) => {
 
         console.log('aqui esta el valor de validate -> ', validate);
@@ -293,7 +291,7 @@ const sendInfoDataBase = (data : DataTypes)  => {
             }
         })
 
-        console.log('busqueda de prueba -> ', busquedaPrueba);
+        // console.log('busqueda de prueba -> ', busquedaPrueba);
 
         const insertCompra = await dataBase.clientes.create({
             data : {
@@ -308,14 +306,14 @@ const sendInfoDataBase = (data : DataTypes)  => {
                 direccion: data.direccion,
                 courier: data.courierDelivery,
                 textarea: data.textArea,
-                products: carritoCompras.map(el=>el.id_product),
+                products: carritoCompras.map(el=> el.id_product),
                 fecha: new Date(),
                 amount: data.amount,
                 allcheck: validate
             }
         })
 
-        console.log('este es el producto que hemos insertado -> ', insertCompra)
+        // console.log('este es el producto que hemos insertado -> ', insertCompra)
 
     }
 }
@@ -358,7 +356,7 @@ const formulario =  async (req : Request, res : Response) => {
 
     let {nombre, apellido, email, phone, phoneTwo, departamento, provincia, distrito, direccion, courierDelivery, textArea, amount, activeEnvio} = req.body;
     const orderId = uuidv4();
-    console.log('aqui esta el orderID -> ', orderId);
+    // console.log('aqui esta el orderID -> ', orderId);
 
     if (!activeEnvio) {
         phoneTwo = "ninguno";
@@ -440,7 +438,7 @@ const formulario =  async (req : Request, res : Response) => {
                 data = {error: 'Invalid JSON response from Izipay', rawResponse: text};
             }
 
-            console.log('datos parseados de Izipay: ', data);
+            // console.log('datos parseados de Izipay: ', data);
 
             const finalResponse = {
                 publicKey : `${process.env.IZIPAY_MERCHANT_ID}:${process.env.IZIPAY_PUBLIC_KEY}`,
@@ -460,42 +458,48 @@ const formulario =  async (req : Request, res : Response) => {
                ok: false});
         }
 
-    // res.render('email', {carritoCompras : generateMap(carritoCompras)}, async (err, html) => {
-    //     if(err) {
-    //         console.log(`ocurrio un problema -> ${err}`)
-    //         return;
-    //     }
-    //     const transport = nodemailer.createTransport({
-    //         service: 'gmail',
-    //         auth: {
-    //             user: process.env.USER_EMAIL,
-    //             pass: process.env.USER_PASSWORD,
-    //         },
-    //         tls: {
-    //             rejectUnauthorized: false,
-    //         }
-    //     })
-    //
-    //     try{
-    //         const mailOptions = await transport.sendMail({
-    //
-    //             from: process.env.USER_EMAIL,
-    //             to: email,
-    //             subject: `Gracias por su compra ${nombre}`,
-    //             html,
-    //         })
-    //
-    //         if(!mailOptions.accepted || mailOptions.accepted.length === 0) throw new Error(`Correo no aceptado por el servidor: ${mailOptions.response}`)
-    //         res.status(200).json({message: 'el correo fue enviado exitosamente', mailOptions, ok: true})
-    //     }catch(err : any){
-    //         console.error('Error al enviar correo:', err.message || err);
-    //         res.status(500).json({message: 'error al enviar el correo', error: err.message, ok: false})
-    //     }finally{
-    //
-    //
-    //     }
-    // })
 
+}
+
+const validateEmail = (req: Request, res: Response) => {
+
+    const {data, carritoCompras, clientAnswer: {name, email}} = req.body
+
+    res.render('email', {carritoCompras : generateMap(carritoCompras)}, async (err, html) => {
+        if(err) {
+            console.log(`ocurrio un problema -> ${err}`)
+            return;
+        }
+        const transport = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.USER_EMAIL,
+                pass: process.env.USER_PASSWORD,
+            },
+            tls: {
+                rejectUnauthorized: false,
+            }
+        })
+
+        try{
+            const mailOptions = await transport.sendMail({
+
+                from: process.env.USER_EMAIL,
+                to: email,
+                subject: `Gracias por su compra ${name}`,
+                html,
+            })
+
+            if(!mailOptions.accepted || mailOptions.accepted.length === 0) throw new Error(`Correo no aceptado por el servidor: ${mailOptions.response}`)
+            res.status(200).json({message: 'el correo fue enviado exitosamente', mailOptions, ok: true})
+        }catch(err : any){
+            console.error('Error al enviar correo:', err.message || err);
+            res.status(500).json({message: 'error al enviar el correo', error: err.message, ok: false})
+        }finally{
+
+
+        }
+    })
 
 }
 
@@ -609,6 +613,7 @@ import qs from "qs"; // importa qs al inicio de tu archivo
 
 interface TaskControllers {
     getProducts: (req: Request, res: Response) => void;
+    validateEmail: (req: Request, res: Response) => void;
     getPayProducts : (req: Request, res: Response) => void;
     getInfoProduct: (req: Request, res: Response) => void;
     selectProducts: (req: Request, res: Response) => void;
@@ -627,6 +632,7 @@ interface TaskControllers {
 }
 
 const taskControllers: TaskControllers = {
+    validateEmail,
     getProducts,
     getPayProducts,
     getInfoProduct,

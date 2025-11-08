@@ -21,9 +21,9 @@ export const IziPayForm = () => {
             let endpoint = "https://static.micuentaweb.pe";
 
             //Configurar libreria con los datos recibidos de su servidor
-            KRGlue.loadLibrary(endpoint, clientAnswer.publicKey).then(({ KR }) => {
+            KRGlue.loadLibrary(endpoint, clientAnswer.result.publicKey).then(({ KR }) => {
                 KR.setFormConfig({
-                    formToken: clientAnswer.formToken,
+                    formToken: clientAnswer.result.formToken,
                     'kr-language': 'es-ES',
                     'kr-payment-methods': 'CARD, YAPE, BIM, TUNKI, PAGOEFECTIVO',
                     'kr-theme': 'material',
@@ -52,6 +52,26 @@ export const IziPayForm = () => {
                             console.log('Respuesta del servidor de validación:', response.data);
                             if (response.data === true) {
                                 console.log('Pago validado exitosamente, redirigiendo...');
+                                const data = true;
+                                const options = {
+                                    method: 'POST',
+                                    headers: {'Content-Type' : 'application/json'},
+                                    body: JSON.stringify({data, carritoCompras, clientAnswer:clientAnswer.usuario})
+                                }
+                                const url = "http://localhost:4000/emailVerify";
+
+                                const sendVerify = async () => {
+
+                                    const response = await fetch(url, options)
+                                    if(!response.ok) throw new Error(`Error en la peticion ${response.status} - ${response.statusText}`);
+                                    // const result = await response.json();
+
+                                    // if(result.ok) console.log(`La compra fue validad correctamente -> ${result.message}`)
+
+
+                                }
+
+                                sendVerify();
                                 toggleCompra()
                                 navigate('/successPage', { state: paymentData.clientAnswer });
                                 // useFetchDeleteAll();

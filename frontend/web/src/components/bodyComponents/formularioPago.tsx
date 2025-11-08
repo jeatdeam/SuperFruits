@@ -201,7 +201,8 @@ export const FormCompras = ({state} : PropsForm) => {
                 result.ok && updateValueFormToken(result.formToken);
                 result.ok && updatePublicKey(result.publicKey);
                 changeStatusSpinner()
-                navigate("/pagoProducts",{state:result})
+                console.log('aqui esta el usuario formulario -> ', usuario)
+                navigate("/pagoProducts",{state:{result, usuario : {name: usuario.nombre, email: usuario.email}}})
 
             }catch(err){
                 console.error(err.message)

@@ -51,7 +51,7 @@ app.get('/lastIdCarrito', taskControllers.getLastIdProducts);
 app.post('/filterProductsBusqueda', taskControllers.busquedaProducts);
 app.post('/api/crear-sesion', taskControllers.crearSesion)
 app.post('/datosPago', taskControllers.generarSesion);
-
+app.post('/emailVerify', taskControllers.validateEmail)
 app.post('/typeProduct', taskControllers.typeProduct);
 app.post('/addProductCarrito', taskControllers.addProductCarrito);
 app.post('/formulario', taskControllers.formulario);

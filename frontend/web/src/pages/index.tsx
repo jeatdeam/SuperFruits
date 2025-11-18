@@ -736,7 +736,7 @@ function Introduction() {
                                              alt=""/>
                                         <div ref={aguajeInfoTwo}
                                              className={"absolute flex flex-col-reverse items-center top-[80%] left-1/2 translate-x-[-50%]"}>
-                                            <h1 className={"text-white text-[20px]"}>Fitoestrogenos</h1>
+                                            <h1 className={"text-white text-[20px]"}>Vitamina E</h1>
                                             <div className={"h-[100px] bg-white w-[2px]"}></div>
                                             <div className={"size-[15px] rounded-full bg-white"}/>
                                         </div>
@@ -751,7 +751,7 @@ function Introduction() {
                                              alt=""/>
                                         <div ref={aguajeInfoThree}
                                              className={"absolute flex flex-col items-center bottom-[80%] left-1/2 translate-x-[-50%]"}>
-                                            <h1 className={"text-white text-[20px]"}>Fitoestrogenos</h1>
+                                            <h1 className={"text-white text-[20px]"}>Calcio</h1>
                                             <div className={"h-[100px] bg-white w-[2.5px]"}></div>
                                             <div className={"size-[15px] rounded-full bg-white"}/>
                                         </div>

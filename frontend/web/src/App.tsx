@@ -22,6 +22,11 @@ import {LayoutConProceso} from "./pages/layoutConProceso.tsx";
 import {useActive} from './zustand/useActiveStore.tsx'
 import {ErrorPage} from './pages/comprasError.tsx'
 import {SuccessPage} from './pages/compraSuccess.tsx'
+import {QuienesSomos} from "./pages/QuienesSomos.tsx";
+import {Certificados} from "./pages/Certificados.tsx";
+import {RegistroSanitario} from "./pages/RegistroSanitario.tsx";
+import {InsumosPreparacion} from "./pages/InsumosPreparacion.tsx";
+import {Preparacion} from "./pages/Preparacion.tsx";
 
 
 function App() {
@@ -36,10 +41,15 @@ function App() {
                          <Route element={<LayoutConProceso/>}>
                              <Route path="/:product" element={<ProductsCards/>}/>
                              <Route path="/:product/:name" element={<InfoProduct/>} />
-                             <Route path="/seccion-de-pagos" element={<PayProducts/>}/>
-                             <Route path="/pagoProducts" element={<IziPayForm/>}/>
-                             <Route path="/errorPage" element={<ErrorPage/>}/>
                              <Route path="/successPage" element={<SuccessPage/>}/>
+                             <Route path="/errorPage" element={<ErrorPage/>}/>
+                             <Route path="/pagoProducts" element={<IziPayForm/>}/>
+                             <Route path="/seccion-de-pagos" element={<PayProducts/>}/>
+                             <Route path="/quienes-somos" element={<QuienesSomos/>}></Route>
+                             <Route path="/certificados" element={<Certificados/>}></Route>
+                             <Route path="/registro-sanitario" element={<RegistroSanitario/>}></Route>
+                             <Route path="/insumos-de-preparacion" element={<InsumosPreparacion/>}></Route>
+                             <Route path="/preparacion" element={<Preparacion/>}></Route>
                          </Route>
                             {/* ruta de fallback */}
                             <Route path={"*"} element={<NotFound/>}></Route>

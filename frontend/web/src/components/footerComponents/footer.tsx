@@ -2,6 +2,7 @@ import {useState, useEffect, useRef} from 'react';
 import {useBlurMenu} from "../../zustand/useBlurMenu.tsx"
 import {useBlurSearch} from "../../zustand/useBlurSearch.tsx";
 import {useWaitUntil} from "../../zustand/useWaitUntil.tsx";
+import {Link} from "react-router-dom";
 
 export function Footer() {
     const toggleBlur = useBlurMenu(state => state.activeBlur)
@@ -12,8 +13,7 @@ export function Footer() {
         <footer className={`${statusSpinner ? "blur-[20px]" : ""} ${switchBlurSearch? "blur-[20px]":""}  ${toggleBlur ? "blur-[20px]" : ""} w-full flex flex-col gap-[30px] bg-gradient-to-br from-purple-700 via-black to-gray-900 px-[20px] pb-[50px]`}>
             <div className={"w-[90%] mx-auto flex flex-col gap-[50px]"}>
 
-                <div
-                    className={"lg:w-[80%] xl:w-[70%] w-[90%] flex flex-col gap-[50px] justify-evenly bg-white/20 mx-auto rounded-b-[35px] p-[25px] backdrop-blur-[20px] border border-white/30 shadow-md"}>
+                <div className={"lg:w-[80%] xl:w-[70%] w-[90%] flex flex-col gap-[50px] justify-evenly bg-white/20 mx-auto rounded-b-[15px] p-[25px] backdrop-blur-[20px] border border-white/30 shadow-md"}>
                     <div>
                         <h1 className={"text-[75px] leading-[1]  w-fit"}>Super Fruits</h1>
                     </div>
@@ -23,9 +23,9 @@ export function Footer() {
 
                     <div className={"w-full flex sm:gap-[15px] gap-[25px] content-end mx-auto flex-wrap "}>
 
-                        <div className={"flex flex-1 min-w-[200px] bg-blue-300 flex-col gap-[15px] "}>
-                            <h1 className={"text-[20px] font-thin flex items-center leading-[1.1] text-gray-200 flex-1"}>quienes
-                                somos</h1>
+                        <div className={"flex flex-1 min-w-[200px]  flex-col gap-[15px] "}>
+                            <Link to="/quienes-somos" className={"font-bold text-[20px] flex items-center leading-[1.1] text-gray-200 flex-1"}>Quienes
+                                somos</Link>
                             <ul className={"flex flex-col gap-[7.5px]"}>
                                 <li className={"text-[15px]"}>quienes somos</li>
                                 <li className={"text-[15px]"}>quienes somos</li>
@@ -35,8 +35,8 @@ export function Footer() {
                             </ul>
                         </div>
 
-                        <div className={"flex flex-1 min-w-[200px] bg-blue-300  flex-col gap-[15px] "}>
-                            <h1 className={"text-[20px] font-thin flex items-center leading-[1.1] text-gray-200 flex-1"}>certificados</h1>
+                        <div className={"flex flex-1 min-w-[200px]  flex-col gap-[15px] "}>
+                            <Link to="/certificados" className={"text-[20px] font-bold flex items-center leading-[1.1] text-gray-200 flex-1"}>Certificados</Link>
                             <ul className={"flex flex-col gap-[7.5px]"}>
                                 <li className={"text-[15px]"}>certificados</li>
                                 <li className={"text-[15px]"}>certificados</li>
@@ -46,9 +46,9 @@ export function Footer() {
                             </ul>
                         </div>
 
-                        <div className={"flex flex-1 min-w-[200px] bg-blue-300  flex-col gap-[15px] "}>
-                            <h1 className={"text-[20px] font-thin flex items-center leading-[1.1] text-gray-200 flex-1"}>registro
-                                sanitario</h1>
+                        <div className={"flex flex-1 min-w-[200px]  flex-col gap-[15px] "}>
+                            <Link to="/registro-sanitario" className={"text-[20px] font-bold flex items-center leading-[1.1] text-gray-200 flex-1"}>registro
+                                Sanitario</Link>
                             <ul className={"flex flex-col gap-[7.5px]"}>
                                 <li className={"text-[15px]"}>sanitario</li>
                                 <li className={"text-[15px]"}>sanitario</li>
@@ -58,10 +58,10 @@ export function Footer() {
                             </ul>
                         </div>
 
-                        <div className={"flex flex-1 min-w-[200px] bg-blue-300  flex-col gap-[15px]"}>
-                            <h1 className={"text-[20px] font-thin flex items-center leading-[1.1] text-gray-200 flex-1"}>insumos
+                        <div className={"flex flex-1 min-w-[200px]   flex-col gap-[15px]"}>
+                            <Link to="/insumos-de-preparacion" className={"text-[20px] font-bold flex items-center leading-[1.1] text-gray-200 flex-1"}>Insumos
                                 de
-                                preparacion</h1>
+                                preparacion</Link>
                             <ul className={"flex flex-col gap-[7.5px]"}>
                                 <li className={"text-[15px]"}>preparacion</li>
                                 <li className={"text-[15px]"}>preparacion</li>
@@ -71,8 +71,8 @@ export function Footer() {
                             </ul>
                         </div>
 
-                        <div className={"flex flex-1 min-w-[200px] bg-blue-300 flex-col gap-[15px]"}>
-                            <h1 className={"text-[20px] font-thin flex items-center leading-[1.1] text-gray-200  flex-1"}>preparacion</h1>
+                        <div className={"flex flex-1 min-w-[200px]  flex-col gap-[15px]"}>
+                            <Link to="/preparacion" className={"text-[20px] font-bold flex items-center leading-[1.1] text-gray-200  flex-1"}>Preparacion</Link>
                             <ul className={"flex flex-col gap-[7.5px]"}>
                                 <li className={"text-[15px]"}>recomendacion</li>
                                 <li className={"text-[15px]"}>recomendacion</li>
@@ -84,18 +84,18 @@ export function Footer() {
 
                     </div>
                 </div>
-                <div className={"md:flex-row md:w-[90%] xl:w-[75%] 2xl:w-[60%] flex mx-auto flex-col items-center xl:justify-between gap-[25px] md:gap-[5px] justify-evenly 2xl:gap-0 bg-blue-300 border-4 w-[90%]"}>
+                <div className={"md:flex-row flex mx-auto flex-col items-center xl:justify-between lg:gap-[25px] md:gap-[30px] justify-evenly 2xl:gap-0 xl:w-[70%] lg:w-[80%] md:w-[90%] w-[90%] xl:gap-[100px]"}>
 
-                    <div className={"flex flex-col gap-[5px] w-[90%] md:w-full"}>
-                        <h1 className={" rounded-[5px] font-thin text-white text-[50px]"}>Contactanos</h1>
-                        <input className={" h-[30px] px-[10px] rounded-[5px]"} type="email" placeholder="Contactanos"/>
-                        <textarea className={"p-[10px] rounded-[5px] h-[150px]"}
+                    <div className={"flex flex-col gap-[5px] md:w-[400px]  w-[95%] sm:w-[90%] lg:w-[500px] 2xl:w-[550px]"}>
+                        <h1 className={"mb-[10px] md:mb-0 rounded-[5px] font-thin text-white text-[50px]"}>Contáctanos</h1>
+                        <input className={"focus:outline-none w-full  2xl:w-[550px] h-[30px] px-[10px] rounded-[5px]"} type="email" placeholder="Contactanos"/>
+                        <textarea className={"focus:outline-none w-full   2xl:w-[550px] p-[10px] rounded-[5px] h-[150px]"}
                                   placeholder={"compras mayoristas - informacion de productos"}/>
                         <button className={"bg-white rounded-[5px] h-[30px] w-[75px] self-end"}>Enviar</button>
                     </div>
 
-                    <div className={"xxs:justify-evenly h-full w-[70%] xxs:w-full 2xl:w-full 2xl:flex-row flex flex-col items-center gap-[25px] md:w-[60%] xxs:flex-row md:flex-col bg-green-400"}>
-                        <div className={"bg-amber-50 h-[150px]  p-[10px] size-[150px] "}>
+                    <div className={"xxs:justify-evenly  h-[325px] w-[95%]  sm:w-[90%] md:w-[30%] lg:w-[30%] lg:h-[175px] lg:mt-[40px] 2xl:w-full 2xl:flex-row flex flex-col items-center gap-[5px] lg:gap-[25px]  xxs:flex-row md:flex-col "}>
+                        <div className={"bg-amber-50 rounded-full text-center p-[10px] size-[150px] "}>
                             Designed for Jeatdeam / Realizado
                         </div>
                         <img className={"aspect-[16/9] w-[160px] h-[90px] "}
@@ -104,8 +104,9 @@ export function Footer() {
                     </div>
 
                 </div>
+
                 <div className={""}>
-                    <div className={"w-full h-[2px] bg-amber-500 flex justify-between "}/>
+                    <div className={"w-full h-[2px] bg-white flex justify-between "}/>
                     <div className={"flex justify-between py-[15px]"}>
                         <h1 className={"text-white"}>Diseñado por jeatdeam</h1>
                         <div className={"flex gap-[10px]"}>
